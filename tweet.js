@@ -1,7 +1,7 @@
 // Dépendances
 const term = require('terminal-kit').terminal; // https://www.npmjs.com/package/terminal-kit
 var Twit = require('twit'); // https://www.npmjs.com/package/twit
-const config = require('tweetConfig.json'); // Fichier local
+const config = require('./tweetConfig.json'); // Fichier local
 
 
 var T = new Twit({
