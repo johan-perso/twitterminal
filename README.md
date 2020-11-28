@@ -2,7 +2,7 @@
 
 ## Prérequis
 
-  - Environ 500 mo d'espace disque
+  - Environ 100 mo d'espace disque
   - Un terminal compatible avec terminal-kit
   - Un compte Twitter développeur (Faites votre demande sur https://developer.twitter.com/)
   - Quelques connaissances
