@@ -29,9 +29,9 @@ Ouvrez un invite de commande / terminal dans le dossier que vous avez créé lor
 
 %jump% permet de sauter une ligne
 
-:joy: permet de mettre un émoji 😂
+\:joy: permet de mettre un émoji 😂
 
-:sob: permet de mettre un émoji 😭
+\:sob: permet de mettre un émoji 😭
 
 
 ## J'ai besoin d'aide
