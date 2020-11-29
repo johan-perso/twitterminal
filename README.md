@@ -30,7 +30,9 @@ Si vous avez besoin d'aide, Venez me mp sur Discord ou Twitter (https://twitter.
 
 ## Remplacement de texte
 
-%jump% permet de sauter une ligne
+%jump% permet de sauter une 
+
 :joy: permet de mettre un émoji 😂
+
 :sob: permet de mettre un émoji 😭
 
