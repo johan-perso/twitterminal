@@ -33,3 +33,4 @@ Si vous avez besoin d'aide, Venez me mp sur Discord ou Twitter (https://twitter.
 %jump% permet de sauter une ligne
 :joy: permet de mettre un émoji 😂
 :sob: permet de mettre un émoji 😭
+
