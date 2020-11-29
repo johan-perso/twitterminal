@@ -26,3 +26,10 @@ Ouvrez le fichier configTwitter.json et modifier les valeurs "consumer_key", "co
 ## J'ai besoin d'aide
 
 Si vous avez besoin d'aide, Venez me mp sur Discord ou Twitter (https://twitter.com/Johan_Perso) (Johan#8021).
+
+
+## Remplacement de texte
+
+%jump% permet de sauter une ligne
+:joy: permet de mettre un émoji 😂
+:sob: permet de mettre un émoji 😭
