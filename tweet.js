@@ -5,7 +5,7 @@ const config = require('./tweetConfig.json'); // Fichier local
 
 // Vérification des champs du fichier de config et si c'est vide : Afficher un message d'erreur et arrêter le processus
 if(!config.consumer_key | !config.consumer_secret | !config.access_token | !config.access_token_secret){
-   term.red("Une erreur s'est produite, Les champs du fichier 'tweetConfig.json' sont incomplet, Veuillez les remplire. Si le problème continue, Veuillez me contacter sur Twitter (@Johan_Perso). | Code erreur #1\n");
+   term.red("Les champs du fichier 'tweetConfig.json' sont incomplet, Veuillez les remplire. Si le problème continue, Veuillez me contacter sur Twitter (@Johan_Perso). | Code erreur #1\n");
    return process.exit();
 }
 
@@ -48,11 +48,24 @@ const input = text
 		    process.exit(); // Arrêter le processus
 		} else {
 		   // Si il y a une erreur
-		    term.red("\nUne erreur inconnue s'est produite, Vérifier votre connexion internet et/ou le contenu du tweet. Si le problème continue, Veuillez me contacter sur Twitter (@Johan_Perso). | Code erreur #2\n"); // Afficher un message d'erreur
+
+		    // Tentative de détection de l'erreur
+		    if(err.message === "Status is a duplicate."){
+		    	var error = "Un tweet contenant le même contenu est déjà existant. | Code erreur #9";
+		    } else {
+		    if(err.message === "Missing required parameter: status."){
+		    	var error = "Votre tweet contient un caractère invalide ou est vide. | Code erreur #10";
+		    } else {
+		    	var error = "Une erreur inconnue s'est produite, Vérifier votre connexion internet et/ou les permissions de votre app Twitter. Pour plus d'aide, Veuillez me contacter sur Twitter (@Johan_Perso). | Code erreur #2";
+		    }
+		    }
+
+        // Affichage de l'erreur
+		    term.red("\nErreur de Twitter : " + err.message + "\n");
+		    term.red("Erreur détecté par Twitterminal : " + error + "\n");
 		    return process.exit(); // Arrêter le processus
 		}
 });
-	}
+}
 );
-  });
-  
+});
