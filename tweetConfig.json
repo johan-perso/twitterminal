@@ -1,8 +1,15 @@
 {
- "//komen sa march": "Vous aurez besoin d'un compte Twitter developpeur (developper.twitter.com et si t'arrives pas cherche sur Google comme tout le monde) et de crée une 'application' puis vous devrez renseigner 4 informations (À ne partager a personne sinon on pourra utiliser votre compte Twitter) en bas",
+ "//komen sa march": "Vous aurez besoin d'un compte Twitter developpeur (developper.twitter.com et si t'arrives pas, Cherche sur Google comme tout le monde) et de crée une 'application' puis vous devrez renseigner 4 informations (À ne partager a personne sinon on pourra utiliser votre compte Twitter) en bas. Si vous n'arrivez pas, Contactez @Johan_Perso sur Twitter ou Johan#8021 sur Discord.",
+
+ "consumer_key1": "",
+ "consumer_secret1": "",
+ "access_token1": "",
+ "access_token_secret1": "",
+
+ "consumer_key2": "",
+ "consumer_secret2": "",
+ "access_token2": "",
+ "access_token_secret2": "",
  
- "consumer_key": "",
- "consumer_secret": "",
- "access_token": "",
- "access_token_secret": ""
+ "//Information": "Les quatres dernières valeurs sont facultatives et permettent d'ajouter un deuxième compte Twitter."
 }
