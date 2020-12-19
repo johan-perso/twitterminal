@@ -49,6 +49,8 @@ const input = text
 .replace(/:joy:/g, "😂") // Annuler l'émoji :joy: (Buggé)
 .replace(/\:sob:/g, ":sob:") // Emoji :sob:
 .replace(/:sob:/g, "😭"); // Annuler l'émoji :sob: (Buggé)
+.replace(/\:clown:/g, ":clown:") // Emoji :clown:
+.replace(/:clown:/g, "🤡"); // Annuler l'émoji :clown: (Buggé)
 
 		term("\nEnvoie du tweet..."); // Message pour dire que le tweet s'envoie
 		T.post('statuses/update', { status: input }, function(err, data, response){ // Tweeter le tweet
@@ -112,6 +114,8 @@ const input = text
 .replace(/:joy:/g, "😂") // Annuler l'émoji :joy: (Buggé)
 .replace(/\:sob:/g, ":sob:") // Emoji :sob:
 .replace(/:sob:/g, "😭"); // Annuler l'émoji :sob: (Buggé)
+.replace(/\:clown:/g, ":clown:") // Emoji :clown:
+.replace(/:clown:/g, "🤡"); // Annuler l'émoji :clown: (Buggé)
 
 		term("\nEnvoie du tweet..."); // Message pour dire que le tweet s'envoie
 		T.post('statuses/update', { status: input }, function(err, data, response){ // Tweeter le tweet
