@@ -63,8 +63,8 @@ const input = text
 // Autres
 .replace(/:fire:/g, "🔥") // Emoji :fire:
 .replace(/:tada:/g, "🎉") // Emoji :tadda:
-.replace(/:rainbow:/g, "🌈"); // Emoji :rainbow:
-.replace(/:santa:/g, "🎅") // Emoji :santa:
+.replace(/:rainbow:/g, "🌈") // Emoji :rainbow:
+.replace(/:santa:/g, "🎅"); // Emoji :santa:
 
 		term("\nEnvoie du tweet..."); // Message pour dire que le tweet s'envoie
 		T.post('statuses/update', { status: input }, function(err, data, response){ // Tweeter le tweet
@@ -142,8 +142,8 @@ term.inputField(function(error, text){ // Demande de texte et enregistrement sou
   // Autres
   .replace(/:fire:/g, "🔥") // Emoji :fire:
   .replace(/:tada:/g, "🎉") // Emoji :tada:
-  .replace(/:rainbow:/g, "🌈"); // Emoji :rainbow:
-  .replace(/:santa:/g, "🎅") // Emoji :santa:
+  .replace(/:rainbow:/g, "🌈") // Emoji :rainbow:
+  .replace(/:santa:/g, "🎅"); // Emoji :santa:
 
 		term("\nEnvoie du tweet..."); // Message pour dire que le tweet s'envoie
 		T.post('statuses/update', { status: input }, function(err, data, response){ // Tweeter le tweet
