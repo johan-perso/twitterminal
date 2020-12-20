@@ -50,7 +50,7 @@ const input = text
 .replace(/:sob:/g, "😭") // Emoji :sob:
 .replace(/:clown:/g, "🤡") // Emoji :clown:
 .replace(/:love:/g, "🥰") // Emoji :love:
-.replace(/:sleeping:/g, "😴") // Emoji :tired:
+.replace(/:sleeping:/g, "😴") // Emoji :sleeping:
 // Animaux
 .replace(/:dog:/g, "🐶") // Emoji :dog:
 .replace(/:cat:/g, "🐱") // Emoji :cat:
@@ -62,7 +62,7 @@ const input = text
 .replace(/:lion:/g, "🦁") // Emoji :lion:
 // Autres
 .replace(/:fire:/g, "🔥") // Emoji :fire:
-.replace(/:tada:/g, "🎉") // Emoji :party:
+.replace(/:tada:/g, "🎉") // Emoji :tadda:
 .replace(/:rainbow:/g, "🌈"); // Emoji :rainbow:
 .replace(/:santa:/g, "🎅") // Emoji :santa:
 
@@ -129,7 +129,7 @@ term.inputField(function(error, text){ // Demande de texte et enregistrement sou
   .replace(/:sob:/g, "😭") // Emoji :sob:
   .replace(/:clown:/g, "🤡") // Emoji :clown:
   .replace(/:love:/g, "🥰") // Emoji :love:
-  .replace(/:sleeping:/g, "😴") // Emoji :tired:
+  .replace(/:sleeping:/g, "😴") // Emoji :sleeping:
   // Animaux
   .replace(/:dog:/g, "🐶") // Emoji :dog:
   .replace(/:cat:/g, "🐱") // Emoji :cat:
@@ -141,10 +141,10 @@ term.inputField(function(error, text){ // Demande de texte et enregistrement sou
   .replace(/:lion:/g, "🦁") // Emoji :lion:
   // Autres
   .replace(/:fire:/g, "🔥") // Emoji :fire:
-  .replace(/:tada:/g, "🎉") // Emoji :party:
+  .replace(/:tada:/g, "🎉") // Emoji :tada:
   .replace(/:rainbow:/g, "🌈"); // Emoji :rainbow:
   .replace(/:santa:/g, "🎅") // Emoji :santa:
-  
+
 		term("\nEnvoie du tweet..."); // Message pour dire que le tweet s'envoie
 		T.post('statuses/update', { status: input }, function(err, data, response){ // Tweeter le tweet
 		// Si il n'y a pas d'erreur
