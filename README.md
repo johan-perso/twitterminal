@@ -29,14 +29,15 @@ Ouvrez un invite de commande / terminal dans le dossier que vous avez créé lor
 
 %jump% permet de sauter une ligne
 
-: joy : permet de mettre un émoji 😂
-: sob : permet de mettre un émoji 😭
-: clown : permet de mettre un émoji 🤡
-: love : permet de mettre un émoji 🥰
-: santa : permet de mettre un émoji 🎅
-: fire : permet de mettre un émoji 🔥
-: party : permet de mettre un émoji 🎉
-: rainbow : permet de mettre un émoji 🌈
+: joy : 😂
+
+: sob : 😭
+
+: clown : 🤡
+
+: love : 🥰
+
+: sleeping : 😴
 
 
 ## J'ai besoin d'aide
