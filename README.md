@@ -33,6 +33,8 @@ Ouvrez un invite de commande / terminal dans le dossier que vous avez créé lor
 
 : sob : permet de mettre un émoji 😭
 
+: clown : permet de mettre un émoji 🤡
+
 
 ## J'ai besoin d'aide
 
