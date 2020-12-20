@@ -48,7 +48,7 @@ const input = text
 .replace(/\:joy:/g, ":joy:") // Emoji :joy:
 .replace(/:joy:/g, "😂") // Annuler l'émoji :joy: (Buggé)
 .replace(/\:sob:/g, ":sob:") // Emoji :sob:
-.replace(/:sob:/g, "😭"); // Annuler l'émoji :sob: (Buggé)
+.replace(/:sob:/g, "😭") // Annuler l'émoji :sob: (Buggé)
 .replace(/\:clown:/g, ":clown:") // Emoji :clown:
 .replace(/:clown:/g, "🤡"); // Annuler l'émoji :clown: (Buggé)
 
@@ -113,7 +113,7 @@ const input = text
 .replace(/\:joy:/g, ":joy:") // Emoji :joy:
 .replace(/:joy:/g, "😂") // Annuler l'émoji :joy: (Buggé)
 .replace(/\:sob:/g, ":sob:") // Emoji :sob:
-.replace(/:sob:/g, "😭"); // Annuler l'émoji :sob: (Buggé)
+.replace(/:sob:/g, "😭") // Annuler l'émoji :sob: (Buggé)
 .replace(/\:clown:/g, ":clown:") // Emoji :clown:
 .replace(/:clown:/g, "🤡"); // Annuler l'émoji :clown: (Buggé)
 
