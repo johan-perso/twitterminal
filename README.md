@@ -35,6 +35,16 @@ Ouvrez un invite de commande / terminal dans le dossier que vous avez créé lor
 
 : clown : permet de mettre un émoji 🤡
 
+: love : permet de mettre un émoji 🥰
+
+: santa : permet de mettre un émoji 🎅
+
+: fire : permet de mettre un émoji 🔥
+
+: party : permet de mettre un émoji 🎉
+
+: rainbow : permet de mettre un émoji 🌈
+
 
 ## J'ai besoin d'aide
 
