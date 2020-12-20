@@ -39,6 +39,7 @@ function tweetClassic(){
     term.yellow("[-----------------------------------------------]\n");
 
 term("Veuillez entrer le contenu du tweet : "); // Message de demande de texte
+term("Emojis disponibles : 😂 = :joy: , 😭 = :sob: , 🤡 = :clown:"); // Afficher la liste des emojis
 term.inputField(function(error, text){ // Demande de texte et enregistrement sous la variable "text"
 
 // Définition de input (Remplacement de certains trucs de text)
