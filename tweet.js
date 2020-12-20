@@ -43,43 +43,28 @@ term.inputField(function(error, text){ // Demande de texte et enregistrement sou
 
 // Définition de input (Remplacement de certains trucs de text)
 const input = text
+// Non émoji
 .replace(/%jump%/g, "\n") // Saut de ligne
-.replace(/\%jump%/g, "%jump%") // Annuler le saut de ligne (Buggé)
-.replace(/\:joy:/g, ":joy:") // Emoji :joy:
-.replace(/:joy:/g, "😂") // Annuler l'émoji :joy: (Buggé)
-.replace(/\:sob:/g, ":sob:") // Emoji :sob:
-.replace(/:sob:/g, "😭") // Annuler l'émoji :sob: (Buggé)
-.replace(/\:clown:/g, ":clown:") // Emoji :clown:
-.replace(/:clown:/g, "🤡") // Annuler l'émoji :clown: (Buggé)
-.replace(/\:love:/g, ":love:") // Emoji :love:
-.replace(/:love:/g, "🥰") // Annuler l'émoji :love: (Buggé)
-.replace(/\:tired:/g, ":tired:") // Emoji :tired:
-.replace(/:tired:/g, "😴") // Annuler l'émoji :tired: (Buggé)
-.replace(/\:santa:/g, ":santa:") // Emoji :santa:
-.replace(/:santa:/g, "🎅") // Annuler l'émoji :santa: (Buggé)
-.replace(/\:dog:/g, ":dog:") // Emoji :dog:
-.replace(/:dog:/g, "🐶") // Annuler l'émoji :dog: (Buggé)
-.replace(/\:cat:/g, ":cat:") // Emoji :cat:
-.replace(/:cat:/g, "🐱") // Annuler l'émoji :cat: (Buggé)
-.replace(/\:panda:/g, ":panda:") // Emoji :panda:
-.replace(/:panda:/g, "🐼") // Annuler l'émoji :panda: (Buggé)
-.replace(/\:pig:/g, ":pig:") // Emoji :pig:
-.replace(/:pig:/g, "🐷") // Annuler l'émoji :pig: (Buggé)
-.replace(/\:wolf:/g, ":wolf:") // Emoji :wolf:
-.replace(/:wolf:/g, "🐺") // Annuler l'émoji :wolf: (Buggé)
-.replace(/\:chicken:/g, ":chicken:") // Emoji :chicken:
-.replace(/:chicken:/g, "🐔") // Annuler l'émoji :chicken: (Buggé)
-.replace(/\:mouse:/g, ":mouse:") // Emoji :mouse:
-.replace(/:mouse:/g, "🐭") // Annuler l'émoji :mouse: (Buggé)
-.replace(/\:lion:/g, ":lion:") // Emoji :lion:
-.replace(/:lion:/g, "🦁") // Annuler l'émoji :lion: (Buggé)
-.replace(/\:fire:/g, ":fire:") // Emoji :fire:
-.replace(/:fire:/g, "🔥") // Annuler l'émoji :fire: (Buggé)
-.replace(/\:party:/g, ":party:") // Emoji :party:
-.replace(/:party:/g, "🎉") // Annuler l'émoji :party: (Buggé)
-.replace(/\:rainbow:/g, ":rainbow:") // Emoji :rainbow:
-.replace(/:rainbow:/g, "🌈"); // Annuler l'émoji :rainbow: (Buggé)
-
+// Visages
+.replace(/:joy:/g, "😂") // Emoji :joy:
+.replace(/:sob:/g, "😭") // Emoji :sob:
+.replace(/:clown:/g, "🤡") // Emoji :clown:
+.replace(/:love:/g, "🥰") // Emoji :love:
+.replace(/:sleeping:/g, "😴") // Emoji :tired:
+// Animaux
+.replace(/:dog:/g, "🐶") // Emoji :dog:
+.replace(/:cat:/g, "🐱") // Emoji :cat:
+.replace(/:panda:/g, "🐼") // Emoji :panda:
+.replace(/:pig:/g, "🐷") // Emoji :pig:
+.replace(/:wolf:/g, "🐺") // Emoji :wolf:
+.replace(/:chicken:/g, "🐔") // Emoji :chicken:
+.replace(/:mouse:/g, "🐭") // Emoji :mouse:
+.replace(/:lion:/g, "🦁") // Emoji :lion:
+// Autres
+.replace(/:fire:/g, "🔥") // Emoji :fire:
+.replace(/:tada:/g, "🎉") // Emoji :party:
+.replace(/:rainbow:/g, "🌈"); // Emoji :rainbow:
+.replace(/:santa:/g, "🎅") // Emoji :santa:
 
 		term("\nEnvoie du tweet..."); // Message pour dire que le tweet s'envoie
 		T.post('statuses/update', { status: input }, function(err, data, response){ // Tweeter le tweet
@@ -135,45 +120,31 @@ function tweetSecond(){
 term("Veuillez entrer le contenu du tweet : "); // Message de demande de texte
 term.inputField(function(error, text){ // Demande de texte et enregistrement sous la variable "text"
 
-// Définition de input (Remplacement de certains trucs de text)
-const input = text
-.replace(/%jump%/g, "\n") // Saut de ligne
-.replace(/\%jump%/g, "%jump%") // Annuler le saut de ligne (Buggé)
-.replace(/\:joy:/g, ":joy:") // Emoji :joy:
-.replace(/:joy:/g, "😂") // Annuler l'émoji :joy: (Buggé)
-.replace(/\:sob:/g, ":sob:") // Emoji :sob:
-.replace(/:sob:/g, "😭") // Annuler l'émoji :sob: (Buggé)
-.replace(/\:clown:/g, ":clown:") // Emoji :clown:
-.replace(/:clown:/g, "🤡") // Annuler l'émoji :clown: (Buggé)
-.replace(/\:love:/g, ":love:") // Emoji :love:
-.replace(/:love:/g, "🥰") // Annuler l'émoji :love: (Buggé)
-.replace(/\:tired:/g, ":tired:") // Emoji :tired:
-.replace(/:tired:/g, "😴") // Annuler l'émoji :tired: (Buggé)
-.replace(/\:santa:/g, ":santa:") // Emoji :santa:
-.replace(/:santa:/g, "🎅") // Annuler l'émoji :santa: (Buggé)
-.replace(/\:dog:/g, ":dog:") // Emoji :dog:
-.replace(/:dog:/g, "🐶") // Annuler l'émoji :dog: (Buggé)
-.replace(/\:cat:/g, ":cat:") // Emoji :cat:
-.replace(/:cat:/g, "🐱") // Annuler l'émoji :cat: (Buggé)
-.replace(/\:panda:/g, ":panda:") // Emoji :panda:
-.replace(/:panda:/g, "🐼") // Annuler l'émoji :panda: (Buggé)
-.replace(/\:pig:/g, ":pig:") // Emoji :pig:
-.replace(/:pig:/g, "🐷") // Annuler l'émoji :pig: (Buggé)
-.replace(/\:wolf:/g, ":wolf:") // Emoji :wolf:
-.replace(/:wolf:/g, "🐺") // Annuler l'émoji :wolf: (Buggé)
-.replace(/\:chicken:/g, ":chicken:") // Emoji :chicken:
-.replace(/:chicken:/g, "🐔") // Annuler l'émoji :chicken: (Buggé)
-.replace(/\:mouse:/g, ":mouse:") // Emoji :mouse:
-.replace(/:mouse:/g, "🐭") // Annuler l'émoji :mouse: (Buggé)
-.replace(/\:lion:/g, ":lion:") // Emoji :lion:
-.replace(/:lion:/g, "🦁") // Annuler l'émoji :lion: (Buggé)
-.replace(/\:fire:/g, ":fire:") // Emoji :fire:
-.replace(/:fire:/g, "🔥") // Annuler l'émoji :fire: (Buggé)
-.replace(/\:party:/g, ":party:") // Emoji :party:
-.replace(/:party:/g, "🎉") // Annuler l'émoji :party: (Buggé)
-.replace(/\:rainbow:/g, ":rainbow:") // Emoji :rainbow:
-.replace(/:rainbow:/g, "🌈"); // Annuler l'émoji :rainbow: (Buggé)
-
+  // Définition de input (Remplacement de certains trucs de text)
+  const input = text
+  // Non émoji
+  .replace(/%jump%/g, "\n") // Saut de ligne
+  // Visages
+  .replace(/:joy:/g, "😂") // Emoji :joy:
+  .replace(/:sob:/g, "😭") // Emoji :sob:
+  .replace(/:clown:/g, "🤡") // Emoji :clown:
+  .replace(/:love:/g, "🥰") // Emoji :love:
+  .replace(/:sleeping:/g, "😴") // Emoji :tired:
+  // Animaux
+  .replace(/:dog:/g, "🐶") // Emoji :dog:
+  .replace(/:cat:/g, "🐱") // Emoji :cat:
+  .replace(/:panda:/g, "🐼") // Emoji :panda:
+  .replace(/:pig:/g, "🐷") // Emoji :pig:
+  .replace(/:wolf:/g, "🐺") // Emoji :wolf:
+  .replace(/:chicken:/g, "🐔") // Emoji :chicken:
+  .replace(/:mouse:/g, "🐭") // Emoji :mouse:
+  .replace(/:lion:/g, "🦁") // Emoji :lion:
+  // Autres
+  .replace(/:fire:/g, "🔥") // Emoji :fire:
+  .replace(/:tada:/g, "🎉") // Emoji :party:
+  .replace(/:rainbow:/g, "🌈"); // Emoji :rainbow:
+  .replace(/:santa:/g, "🎅") // Emoji :santa:
+  
 		term("\nEnvoie du tweet..."); // Message pour dire que le tweet s'envoie
 		T.post('statuses/update', { status: input }, function(err, data, response){ // Tweeter le tweet
 		// Si il n'y a pas d'erreur
