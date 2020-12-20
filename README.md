@@ -39,6 +39,30 @@ Ouvrez un invite de commande / terminal dans le dossier que vous avez créé lor
 
 : sleeping : 😴
 
+:  dog : 🐶
+
+: cat : 🐱
+
+: panda : 🐼
+
+: pig : 🐷
+
+: wolf : 🐺
+
+: chicken : 🐔
+
+: mouse : 🐭
+
+: lion : 🦁
+
+: fire : 🔥
+
+: tada : 🎉
+
+: rainbow : 🌈
+ 
+: santa : 🎅
+
 
 ## J'ai besoin d'aide
 
