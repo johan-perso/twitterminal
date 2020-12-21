@@ -14,8 +14,16 @@ if(!config.consumer_key2 | !config.consumer_secret2 | !config.access_token2 | !c
   return tweetClassic();
 }
 
+// Vérification des champs 3 du fichier de config et si c'est vide : N'utiliser qu'un seul compte
+if(!config.consumer_key3 | !config.consumer_secret3 | !config.access_token3 | !config.access_token_secret3){
+
+if(!config.consumer_key2 | !config.consumer_secret2 | !config.access_token2 | !config.access_token_secret2){
+  return tweetClassic();
+}
+}
+
 // Indication des touches + Définition de numberInput
-term('Appuyer sur la touche "A" pour tweeter avec le compte principal et "B" pour tweeter avec le compte secondaire\n\n');
+term('Appuyer sur la touche "A" pour tweeter avec le compte principal , "B" pour tweeter avec le compte secondaire et "C" pour tweeter avec le troisième compte\n\n');
 var numberInput = 0;
 
 // Liste des auto complétations
@@ -122,7 +130,6 @@ const input = text
 }
 )}
 
-// tweetSecond = Tweeter avec le compte secondaire
 function tweetSecond(){
 
    var T = new Twit({
@@ -215,6 +222,98 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
 }
 )}
 
+// tweetThird = Tweeter avec le troisième compte
+function tweetThird(){
+
+   var T = new Twit({
+// Les 4 premiers champs peuvent être trouvés dans son profil développeur Twitter
+    consumer_key:         config.consumer_key3,
+    consumer_secret:      config.consumer_secret3,
+    access_token:         config.access_token3,
+    access_token_secret:  config.access_token_secret3,
+    timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
+    strictSSL:            true,     // optional - requires SSL certificates to be valid.
+});
+
+// Affichage d'un message de bienvenue
+   T.get('account/verify_credentials', { skip_status: true })
+  .then(function (result) {
+    term("Bonjour " + result.data.name) + term(" !\n");
+    term("(Connecté en tant que ") + term.cyan("@" + result.data.screen_name) + term(")\n");
+    term.yellow("[-----------------------------------------------]\n");
+
+term("Veuillez entrer le contenu du tweet : "); // Message de demande de texte
+term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoCompleteHint: true }, function( error , text ) { // Demande de texte et enregistrement sous la variable "text"
+
+// Définition de input (Remplacement de certains trucs de text)
+const input = text
+// Non émoji
+.replace(/%jump%/g, "\n") // Saut de ligne
+// Personnes
+.replace(/:joy:/g, "😂") // Emoji :joy:
+.replace(/:sob:/g, "😭") // Emoji :sob:
+.replace(/:clown:/g, "🤡") // Emoji :clown:
+.replace(/:love:/g, "🥰") // Emoji :love:
+.replace(/:sleeping:/g, "😴") // Emoji :sleeping:
+.replace(/:upside_down:/g, "🙃") // Emoji :upside_down:
+.replace(/:sunglasses:/g, "😎") // Emoji :sunglasses:
+.replace(/:thinking:/g, "🤔") // Emoji :thinking:
+.replace(/:scream:/g, "😱") // Emoji :scream:
+.replace(/:laughing:/g, "😆") // Emoji :laughing:
+// Animaux
+.replace(/:dog:/g, "🐶") // Emoji :dog:
+.replace(/:cat:/g, "🐱") // Emoji :cat:
+.replace(/:panda:/g, "🐼") // Emoji :panda:
+.replace(/:pig:/g, "🐷") // Emoji :pig:
+.replace(/:wolf:/g, "🐺") // Emoji :wolf:
+.replace(/:chicken:/g, "🐔") // Emoji :chicken:
+.replace(/:mouse:/g, "🐭") // Emoji :mouse:
+.replace(/:lion:/g, "🦁") // Emoji :lion:
+.replace(/:penguin:/g, "🐧") // Emoji :penguin:
+// Autres
+.replace(/:fire:/g, "🔥") // Emoji :fire:
+.replace(/:tada:/g, "🎉") // Emoji :tadda:
+.replace(/:rainbow:/g, "🌈") // Emoji :rainbow:
+.replace(/:santa:/g, "🎅") // Emoji :santa:
+.replace(/:eyes:/g, "👀") // Emoji :eyes:
+.replace(/:middle_finger:/g, "🖕") // Emoji :middle_finger:
+.replace(/:100:/g, "💯"); // Emoji :100:
+
+		term("\nEnvoie du tweet..."); // Message pour dire que le tweet s'envoie
+		T.post('statuses/update', { status: input }, function(err, data, response){ // Tweeter le tweet
+		// Si il n'y a pas d'erreur
+		if(!err){
+		    term("\nTweet envoyé..."); // Dire que le tweet est envoyé
+		    term("\nLien du tweet : ") + term.cyan(`https://twitter.com/${ data.user.screen_name }/status/${ data.id_str }\n`); // Donner le lien du tweet
+		    process.exit(); // Arrêter le processus
+		} else {
+		   // Si il y a une erreur
+
+		    // Tentative de détection de l'erreur
+		    if(err.message === "Status is a duplicate."){
+		    	var error = "Un tweet contenant le même contenu est déjà existant. | Code erreur #9";
+		    } else {
+		    if(err.message === "Missing required parameter: status."){
+		    	var error = "Votre tweet contient un caractère invalide ou est vide. | Code erreur #10";
+		    } else {
+          if(err.message === "Tweet needs to be a bit shorter."){
+            var error = "Votre tweet est trop long. | Code erreur #11";
+          } else {
+		    	var error = "Une erreur inconnue s'est produite, Vérifier votre connexion internet et/ou les permissions de votre app Twitter. Pour plus d'aide, Veuillez me contacter sur Twitter (@Johan_Perso). | Code erreur #2";
+		    }
+        }
+		    }
+
+        // Affichage de l'erreur
+		    term.red("\nErreur de Twitter : " + err.message + "\n");
+		    term.red("Erreur détecté par Twitterminal : " + error + "\n");
+		    return process.exit(); // Arrêter le processus
+		}
+
+		});
+});
+}
+)}
 
 term.grabInput(true);
 term.on('key', function(name, matches, data){
@@ -232,6 +331,15 @@ term.on('key', function(name, matches, data){
 		if(numberInput !== 0) return;
 		numberInput++;
 		tweetSecond();
+	}
+});
+
+term.on('key', function(name, matches, data){
+  // Si B : Tweeter avec le troisième compte
+	if (name === 'c'){
+		if(numberInput !== 0) return;
+		numberInput++;
+		tweetThird();
 	}
 });
 
