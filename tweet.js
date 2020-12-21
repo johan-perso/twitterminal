@@ -29,14 +29,15 @@ var autoComplete = [
 	':mouse:' , ':lion:' , ':fire:' , ':tada:' ,
 	':rainbow:' , ':santa:' , ':zero:' , ':one:' ,
   ':two:' , ':three:' , ':four:' , ':five:' , ':six:' ,
-  ':seven:' , ':eight:' , ':nine:' , ':ten:' , 'heart' ,
-  'orange_heart' , 'yellow_heart' , 'green_heart' ,
-  'blue_heart' , 'purple_heart' , 'black_heart' ,
-  'brown_heart' , 'white_heart', 'broken_heart' ,
-  'heart_exclamation' , 'two_hearts' , 'revolving_heart' ,
-  'two_hearts' , ':revolving_heart:' , 'heartbeat' ,
-  'heartpulse' , 'sparkling_heart' , 'cupid' , 'gift_heart' ,
-  'heart_decoration' , 'gift'
+  ':seven:' , ':eight:' , ':nine:' , ':ten:' , 'heart:' ,
+  ':orange_heart:' , ':yellow_heart:' , ':green_heart:' ,
+  ':blue_heart:' , ':purple_heart:' , ':black_heart:' ,
+  ':brown_heart:' , ':white_heart:', ':broken_heart:' ,
+  ':heart_exclamation' , ':two_hearts:' , ':revolving_heart:' ,
+  ':two_hearts:' , ':revolving_heart:' , ':heartbeat:' ,
+  ':heartpulse:' , ':sparkling_heart:' , ':cupid:' , ':gift_heart:' ,
+  ':heart_decoration:' , ':gift:' , ':smirk:' , ':hot:' , ':kiss:' ,
+  ':skull:'
 ];
 
 // tweetClassic = Tweeter avec le compte principal
@@ -77,6 +78,9 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:thinking:/g, "🤔") // Emoji :thinking:
   .replace(/:scream:/g, "😱") // Emoji :scream:
   .replace(/:laughing:/g, "😆") // Emoji :laughing:
+  .replace(/:smirk:/g, "😏") // Emoji :smirk:
+  .replace(/:hot:/g, "🥵") // Emoji :hot:
+  .replace(/:kiss:/g, "😘") // Emoji :hot:
   // Animaux
   .replace(/:dog:/g, "🐶") // Emoji :dog:
   .replace(/:cat:/g, "🐱") // Emoji :cat:
@@ -127,7 +131,8 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:eyes:/g, "👀") // Emoji :eyes:
   .replace(/:middle_finger:/g, "🖕") // Emoji :middle_finger:
   .replace(/:100:/g, "💯") // Emoji :100:
-  .replace(/:gift:/g, "🎁"); // Emoji :gift:
+  .replace(/:gift:/g, "🎁") // Emoji :gift:
+  .replace(/:skull:/g, "💀"); // Emoji :skull:
 
 		term("\nEnvoie du tweet..."); // Message pour dire que le tweet s'envoie
 		T.post('statuses/update', { status: input }, function(err, data, response){ // Tweeter le tweet
@@ -203,6 +208,9 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:thinking:/g, "🤔") // Emoji :thinking:
   .replace(/:scream:/g, "😱") // Emoji :scream:
   .replace(/:laughing:/g, "😆") // Emoji :laughing:
+  .replace(/:smirk:/g, "😏") // Emoji :smirk:
+  .replace(/:hot:/g, "🥵") // Emoji :hot:
+  .replace(/:kiss:/g, "😘") // Emoji :hot:
   // Animaux
   .replace(/:dog:/g, "🐶") // Emoji :dog:
   .replace(/:cat:/g, "🐱") // Emoji :cat:
@@ -253,7 +261,8 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:eyes:/g, "👀") // Emoji :eyes:
   .replace(/:middle_finger:/g, "🖕") // Emoji :middle_finger:
   .replace(/:100:/g, "💯") // Emoji :100:
-  .replace(/:gift:/g, "🎁"); // Emoji :gift:
+  .replace(/:gift:/g, "🎁") // Emoji :gift:
+  .replace(/:skull:/g, "💀"); // Emoji :skull:
 
 		term("\nEnvoie du tweet..."); // Message pour dire que le tweet s'envoie
 		T.post('statuses/update', { status: input }, function(err, data, response){ // Tweeter le tweet
