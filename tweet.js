@@ -24,7 +24,9 @@ var autoComplete = [
 	':love:' , ':sleeping:' , ':dog:' , ':cat:' ,
 	':panda:' , ':pig:' , ':wolf:' , ':chicken:' ,
 	':mouse:' , ':lion:' , ':fire:' , ':tada:' ,
-	':rainbow:' , ':santa:'
+	':rainbow:' , ':santa:' , 'thinking' , 'eyes' ,
+  'upside_down' , 'middle_finger' , 'sunglasses' ,
+  'scream' , 'penguin' , 'laughing' , '100'
 ];
 
 // tweetClassic = Tweeter avec le compte principal
@@ -54,12 +56,17 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
 const input = text
 // Non émoji
 .replace(/%jump%/g, "\n") // Saut de ligne
-// Visages
+// Personnes
 .replace(/:joy:/g, "😂") // Emoji :joy:
 .replace(/:sob:/g, "😭") // Emoji :sob:
 .replace(/:clown:/g, "🤡") // Emoji :clown:
 .replace(/:love:/g, "🥰") // Emoji :love:
 .replace(/:sleeping:/g, "😴") // Emoji :sleeping:
+.replace(/:upside_down:/g, "🙃") // Emoji :upside_down:
+.replace(/:sunglasses:/g, "😎") // Emoji :sunglasses:
+.replace(/:thinking:/g, "🤔") // Emoji :thinking:
+.replace(/:scream:/g, "😱") // Emoji :scream:
+.replace(/:laughing:/g, "😆") // Emoji :laughing:
 // Animaux
 .replace(/:dog:/g, "🐶") // Emoji :dog:
 .replace(/:cat:/g, "🐱") // Emoji :cat:
@@ -69,11 +76,15 @@ const input = text
 .replace(/:chicken:/g, "🐔") // Emoji :chicken:
 .replace(/:mouse:/g, "🐭") // Emoji :mouse:
 .replace(/:lion:/g, "🦁") // Emoji :lion:
+.replace(/:penguin:/g, "🐧") // Emoji :penguin:
 // Autres
 .replace(/:fire:/g, "🔥") // Emoji :fire:
 .replace(/:tada:/g, "🎉") // Emoji :tadda:
 .replace(/:rainbow:/g, "🌈") // Emoji :rainbow:
-.replace(/:santa:/g, "🎅"); // Emoji :santa:
+.replace(/:santa:/g, "🎅") // Emoji :santa:
+.replace(/:eyes:/g, "👀") // Emoji :eyes:
+.replace(/:middle_finger:/g, "🖕") // Emoji :middle_finger:
+.replace(/:100:/g, "💯"); // Emoji :100:
 
 		term("\nEnvoie du tweet..."); // Message pour dire que le tweet s'envoie
 		T.post('statuses/update', { status: input }, function(err, data, response){ // Tweeter le tweet
@@ -92,8 +103,12 @@ const input = text
 		    if(err.message === "Missing required parameter: status."){
 		    	var error = "Votre tweet contient un caractère invalide ou est vide. | Code erreur #10";
 		    } else {
+          if(err.message === "Tweet needs to be a bit shorter."){
+            var error = "Votre tweet est trop long. | Code erreur #11";
+          } else {
 		    	var error = "Une erreur inconnue s'est produite, Vérifier votre connexion internet et/ou les permissions de votre app Twitter. Pour plus d'aide, Veuillez me contacter sur Twitter (@Johan_Perso). | Code erreur #2";
 		    }
+        }
 		    }
 
         // Affichage de l'erreur
@@ -133,12 +148,17 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   const input = text
   // Non émoji
   .replace(/%jump%/g, "\n") // Saut de ligne
-  // Visages
+  // Personnes
   .replace(/:joy:/g, "😂") // Emoji :joy:
   .replace(/:sob:/g, "😭") // Emoji :sob:
   .replace(/:clown:/g, "🤡") // Emoji :clown:
   .replace(/:love:/g, "🥰") // Emoji :love:
   .replace(/:sleeping:/g, "😴") // Emoji :sleeping:
+  .replace(/:upside_down:/g, "🙃") // Emoji :upside_down:
+  .replace(/:sunglasses:/g, "😎") // Emoji :sunglasses:
+  .replace(/:thinking:/g, "🤔") // Emoji :thinking:
+  .replace(/:scream:/g, "😱") // Emoji :scream:
+  .replace(/:laughing:/g, "😆") // Emoji :laughing:
   // Animaux
   .replace(/:dog:/g, "🐶") // Emoji :dog:
   .replace(/:cat:/g, "🐱") // Emoji :cat:
@@ -148,11 +168,15 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:chicken:/g, "🐔") // Emoji :chicken:
   .replace(/:mouse:/g, "🐭") // Emoji :mouse:
   .replace(/:lion:/g, "🦁") // Emoji :lion:
+  .replace(/:penguin:/g, "🐧") // Emoji :penguin:
   // Autres
   .replace(/:fire:/g, "🔥") // Emoji :fire:
-  .replace(/:tada:/g, "🎉") // Emoji :tada:
+  .replace(/:tada:/g, "🎉") // Emoji :tadda:
   .replace(/:rainbow:/g, "🌈") // Emoji :rainbow:
-  .replace(/:santa:/g, "🎅"); // Emoji :santa:
+  .replace(/:santa:/g, "🎅") // Emoji :santa:
+  .replace(/:eyes:/g, "👀") // Emoji :eyes:
+  .replace(/:middle_finger:/g, "🖕") // Emoji :middle_finger:
+  .replace(/:100:/g, "💯"); // Emoji :middle_finger:
 
 		term("\nEnvoie du tweet..."); // Message pour dire que le tweet s'envoie
 		T.post('statuses/update', { status: input }, function(err, data, response){ // Tweeter le tweet
@@ -164,16 +188,20 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
 		} else {
 		   // Si il y a une erreur
 
-		    // Tentative de détection de l'erreur
-		    if(err.message === "Status is a duplicate."){
-		    	var error = "Un tweet contenant le même contenu est déjà existant. | Code erreur #9";
-		    } else {
-		    if(err.message === "Missing required parameter: status."){
-		    	var error = "Votre tweet contient un caractère invalide ou est vide. | Code erreur #10";
-		    } else {
-		    	var error = "Une erreur inconnue s'est produite, Vérifier votre connexion internet et/ou les permissions de votre app Twitter. Pour plus d'aide, Veuillez me contacter sur Twitter (@Johan_Perso). | Code erreur #2";
-		    }
-		    }
+       // Tentative de détection de l'erreur
+       if(err.message === "Status is a duplicate."){
+         var error = "Un tweet contenant le même contenu est déjà existant. | Code erreur #9";
+       } else {
+       if(err.message === "Missing required parameter: status."){
+         var error = "Votre tweet contient un caractère invalide ou est vide. | Code erreur #10";
+       } else {
+         if(err.message === "Tweet needs to be a bit shorter."){
+           var error = "Votre tweet est trop long. | Code erreur #11";
+         } else {
+         var error = "Une erreur inconnue s'est produite, Vérifier votre connexion internet et/ou les permissions de votre app Twitter. Pour plus d'aide, Veuillez me contacter sur Twitter (@Johan_Perso). | Code erreur #2";
+       }
+       }
+       }
 
         // Affichage de l'erreur
 		    term.red("\nErreur de Twitter : " + err.message + "\n");
