@@ -39,6 +39,16 @@ Ouvrez un invite de commande / terminal dans le dossier que vous avez créé lor
 
 : sleeping : 😴
 
+: upside_down : 🙃
+
+: sunglasses : 😎
+
+: thinking : 🤔
+
+: scream : 😱
+
+: laughing : 😆
+
 :  dog : 🐶
 
 : cat : 🐱
@@ -55,6 +65,8 @@ Ouvrez un invite de commande / terminal dans le dossier que vous avez créé lor
 
 : lion : 🦁
 
+: penguin : 🐧
+
 : fire : 🔥
 
 : tada : 🎉
@@ -62,6 +74,12 @@ Ouvrez un invite de commande / terminal dans le dossier que vous avez créé lor
 : rainbow : 🌈
  
 : santa : 🎅
+
+: eyes : 👀
+
+: middle_finger : 🖕
+
+: 100 : 💯
 
 
 ## J'ai besoin d'aide
