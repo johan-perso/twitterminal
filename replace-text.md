@@ -127,3 +127,9 @@
 :middle_finger: 🖕
 
 :gift: 🎁
+
+
+
+# Liste des replacements de texte
+
+%jump% permet de sauter une ligne
