@@ -210,7 +210,7 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:laughing:/g, "😆") // Emoji :laughing:
   .replace(/:smirk:/g, "😏") // Emoji :smirk:
   .replace(/:hot:/g, "🥵") // Emoji :hot:
-  .replace(/:kiss:/g, "😘") // Emoji :hot:
+  .replace(/:kiss:/g, "😘") // Emoji :kiss:
   // Animaux
   .replace(/:dog:/g, "🐶") // Emoji :dog:
   .replace(/:cat:/g, "🐱") // Emoji :cat:
@@ -304,8 +304,10 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
 function emojiList(){
   fetch('https://raw.githubusercontent.com/anticoupable/twitterminal/main/replace-text.md')
     .then(res => res.text())
-    .then(body => console.log(markdownChalk(body) + "\nAccessible à cette adresse : https://github.com/anticoupable/twitterminal/blob/main/replace-text.md"));
-process.exit()
+    .then(body => {
+      console.log(markdownChalk(body) + "\nAccessible à cette adresse : https://github.com/anticoupable/twitterminal/blob/main/replace-text.md");
+      process.exit();
+    });
 }
 
 term.grabInput(true);
