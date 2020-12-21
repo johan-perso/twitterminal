@@ -67,6 +67,10 @@ const input = text
 .replace(/:thinking:/g, "🤔") // Emoji :thinking:
 .replace(/:scream:/g, "😱") // Emoji :scream:
 .replace(/:laughing:/g, "😆") // Emoji :laughing:
+.replace(/:smirk:/g, "😏") // Emoji :smirk:
+.replace(/:hot:/g, "🥵") // Emoji :hot:
+.replace(/:kiss:/g, "😘") // Emoji :hot:
+.replace(/:skull:/g, "💀") // Emoji :skull:
 // Animaux
 .replace(/:dog:/g, "🐶") // Emoji :dog:
 .replace(/:cat:/g, "🐱") // Emoji :cat:
@@ -160,6 +164,10 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:thinking:/g, "🤔") // Emoji :thinking:
   .replace(/:scream:/g, "😱") // Emoji :scream:
   .replace(/:laughing:/g, "😆") // Emoji :laughing:
+.replace(/:smirk:/g, "😏") // Emoji :smirk:
+.replace(/:hot:/g, "🥵") // Emoji :hot:
+.replace(/:kiss:/g, "😘") // Emoji :hot:
+.replace(/:skull:/g, "💀") // Emoji :skull:
   // Animaux
   .replace(/:dog:/g, "🐶") // Emoji :dog:
   .replace(/:cat:/g, "🐱") // Emoji :cat:
