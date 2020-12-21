@@ -10,9 +10,9 @@
 
 ## Installer Twitterminal (Installation classique compatible avec la plupart des OS)
 
-Installe Node.js depuis le site de [nodejs](https://nodejs.org/) ou un autre endroit tierce ayant npm embarqué dedans, Créez un dossier "Twitterminal", Ouvrez un invite de commande / terminal depuis ce dossier puis installer la dépendance terminal-kit avec la commande `npm i terminal-kit` et twit avec la commande `npm i twit`. Téléchargez le fichier tweetConfig.json et tweet.js dans le dossier précedemment créé. Une fois ceci fait tout est bon : Rendez vous à l'étape pour lancer Twitterminal.
+Installe Node.js depuis le site de [nodejs](https://nodejs.org/) ou un autre endroit tierce ayant npm embarqué dedans, Créez un dossier "Twitterminal", Ouvrez un invite de commande / terminal depuis ce dossier puis installer la dépendance terminal-kit avec la commande `npm i terminal-kit`, Twit avec la commande `npm i twit`, node-fetch avec la commande `npm i node-fetch` et markdown-chalk avec la commande `npm i markdown-chalk`. Téléchargez le fichier tweetConfig.json et tweet.js dans le dossier précedemment créé. Une fois ceci fait tout est bon : Rendez vous à l'étape pour lancer Twitterminal.
 
-*À noter qu'il peut y avoir des bugs sur certains OS, merci de les signaler grâce aux Issues présentes sur GitHub.
+*À noter qu'il peut y avoir des bugs, Merci de les signaler grâce aux Issues présentes sur GitHub.
 
 
 ## Comment configurer Twitterminal
@@ -27,59 +27,7 @@ Ouvrez un invite de commande / terminal dans le dossier que vous avez créé lor
 
 ## Remplacement de texte
 
-%jump% permet de sauter une ligne
-
-: joy : 😂
-
-: sob : 😭
-
-: clown : 🤡
-
-: love : 🥰
-
-: sleeping : 😴
-
-: upside_down : 🙃
-
-: sunglasses : 😎
-
-: thinking : 🤔
-
-: scream : 😱
-
-: laughing : 😆
-
-:  dog : 🐶
-
-: cat : 🐱
-
-: panda : 🐼
-
-: pig : 🐷
-
-: wolf : 🐺
-
-: chicken : 🐔
-
-: mouse : 🐭
-
-: lion : 🦁
-
-: penguin : 🐧
-
-: fire : 🔥
-
-: tada : 🎉
-
-: rainbow : 🌈
- 
-: santa : 🎅
-
-: eyes : 👀
-
-: middle_finger : 🖕
-
-: 100 : 💯
+Liste des remplacements de texte disponible dans les nouvelles version de Twitterminal (Si vous utilisez une version récente mais pas trop, Twitterminal affichera des remplacements de textes qui ne sont pas dans votre version mais dans la dernière) ou [ici](https://github.com/anticoupable/twitterminal/blob/main/replace-text.md).
 
 
 ## J'ai besoin d'aide
