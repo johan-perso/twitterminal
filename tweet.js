@@ -31,7 +31,7 @@ function tweetClassic(){
     strictSSL:            true,     // optional - requires SSL certificates to be valid.
 });
 
-// Affichage d'uun message de bienvenue
+// Affichage d'un message de bienvenue
    T.get('account/verify_credentials', { skip_status: true })
   .then(function (result) {
     term("Bonjour " + result.data.name) + term(" !\n");
@@ -110,7 +110,7 @@ function tweetSecond(){
     strictSSL:            true,     // optional - requires SSL certificates to be valid.
 });
 
-// Affichage d'uun message de bienvenue
+// Affichage d'un message de bienvenue
    T.get('account/verify_credentials', { skip_status: true })
   .then(function (result) {
     term("Bonjour " + result.data.name) + term(" !\n");
