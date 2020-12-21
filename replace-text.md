@@ -22,6 +22,12 @@
 
 : laughing: 😆
 
+: smirk: 😏
+
+: hot: 🥵
+
+: kiss: 😘
+
 
 ## Animaux
 
@@ -127,6 +133,8 @@
 : middle_finger: 🖕
 
 : gift: 🎁
+
+: skull: 💀
 
 
 
