@@ -20,11 +20,11 @@ var numberInput = 0;
 
 // Liste des auto complétations
 var autoComplete = [
-	'%jump%' , ':joy:' , ':sob:' , ':clown:' ,
-	':love:' , ':sleeping:' , ':dog:' , ':cat:' ,
-	':panda:' , ':pig:' , ':wolf:' , ':chicken:' ,
-	':mouse:' , ':lion:' , ':fire:' , ':tada:' ,
-	':rainbow:' , ':santa:' , ':thinking:' , ':eyes:' ,
+  '%jump%' , ':joy:' , ':sob:' , ':clown:' ,
+  ':love:' , ':sleeping:' , ':dog:' , ':cat:' ,
+  ':panda:' , ':pig:' , ':wolf:' , ':chicken:' ,
+  ':mouse:' , ':lion:' , ':fire:' , ':tada:' ,
+  ':rainbow:' , ':santa:' , ':thinking:' , ':eyes:' ,
   ':upside_down:' , ':middle_finger:' , ':sunglasses:' ,
   ':scream:' , ':penguin:' , ':laughing:' , ':100:'
 ];
