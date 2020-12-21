@@ -80,7 +80,7 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:laughing:/g, "😆") // Emoji :laughing:
   .replace(/:smirk:/g, "😏") // Emoji :smirk:
   .replace(/:hot:/g, "🥵") // Emoji :hot:
-  .replace(/:kiss:/g, "😘") // Emoji :hot:
+  .replace(/:kiss:/g, "😘") // Emoji :kiss:
   // Animaux
   .replace(/:dog:/g, "🐶") // Emoji :dog:
   .replace(/:cat:/g, "🐱") // Emoji :cat:
