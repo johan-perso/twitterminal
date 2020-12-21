@@ -14,11 +14,13 @@ if(!config.consumer_key1 | !config.consumer_secret1 | !config.access_token1 | !c
 
 // Vérification des champs 2 du fichier de config et si c'est vide : N'utiliser qu'un seul compte
 if(!config.consumer_key2 | !config.consumer_secret2 | !config.access_token2 | !config.access_token_secret2){
-  return tweetClassic();
+  term('Appuyer sur la touche "A" pour tweeter, "E" pour voir la liste des émojis\n\n');
+} else {
+  // Indication des touches
+  term('Appuyer sur la touche "A" pour tweeter avec le compte principal, "B" pour tweeter avec le compte secondaire, "E" pour voir la liste des émojis\n\n');
 }
 
-// Indication des touches + Définition de numberInput
-term('Appuyer sur la touche "A" pour tweeter avec le compte principal, "B" pour tweeter avec le compte secondaire, "E" pour voir la liste des émojis\n\n');
+// Définition de numberInput
 var numberInput = 0;
 
 // Liste des auto complétations
@@ -324,6 +326,7 @@ term.on('key', function(name, matches, data){
   // Si B : Tweeter avec le second compte
 	if (name === 'b'){
 		if(numberInput !== 0) return;
+    if(!config.consumer_key2 | !config.consumer_secret2 | !config.access_token2 | !config.access_token_secret2) return; // Vérification des champs 2 du fichier de config et si c'est vide : Ne pas utiliser le second compte
 		numberInput++;
 		tweetSecond();
 	}
