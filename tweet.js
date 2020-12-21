@@ -122,6 +122,7 @@ const input = text
 }
 )}
 
+// tweetSecond = Tweeter avec le compte secondaire
 function tweetSecond(){
 
    var T = new Twit({
