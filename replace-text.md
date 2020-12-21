@@ -2,7 +2,7 @@
 
 ## Personnes
 
-:joy: 😂
+\:joy: 😂
 
 :sob: 😭
 
