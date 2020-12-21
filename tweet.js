@@ -18,6 +18,15 @@ if(!config.consumer_key2 | !config.consumer_secret2 | !config.access_token2 | !c
 term('Appuyer sur la touche "A" pour tweeter avec le compte principal et "B" pour tweeter avec le compte secondaire\n\n');
 var numberInput = 0;
 
+// Liste des auto complétations
+var autoComplete = [
+	'%jump%' , ':joy:' , ':sob:' , ':clown:' ,
+	':love:' , ':sleeping:' , ':dog:' , ':cat:' ,
+	':panda:' , ':pig:' , ':wolf:' , ':chicken:' ,
+	':mouse:' , ':lion:' , ':fire:' , ':tada:' ,
+	':rainbow:' , ':santa:'
+];
+
 // tweetClassic = Tweeter avec le compte principal
 function tweetClassic(){
 
@@ -39,7 +48,7 @@ function tweetClassic(){
     term.yellow("[-----------------------------------------------]\n");
 
 term("Veuillez entrer le contenu du tweet : "); // Message de demande de texte
-term.inputField(function(error, text){ // Demande de texte et enregistrement sous la variable "text"
+term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoCompleteHint: true }, function( error , text ) { // Demande de texte et enregistrement sous la variable "text"
 
 // Définition de input (Remplacement de certains trucs de text)
 const input = text
@@ -118,7 +127,7 @@ function tweetSecond(){
     term.yellow("[-----------------------------------------------]\n");
 
 term("Veuillez entrer le contenu du tweet : "); // Message de demande de texte
-term.inputField(function(error, text){ // Demande de texte et enregistrement sous la variable "text"
+term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoCompleteHint: true }, function( error , text ) { // Demande de texte et enregistrement sous la variable "text"
 
   // Définition de input (Remplacement de certains trucs de text)
   const input = text
