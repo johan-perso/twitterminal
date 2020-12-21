@@ -2,131 +2,131 @@
 
 ## Personnes
 
-\:joy: 😂
+: joy: 😂
 
-:sob: 😭
+: sob: 😭
 
-:clown: 🤡
+: clown: 🤡
 
-:love: 🥰
+: love: 🥰
 
-:sleeping: 😴
+: sleeping: 😴
 
-:upside_down: 🙃
+: upside_down: 🙃
 
-:sunglasses: 😎
+: sunglasses: 😎
 
-:thinking: 🤔
+: thinking: 🤔
 
-:scream: 😱
+: scream: 😱
 
-:laughing: 😆
+: laughing: 😆
 
 
 ## Animaux
 
-:dog: 🐶
+: dog: 🐶
 
-:cat: 🐱
+: cat: 🐱
 
-:panda: 🐼
+: panda: 🐼
 
-:pig: 🐷
+: pig: 🐷
 
-:wolf: 🐺
+: wolf: 🐺
 
-:chicken: 🐔
+: chicken: 🐔
 
-:mouse: 🐭
+: mouse: 🐭
 
-:lion: 🦁
+: lion: 🦁
 
-:penguin: 🐧
+: penguin: 🐧
 
 
 ## Nombres
 
-:zero: 0️⃣
+: zero: 0️⃣
 
-:one: 1️⃣
+: one: 1️⃣
 
-:two: ️2️⃣
+: two: ️2️⃣
 
-:three: 3️⃣
+: three: 3️⃣
 
-:four: 4️⃣
+: four: 4️⃣
 
-:five: 5️⃣
+: five: 5️⃣
 
-:six: 6️⃣
+: six: 6️⃣
 
-:seven: 7️⃣
+: seven: 7️⃣
 
-:eight: 8️⃣
+: eight: 8️⃣
 
-:nine: 9️⃣
+: nine: 9️⃣
 
-:ten: 🔟
+: ten: 🔟
 
 
 ## Coeur
 
-:heart: ❤️
+: heart: ❤️
 
-:orange_heart: 🧡
+: orange_heart: 🧡
 
-:heart_decoration: 💟
+: heart_decoration: 💟
 
-:yellow_heart: 💛
+: yellow_heart: 💛
 
-:green_heart: 💚
+: green_heart: 💚
 
-:gift_heart: 💝
+: gift_heart: 💝
 
-:blue_heart: 💙
+: blue_heart: 💙
 
-:purple_heart: 💜
+: purple_heart: 💜
 
-:cupid: 💘
+: cupid: 💘
 
-:black_heart: 🖤
+: black_heart: 🖤
 
-:brown_heart: 🤎
+: brown_heart: 🤎
 
-:white_heart: 🤍
+: white_heart: 🤍
 
-:broken_heart: 💔
+: broken_heart: 💔
 
-:heart_exclamation: ❣️
+: heart_exclamation: ❣️
 
-:two_hearts: 💕
+: two_hearts: 💕
 
-:revolving_heart: 💞
+: revolving_heart: 💞
 
-:heartbeat: 💓
+: heartbeat: 💓
 
-:heartpulse: 💗
+: heartpulse: 💗
 
-:sparkling_heart: 💖
+: sparkling_heart: 💖
 
 
 ## Autres
 
-:fire: 🔥
+: fire: 🔥
 
-:tada: 🎉
+: tada: 🎉
 
-:rainbow: 🌈
+: rainbow: 🌈
 
-:santa: 🎅
+: santa: 🎅
 
-:eyes: 👀
+: eyes: 👀
 
-:100: 💯
+: 100: 💯
 
-:middle_finger: 🖕
+: middle_finger: 🖕
 
-:gift: 🎁
+: gift: 🎁
 
 
 
