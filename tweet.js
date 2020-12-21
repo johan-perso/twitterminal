@@ -24,9 +24,9 @@ var autoComplete = [
 	':love:' , ':sleeping:' , ':dog:' , ':cat:' ,
 	':panda:' , ':pig:' , ':wolf:' , ':chicken:' ,
 	':mouse:' , ':lion:' , ':fire:' , ':tada:' ,
-	':rainbow:' , ':santa:' , 'thinking' , 'eyes' ,
-  'upside_down' , 'middle_finger' , 'sunglasses' ,
-  'scream' , 'penguin' , 'laughing' , '100'
+	':rainbow:' , ':santa:' , ':thinking:' , ':eyes:' ,
+  ':upside_down:' , ':middle_finger:' , ':sunglasses:' ,
+  ':scream:' , ':penguin:' , ':laughing:' , ':100:'
 ];
 
 // tweetClassic = Tweeter avec le compte principal
