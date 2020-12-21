@@ -27,59 +27,7 @@ Ouvrez un invite de commande / terminal dans le dossier que vous avez créé lor
 
 ## Remplacement de texte
 
-%jump% permet de sauter une ligne
-
-: joy : 😂
-
-: sob : 😭
-
-: clown : 🤡
-
-: love : 🥰
-
-: sleeping : 😴
-
-: upside_down : 🙃
-
-: sunglasses : 😎
-
-: thinking : 🤔
-
-: scream : 😱
-
-: laughing : 😆
-
-:  dog : 🐶
-
-: cat : 🐱
-
-: panda : 🐼
-
-: pig : 🐷
-
-: wolf : 🐺
-
-: chicken : 🐔
-
-: mouse : 🐭
-
-: lion : 🦁
-
-: penguin : 🐧
-
-: fire : 🔥
-
-: tada : 🎉
-
-: rainbow : 🌈
- 
-: santa : 🎅
-
-: eyes : 👀
-
-: middle_finger : 🖕
-
-: 100 : 💯
+Liste des remplacements de texte disponible dans les nouvelles version de Twitterminal (Si vous utilisez une version récente mais pas trop, Twitterminal affichera des remplacements de textes qui ne sont pas dans votre version mais dans la dernière) ou [ici](https://github.com/anticoupable/twitterminal/blob/main/replace-text.md).
 
 
 ## J'ai besoin d'aide
