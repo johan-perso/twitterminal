@@ -10,6 +10,12 @@
  "consumer_secret2": "",
  "access_token2": "",
  "access_token_secret2": "",
+
+
+ "consumer_key3": "",
+ "consumer_secret3": "",
+ "access_token3": "",
+ "access_token_secret3": "",
  
  "//Information": "Les quatres dernières valeurs sont facultatives et permettent d'ajouter un deuxième compte Twitter."
 }
