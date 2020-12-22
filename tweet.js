@@ -14,10 +14,10 @@ if(!config.consumer_key1 | !config.consumer_secret1 | !config.access_token1 | !c
 
 // Vérification des champs 2 du fichier de config et si c'est vide : N'utiliser qu'un seul compte
 if(!config.consumer_key2 | !config.consumer_secret2 | !config.access_token2 | !config.access_token_secret2){
-  term('Appuyer sur la touche "A" pour tweeter, "E" pour voir la liste des émojis, "G" pour chercher des gifs (Propulsé par Tenor).\n\n');
+  term('Appuyer sur la touche "A" pour tweeter, "E" pour voir la liste des émojis\n\n');
 } else {
   // Indication des touches
-  term('Appuyer sur la touche "A" pour tweeter avec le compte principal, "B" pour tweeter avec le compte secondaire, "E" pour voir la liste des émojis, "G" pour chercher des gifs (Propulsé par Tenor).\n\n');
+  term('Appuyer sur la touche "A" pour tweeter avec le compte principal, "B" pour tweeter avec le compte secondaire, "E" pour voir la liste des émojis\n\n');
 }
 
 // Définition de numberInput
@@ -93,6 +93,20 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:mouse:/g, "🐭") // Emoji :mouse:
   .replace(/:lion:/g, "🦁") // Emoji :lion:
   .replace(/:penguin:/g, "🐧") // Emoji :penguin:
+  .replace(/:frog:/g, "🐸") // Emoji :frog:
+  .replace(/:tiger:/g, "🐯") // Emoji :tiger:
+  .replace(/:monkey:/g, "🐵") // Emoji :monkey:
+  .replace(/:zebra:/g, "🦓") // Emoji :zebra:
+  .replace(/:hamster:/g, "🐹") // Emoji :hamster:
+  .replace(/:cow:/g, "🐮") // Emoji :cow:
+  .replace(/:rabbit:/g, "🐰") // Emoji :rabbit:
+  .replace(/:bear:/g, "🐻") // Emoji :bear:
+  .replace(/:koala:/g, "🐨") // Emoji :koala:
+  .replace(/:elephant:/g, "🐘") // Emoji :elefant:
+  .replace(/:dragon:/g, "🐲") // Emoji :dragon:
+  .replace(/:racoon:/g, "🦝") // Emoji :racoon:
+  .replace(/:horse:/g, "🐴") // Emoji :horse:
+  .replace(/:unicorn:/g, "🦄") // Emoji :unicorn:
   // Nombres
   .replace(/:zero:/g, "0️⃣") // Emoji :zero:
   .replace(/:one:/g, "1️⃣") // Emoji :one:
@@ -105,6 +119,18 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:eight:/g, "8️⃣") // Emoji :eight:
   .replace(/:nine:/g, "9️⃣") // Emoji :nine:
   .replace(/:ten:/g, "🔟") // Emoji :ten:
+  // Nourriture
+  .replace(/:pizza:/g, "🍕") // Emoji :pizza:
+  .replace(/:burger:/g, "🍔") // Emoji :burger:
+  .replace(/:french_fries:/g, "🍟") // Emoji :french_fries:
+  .replace(/:hot_dog:/g, "🌭") // Emoji :hot_dog:
+  .replace(/:pop_corn:/g, "🍿") // Emoji :pop_corn:
+  .replace(/:salt:/g, "🧂") // Emoji :salt:
+  .replace(/:bacon:/g, "🥓") // Emoji :bacon:
+  .replace(/:egg:/g, "🥚") // Emoji :egg:
+  .replace(/:waffle:/g, "🧇") // Emoji :waffle:
+  .replace(/:pancake:/g, "🥞") // Emoji :pancake: (pancake launcher lol)
+  .replace(/:butter:/g, "🧈") // Emoji :butter:
   // Coeur
   .replace(/:heart:/g, "❤️") // Emoji :heart:
   .replace(/:orange_heart:/g, "🧡") // Emoji :orange_heart:
@@ -223,6 +249,20 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:mouse:/g, "🐭") // Emoji :mouse:
   .replace(/:lion:/g, "🦁") // Emoji :lion:
   .replace(/:penguin:/g, "🐧") // Emoji :penguin:
+  .replace(/:frog:/g, "🐸") // Emoji :frog:
+  .replace(/:tiger:/g, "🐯") // Emoji :tiger:
+  .replace(/:monkey:/g, "🐵") // Emoji :monkey:
+  .replace(/:zebra:/g, "🦓") // Emoji :zebra:
+  .replace(/:hamster:/g, "🐹") // Emoji :hamster:
+  .replace(/:cow:/g, "🐮") // Emoji :cow:
+  .replace(/:rabbit:/g, "🐰") // Emoji :rabbit:
+  .replace(/:bear:/g, "🐻") // Emoji :bear:
+  .replace(/:koala:/g, "🐨") // Emoji :koala:
+  .replace(/:elephant:/g, "🐘") // Emoji :elefant:
+  .replace(/:dragon:/g, "🐲") // Emoji :dragon:
+  .replace(/:racoon:/g, "🦝") // Emoji :racoon:
+  .replace(/:horse:/g, "🐴") // Emoji :horse:
+  .replace(/:unicorn:/g, "🦄") // Emoji :unicorn:
   // Nombres
   .replace(/:zero:/g, "0️⃣") // Emoji :zero:
   .replace(/:one:/g, "1️⃣") // Emoji :one:
@@ -235,6 +275,18 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:eight:/g, "8️⃣") // Emoji :eight:
   .replace(/:nine:/g, "9️⃣") // Emoji :nine:
   .replace(/:ten:/g, "🔟") // Emoji :ten:
+  // Nourriture
+  .replace(/:pizza:/g, "🍕") // Emoji :pizza:
+  .replace(/:burger:/g, "🍔") // Emoji :burger:
+  .replace(/:french_fries:/g, "🍟") // Emoji :french_fries:
+  .replace(/:hot_dog:/g, "🌭") // Emoji :hot_dog:
+  .replace(/:pop_corn:/g, "🍿") // Emoji :pop_corn:
+  .replace(/:salt:/g, "🧂") // Emoji :salt:
+  .replace(/:bacon:/g, "🥓") // Emoji :bacon:
+  .replace(/:egg:/g, "🥚") // Emoji :egg:
+  .replace(/:waffle:/g, "🧇") // Emoji :waffle:
+  .replace(/:pancake:/g, "🥞") // Emoji :pancake: (pancake launcher lol)
+  .replace(/:butter:/g, "🧈") // Emoji :butter:
   // Coeur
   .replace(/:heart:/g, "❤️") // Emoji :heart:
   .replace(/:orange_heart:/g, "🧡") // Emoji :orange_heart:
@@ -312,48 +364,6 @@ function emojiList(){
     });
 }
 
-// gif = Recherche de gif
-function gif(){
-  term("Entrer quelque chose à rechercher sur Tenor : "); // Demande de texte
-  term.inputField(function(error, inputGif){
-    // Remplacement des caractères invalides
-    var gifSearch = inputGif
-    .replace(/é/g, "e")
-    .replace(/è/g, "e")
-    .replace(/à/g, "a")
-    .replace(/ê/g, "e")
-    .replace(/ù/g, "u")
-    .replace(/`/g, "")
-    .replace(/\\/g, " ");
-
-  // Fetch des gifs via l'API de Tenor
-    fetch('https://api.tenor.com/v1/search?q=' + gifSearch + '&key=LIVDSRZULELA&limit=15')
-        .then(res => res.json())
-        .then(json => {
-          console.log("\n\n" + json.results[0].url);
-          console.log(json.results[1].url);
-          console.log(json.results[2].url);
-          console.log(json.results[3].url);
-          console.log(json.results[4].url);
-          console.log(json.results[5].url);
-          console.log(json.results[6].url);
-          console.log(json.results[7].url);
-          console.log(json.results[8].url);
-          console.log(json.results[9].url);
-          console.log(json.results[10].url);
-          console.log(json.results[11].url);
-          console.log(json.results[12].url);
-          console.log(json.results[13].url);
-          console.log(json.results[14].url);
-          process.exit();
-  }).catch(err => {
-    // En cas d'erreur, Arrêter le processus
-    process.exit();
-  });
-  });
-
-}
-
 term.grabInput(true);
 term.on('key', function(name, matches, data){
   // Si A : Tweeter avec le compte principal
@@ -383,15 +393,6 @@ term.on('key', function(name, matches, data){
 	}
 });
 
-term.on('key', function(name, matches, data){
-  // Si G : Utiliser la recherche de gif
-	if (name === 'g'){
-		if(numberInput !== 0) return;
-		numberInput++;
-		gif();
-	}
-});
-
 
 term.grabInput(true);
 term.on('key', function(name, matches, data){
@@ -400,3 +401,5 @@ term.on('key', function(name, matches, data){
 		process.exit();
 	}
   });
+
+//buy airpods 
