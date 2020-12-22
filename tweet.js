@@ -40,10 +40,10 @@ var autoComplete = [
   ':two_hearts:' , ':revolving_heart:' , ':heartbeat:' ,
   ':heartpulse:' , ':sparkling_heart:' , ':cupid:' , ':gift_heart:' ,
   ':heart_decoration:' , ':gift:' , ':smirk:' , ':hot:' , ':kiss:' ,
-  ':skull:' , 'frog' , 'tiger' , 'monkey' , 'zebra' , 'hamster' , 
-  'cow' , 'rabbit' , 'bear' , 'koala' , 'elephant' , 'dragon' , 'racoon' ,
-  'horse' , 'unicorn' , 'pizza' , 'burger' , 'french_fries' , 'hot_dog' ,
-  'pop_corn' , 'salt' , 'bacon' , 'egg' , 'waffle' , 'pancake' , 'butter'
+  ':skull:' , ':frog:' , ':tiger:' , ':monkey:' , ':zebra:' , ':hamster:' ,
+  ':cow:' , ':rabbit:' , ':bear:' , ':koala:' , ':elephant:' , ':dragon:' , ':racoon:' ,
+  ':horse:' , ':unicorn:' , ':pizza:' , ':burger:' , ':french_fries:' , ':hot_dog:' ,
+  ':pop_corn:' , ':salt:' , ':bacon:' , ':egg:' , ':waffle:' , ':pancake:' , ':butter:'
 ];
 
 // tweetClassic = Tweeter avec le compte principal
