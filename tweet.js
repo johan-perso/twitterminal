@@ -4,6 +4,7 @@ var Twit = require('twit'); // https://www.npmjs.com/package/twit
 const config = require('./tweetConfig.json'); // Fichier local
 const markdownChalk = require('markdown-chalk'); // https://www.npmjs.com/package/markdown-chalk
 const fetch = require('node-fetch'); // https://www.npmjs.com/package/node-fetch
+const clipboardy = require('clipboardy'); // https://www.npmjs.com/package/clipboardy
 
 
 // Vérification des champs 1 du fichier de config et si c'est vide : Afficher un message d'erreur et arrêter le processus
@@ -39,7 +40,10 @@ var autoComplete = [
   ':two_hearts:' , ':revolving_heart:' , ':heartbeat:' ,
   ':heartpulse:' , ':sparkling_heart:' , ':cupid:' , ':gift_heart:' ,
   ':heart_decoration:' , ':gift:' , ':smirk:' , ':hot:' , ':kiss:' ,
-  ':skull:'
+  ':skull:' , 'frog' , 'tiger' , 'monkey' , 'zebra' , 'hamster' , 
+  'cow' , 'rabbit' , 'bear' , 'koala' , 'elephant' , 'dragon' , 'racoon' ,
+  'horse' , 'unicorn' , 'pizza' , 'burger' , 'french_fries' , 'hot_dog' ,
+  'pop_corn' , 'salt' , 'bacon' , 'egg' , 'waffle' , 'pancake' , 'butter'
 ];
 
 // tweetClassic = Tweeter avec le compte principal
@@ -93,6 +97,20 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:mouse:/g, "🐭") // Emoji :mouse:
   .replace(/:lion:/g, "🦁") // Emoji :lion:
   .replace(/:penguin:/g, "🐧") // Emoji :penguin:
+  .replace(/:frog:/g, "🐸") // Emoji :frog:
+  .replace(/:tiger:/g, "🐯") // Emoji :tiger:
+  .replace(/:monkey:/g, "🐵") // Emoji :monkey:
+  .replace(/:zebra:/g, "🦓") // Emoji :zebra:
+  .replace(/:hamster:/g, "🐹") // Emoji :hamster:
+  .replace(/:cow:/g, "🐮") // Emoji :cow:
+  .replace(/:rabbit:/g, "🐰") // Emoji :rabbit:
+  .replace(/:bear:/g, "🐻") // Emoji :bear:
+  .replace(/:koala:/g, "🐨") // Emoji :koala:
+  .replace(/:elephant:/g, "🐘") // Emoji :elefant:
+  .replace(/:dragon:/g, "🐲") // Emoji :dragon:
+  .replace(/:racoon:/g, "🦝") // Emoji :racoon:
+  .replace(/:horse:/g, "🐴") // Emoji :horse:
+  .replace(/:unicorn:/g, "🦄") // Emoji :unicorn:
   // Nombres
   .replace(/:zero:/g, "0️⃣") // Emoji :zero:
   .replace(/:one:/g, "1️⃣") // Emoji :one:
@@ -105,6 +123,18 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:eight:/g, "8️⃣") // Emoji :eight:
   .replace(/:nine:/g, "9️⃣") // Emoji :nine:
   .replace(/:ten:/g, "🔟") // Emoji :ten:
+  // Nourriture
+  .replace(/:pizza:/g, "🍕") // Emoji :pizza:
+  .replace(/:burger:/g, "🍔") // Emoji :burger:
+  .replace(/:french_fries:/g, "🍟") // Emoji :french_fries:
+  .replace(/:hot_dog:/g, "🌭") // Emoji :hot_dog:
+  .replace(/:pop_corn:/g, "🍿") // Emoji :pop_corn:
+  .replace(/:salt:/g, "🧂") // Emoji :salt:
+  .replace(/:bacon:/g, "🥓") // Emoji :bacon:
+  .replace(/:egg:/g, "🥚") // Emoji :egg:
+  .replace(/:waffle:/g, "🧇") // Emoji :waffle:
+  .replace(/:pancake:/g, "🥞") // Emoji :pancake:
+  .replace(/:butter:/g, "🧈") // Emoji :butter:
   // Coeur
   .replace(/:heart:/g, "❤️") // Emoji :heart:
   .replace(/:orange_heart:/g, "🧡") // Emoji :orange_heart:
@@ -142,6 +172,7 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
 		if(!err){
 		    term("\nTweet envoyé..."); // Dire que le tweet est envoyé
 		    term("\nLien du tweet : ") + term.cyan(`https://twitter.com/${ data.user.screen_name }/status/${ data.id_str }\n`); // Donner le lien du tweet
+        clipboardy.writeSync(`https://twitter.com/${ data.user.screen_name }/status/${ data.id_str }`); // Copier le lien du tweet dans le presse papier
 		    process.exit(); // Arrêter le processus
 		} else {
 		   // Si il y a une erreur
@@ -223,6 +254,20 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:mouse:/g, "🐭") // Emoji :mouse:
   .replace(/:lion:/g, "🦁") // Emoji :lion:
   .replace(/:penguin:/g, "🐧") // Emoji :penguin:
+  .replace(/:frog:/g, "🐸") // Emoji :frog:
+  .replace(/:tiger:/g, "🐯") // Emoji :tiger:
+  .replace(/:monkey:/g, "🐵") // Emoji :monkey:
+  .replace(/:zebra:/g, "🦓") // Emoji :zebra:
+  .replace(/:hamster:/g, "🐹") // Emoji :hamster:
+  .replace(/:cow:/g, "🐮") // Emoji :cow:
+  .replace(/:rabbit:/g, "🐰") // Emoji :rabbit:
+  .replace(/:bear:/g, "🐻") // Emoji :bear:
+  .replace(/:koala:/g, "🐨") // Emoji :koala:
+  .replace(/:elephant:/g, "🐘") // Emoji :elefant:
+  .replace(/:dragon:/g, "🐲") // Emoji :dragon:
+  .replace(/:racoon:/g, "🦝") // Emoji :racoon:
+  .replace(/:horse:/g, "🐴") // Emoji :horse:
+  .replace(/:unicorn:/g, "🦄") // Emoji :unicorn:
   // Nombres
   .replace(/:zero:/g, "0️⃣") // Emoji :zero:
   .replace(/:one:/g, "1️⃣") // Emoji :one:
@@ -235,6 +280,18 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:eight:/g, "8️⃣") // Emoji :eight:
   .replace(/:nine:/g, "9️⃣") // Emoji :nine:
   .replace(/:ten:/g, "🔟") // Emoji :ten:
+  // Nourriture
+  .replace(/:pizza:/g, "🍕") // Emoji :pizza:
+  .replace(/:burger:/g, "🍔") // Emoji :burger:
+  .replace(/:french_fries:/g, "🍟") // Emoji :french_fries:
+  .replace(/:hot_dog:/g, "🌭") // Emoji :hot_dog:
+  .replace(/:pop_corn:/g, "🍿") // Emoji :pop_corn:
+  .replace(/:salt:/g, "🧂") // Emoji :salt:
+  .replace(/:bacon:/g, "🥓") // Emoji :bacon:
+  .replace(/:egg:/g, "🥚") // Emoji :egg:
+  .replace(/:waffle:/g, "🧇") // Emoji :waffle:
+  .replace(/:pancake:/g, "🥞") // Emoji :pancake:
+  .replace(/:butter:/g, "🧈") // Emoji :butter:
   // Coeur
   .replace(/:heart:/g, "❤️") // Emoji :heart:
   .replace(/:orange_heart:/g, "🧡") // Emoji :orange_heart:
@@ -272,6 +329,7 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
 		if(!err){
 		    term("\nTweet envoyé..."); // Dire que le tweet est envoyé
 		    term("\nLien du tweet : ") + term.cyan(`https://twitter.com/${ data.user.screen_name }/status/${ data.id_str }\n`); // Donner le lien du tweet
+        clipboardy.writeSync(`https://twitter.com/${ data.user.screen_name }/status/${ data.id_str }`); // Copier le lien du tweet dans le presse papier
 		    process.exit(); // Arrêter le processus
 		} else {
 		   // Si il y a une erreur
@@ -308,7 +366,8 @@ function emojiList(){
     .then(res => res.text())
     .then(body => {
       console.log(markdownChalk(body) + "\nAccessible à cette adresse : https://github.com/anticoupable/twitterminal/blob/main/replace-text.md");
-      process.exit();
+      clipboardy.writeSync("https://github.com/anticoupable/twitterminal/blob/main/replace-text.md"); // Copier le lien dans le presse papier
+      process.exit(); // Arrêter le processus
     });
 }
 
@@ -345,7 +404,8 @@ function gif(){
           console.log(json.results[12].url);
           console.log(json.results[13].url);
           console.log(json.results[14].url);
-          process.exit();
+          clipboardy.writeSync(json.results[0].url); // Copier le lien du premier gif dans le presse papier
+          process.exit(); // Arrêter le processus
   }).catch(err => {
     // En cas d'erreur, Arrêter le processus
     process.exit();
