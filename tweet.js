@@ -4,6 +4,7 @@ var Twit = require('twit'); // https://www.npmjs.com/package/twit
 const config = require('./tweetConfig.json'); // Fichier local
 const markdownChalk = require('markdown-chalk'); // https://www.npmjs.com/package/markdown-chalk
 const fetch = require('node-fetch'); // https://www.npmjs.com/package/node-fetch
+const clipboardy = require('clipboardy'); // https://www.npmjs.com/package/clipboardy
 
 
 // Vérification des champs 1 du fichier de config et si c'est vide : Afficher un message d'erreur et arrêter le processus
@@ -14,10 +15,10 @@ if(!config.consumer_key1 | !config.consumer_secret1 | !config.access_token1 | !c
 
 // Vérification des champs 2 du fichier de config et si c'est vide : N'utiliser qu'un seul compte
 if(!config.consumer_key2 | !config.consumer_secret2 | !config.access_token2 | !config.access_token_secret2){
-  term('Appuyer sur la touche "A" pour tweeter, "E" pour voir la liste des émojis\n\n');
+  term('Appuyer sur la touche "A" pour tweeter, "E" pour voir la liste des émojis, "G" pour chercher des gifs (Propulsé par Tenor).\n\n');
 } else {
   // Indication des touches
-  term('Appuyer sur la touche "A" pour tweeter avec le compte principal, "B" pour tweeter avec le compte secondaire, "E" pour voir la liste des émojis\n\n');
+  term('Appuyer sur la touche "A" pour tweeter avec le compte principal, "B" pour tweeter avec le compte secondaire, "E" pour voir la liste des émojis, "G" pour chercher des gifs (Propulsé par Tenor).\n\n');
 }
 
 // Définition de numberInput
@@ -39,7 +40,10 @@ var autoComplete = [
   ':two_hearts:' , ':revolving_heart:' , ':heartbeat:' ,
   ':heartpulse:' , ':sparkling_heart:' , ':cupid:' , ':gift_heart:' ,
   ':heart_decoration:' , ':gift:' , ':smirk:' , ':hot:' , ':kiss:' ,
-  ':skull:'
+  ':skull:' , 'frog' , 'tiger' , 'monkey' , 'zebra' , 'hamster' , 
+  'cow' , 'rabbit' , 'bear' , 'koala' , 'elephant' , 'dragon' , 'racoon' ,
+  'horse' , 'unicorn' , 'pizza' , 'burger' , 'french_fries' , 'hot_dog' ,
+  'pop_corn' , 'salt' , 'bacon' , 'egg' , 'waffle' , 'pancake' , 'butter'
 ];
 
 // tweetClassic = Tweeter avec le compte principal
@@ -129,7 +133,7 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:bacon:/g, "🥓") // Emoji :bacon:
   .replace(/:egg:/g, "🥚") // Emoji :egg:
   .replace(/:waffle:/g, "🧇") // Emoji :waffle:
-  .replace(/:pancake:/g, "🥞") // Emoji :pancake: (pancake launcher lol)
+  .replace(/:pancake:/g, "🥞") // Emoji :pancake:
   .replace(/:butter:/g, "🧈") // Emoji :butter:
   // Coeur
   .replace(/:heart:/g, "❤️") // Emoji :heart:
@@ -168,6 +172,7 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
 		if(!err){
 		    term("\nTweet envoyé..."); // Dire que le tweet est envoyé
 		    term("\nLien du tweet : ") + term.cyan(`https://twitter.com/${ data.user.screen_name }/status/${ data.id_str }\n`); // Donner le lien du tweet
+        clipboardy.writeSync(`https://twitter.com/${ data.user.screen_name }/status/${ data.id_str }`); // Copier le lien du tweet dans le presse papier
 		    process.exit(); // Arrêter le processus
 		} else {
 		   // Si il y a une erreur
@@ -285,7 +290,7 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:bacon:/g, "🥓") // Emoji :bacon:
   .replace(/:egg:/g, "🥚") // Emoji :egg:
   .replace(/:waffle:/g, "🧇") // Emoji :waffle:
-  .replace(/:pancake:/g, "🥞") // Emoji :pancake: (pancake launcher lol)
+  .replace(/:pancake:/g, "🥞") // Emoji :pancake:
   .replace(/:butter:/g, "🧈") // Emoji :butter:
   // Coeur
   .replace(/:heart:/g, "❤️") // Emoji :heart:
@@ -324,6 +329,7 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
 		if(!err){
 		    term("\nTweet envoyé..."); // Dire que le tweet est envoyé
 		    term("\nLien du tweet : ") + term.cyan(`https://twitter.com/${ data.user.screen_name }/status/${ data.id_str }\n`); // Donner le lien du tweet
+        clipboardy.writeSync(`https://twitter.com/${ data.user.screen_name }/status/${ data.id_str }`); // Copier le lien du tweet dans le presse papier
 		    process.exit(); // Arrêter le processus
 		} else {
 		   // Si il y a une erreur
@@ -360,8 +366,52 @@ function emojiList(){
     .then(res => res.text())
     .then(body => {
       console.log(markdownChalk(body) + "\nAccessible à cette adresse : https://github.com/anticoupable/twitterminal/blob/main/replace-text.md");
-      process.exit();
+      clipboardy.writeSync("https://github.com/anticoupable/twitterminal/blob/main/replace-text.md"); // Copier le lien dans le presse papier
+      process.exit(); // Arrêter le processus
     });
+}
+
+// gif = Recherche de gif
+function gif(){
+  term("Entrer quelque chose à rechercher sur Tenor : "); // Demande de texte
+  term.inputField(function(error, inputGif){
+    // Remplacement des caractères invalides
+    var gifSearch = inputGif
+    .replace(/é/g, "e")
+    .replace(/è/g, "e")
+    .replace(/à/g, "a")
+    .replace(/ê/g, "e")
+    .replace(/ù/g, "u")
+    .replace(/`/g, "")
+    .replace(/\\/g, " ");
+
+  // Fetch des gifs via l'API de Tenor
+    fetch('https://api.tenor.com/v1/search?q=' + gifSearch + '&key=LIVDSRZULELA&limit=15')
+        .then(res => res.json())
+        .then(json => {
+          console.log("\n\n" + json.results[0].url);
+          console.log(json.results[1].url);
+          console.log(json.results[2].url);
+          console.log(json.results[3].url);
+          console.log(json.results[4].url);
+          console.log(json.results[5].url);
+          console.log(json.results[6].url);
+          console.log(json.results[7].url);
+          console.log(json.results[8].url);
+          console.log(json.results[9].url);
+          console.log(json.results[10].url);
+          console.log(json.results[11].url);
+          console.log(json.results[12].url);
+          console.log(json.results[13].url);
+          console.log(json.results[14].url);
+          clipboardy.writeSync(json.results[0].url); // Copier le lien du premier gif dans le presse papier
+          process.exit(); // Arrêter le processus
+  }).catch(err => {
+    // En cas d'erreur, Arrêter le processus
+    process.exit();
+  });
+  });
+
 }
 
 term.grabInput(true);
@@ -393,6 +443,15 @@ term.on('key', function(name, matches, data){
 	}
 });
 
+term.on('key', function(name, matches, data){
+  // Si G : Utiliser la recherche de gif
+	if (name === 'g'){
+		if(numberInput !== 0) return;
+		numberInput++;
+		gif();
+	}
+});
+
 
 term.grabInput(true);
 term.on('key', function(name, matches, data){
@@ -401,5 +460,3 @@ term.on('key', function(name, matches, data){
 		process.exit();
 	}
   });
-
-//buy airpods 
