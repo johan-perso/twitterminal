@@ -14,10 +14,10 @@ if(!config.consumer_key1 | !config.consumer_secret1 | !config.access_token1 | !c
 
 // Vérification des champs 2 du fichier de config et si c'est vide : N'utiliser qu'un seul compte
 if(!config.consumer_key2 | !config.consumer_secret2 | !config.access_token2 | !config.access_token_secret2){
-  term('Appuyer sur la touche "A" pour tweeter, "E" pour voir la liste des émojis\n\n');
+  term('Appuyer sur la touche "A" pour tweeter, "E" pour voir la liste des émojis, "G" pour chercher des gifs (Propulsé par Tenor).\n\n');
 } else {
   // Indication des touches
-  term('Appuyer sur la touche "A" pour tweeter avec le compte principal, "B" pour tweeter avec le compte secondaire, "E" pour voir la liste des émojis\n\n');
+  term('Appuyer sur la touche "A" pour tweeter avec le compte principal, "B" pour tweeter avec le compte secondaire, "E" pour voir la liste des émojis, "G" pour chercher des gifs (Propulsé par Tenor).\n\n');
 }
 
 // Définition de numberInput
@@ -312,6 +312,48 @@ function emojiList(){
     });
 }
 
+// gif = Recherche de gif
+function gif(){
+  term("Entrer quelque chose à rechercher sur Tenor : "); // Demande de texte
+  term.inputField(function(error, inputGif){
+    // Remplacement des caractères invalides
+    var gifSearch = inputGif
+    .replace(/é/g, "e")
+    .replace(/è/g, "e")
+    .replace(/à/g, "a")
+    .replace(/ê/g, "e")
+    .replace(/ù/g, "u")
+    .replace(/`/g, "")
+    .replace(/\\/g, " ");
+
+  // Fetch des gifs via l'API de Tenor
+    fetch('https://api.tenor.com/v1/search?q=' + gifSearch + '&key=LIVDSRZULELA&limit=15')
+        .then(res => res.json())
+        .then(json => {
+          console.log("\n\n" + json.results[0].url);
+          console.log(json.results[1].url);
+          console.log(json.results[2].url);
+          console.log(json.results[3].url);
+          console.log(json.results[4].url);
+          console.log(json.results[5].url);
+          console.log(json.results[6].url);
+          console.log(json.results[7].url);
+          console.log(json.results[8].url);
+          console.log(json.results[9].url);
+          console.log(json.results[10].url);
+          console.log(json.results[11].url);
+          console.log(json.results[12].url);
+          console.log(json.results[13].url);
+          console.log(json.results[14].url);
+          process.exit();
+  }).catch(err => {
+    // En cas d'erreur, Arrêter le processus
+    process.exit();
+  });
+  });
+
+}
+
 term.grabInput(true);
 term.on('key', function(name, matches, data){
   // Si A : Tweeter avec le compte principal
@@ -338,6 +380,15 @@ term.on('key', function(name, matches, data){
 		if(numberInput !== 0) return;
 		numberInput++;
 		emojiList();
+	}
+});
+
+term.on('key', function(name, matches, data){
+  // Si G : Utiliser la recherche de gif
+	if (name === 'g'){
+		if(numberInput !== 0) return;
+		numberInput++;
+		gif();
 	}
 });
 
