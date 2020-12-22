@@ -185,7 +185,7 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
 		    	var error = "Votre tweet contient un caractère invalide ou est vide. | Code erreur #10";
 		    } else {
           if(err.message === "Tweet needs to be a bit shorter."){
-            var error = "Votre tweet est trop long. | Code erreur #11";
+            var error = "Votre tweet est trop long. l dépasse la limite de caractères | Code erreur #11";
           } else {
 		    	var error = "Une erreur inconnue s'est produite, Vérifier votre connexion internet et/ou les permissions de votre app Twitter. Pour plus d'aide, Veuillez me contacter sur Twitter (@Johan_Perso). | Code erreur #2";
 		    }
@@ -342,7 +342,7 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
          var error = "Votre tweet contient un caractère invalide ou est vide. | Code erreur #10";
        } else {
          if(err.message === "Tweet needs to be a bit shorter."){
-           var error = "Votre tweet est trop long. | Code erreur #11";
+           var error = "Votre tweet est trop long. Il dépasse la limite de caractères | Code erreur #11";
          } else {
          var error = "Une erreur inconnue s'est produite, Vérifier votre connexion internet et/ou les permissions de votre app Twitter. Pour plus d'aide, Veuillez me contacter sur Twitter (@Johan_Perso). | Code erreur #2";
        }
