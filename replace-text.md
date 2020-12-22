@@ -49,6 +49,34 @@
 
 : penguin: 🐧
 
+: frog: 🐸
+
+: tiger: 🐯
+
+: monkey: 🐵
+
+: zebra: 🦓
+
+: hamster: 🐹
+
+: cow: 🐮
+
+: rabbit: 🐰
+
+: bear: 🐻
+
+: koala: 🐨
+
+: elephant: 🐘
+
+: dragon: 🐲
+
+: racoon: 🦝
+
+: horse: 🐴
+
+: unicorn: 🦄
+
 
 ## Nombres
 
@@ -73,6 +101,31 @@
 : nine: 9️⃣
 
 : ten: 🔟
+
+
+## Nourriture
+
+: pizza: 🍕
+
+: burger: 🍔
+
+: frecnh_fries: 🍟
+
+: hot_dog: 🌭
+
+: pop_corn: 🍿
+
+: salt: 🧂
+
+: bacon: 🥓
+
+: egg: 🥚
+
+: waffle: 🧇
+
+: pancake: 🥞
+
+: butter: 🧈
 
 
 ## Coeur
