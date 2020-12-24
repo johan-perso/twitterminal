@@ -1,0 +1,15 @@
+echo "L'installation néecésite nodejs."
+echo "L'installation néecésite nodejs."
+echo "L'installation néecésite nodejs."
+echo "################################"
+mkdir Twitterminal
+cd Twitterminal
+mkdir node_modules
+npm i twit
+npm i clipboardy
+npm i terminal-kit
+npm i node-fetch
+npm i markdown-chalk
+curl -O https://raw.githubusercontent.com/anticoupable/twitterminal/main/tweet.js
+curl -O https://raw.githubusercontent.com/anticoupable/twitterminal/main/tweetConfig.json
+echo "Pour lancer Twitterminal : node Twitterminal/tweet.js"
