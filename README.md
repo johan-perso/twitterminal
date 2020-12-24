@@ -11,7 +11,7 @@
 ## Installer Twitterminal
 
 ### Installation classique (Compatible avec la plupart des OS)
-Installe Node.js depuis le site de [nodejs](https://nodejs.org/) ou un autre endroit tierce ayant npm embarqué dedans, Créez un dossier "Twitterminal", Ouvrez un invite de commande / terminal depuis ce dossier puis installer la dépendance terminal-kit avec la commande `npm i terminal-kit`, Twit avec la commande `npm i twit`, node-fetch avec la commande `npm i node-fetch`, clipboardy avec la commande `npm i clipboardy` et markdown-chalk avec la commande `npm i markdown-chalk`. Téléchargez le fichier tweetConfig.json et tweet.js dans le dossier précedemment créé. Une fois ceci fait tout est bon : Rendez vous à l'étape pour lancer Twitterminal.
+Installez Node.js depuis le site de [nodejs](https://nodejs.org/) ou un autre endroit tierce ayant npm embarqué, Créez un dossier "Twitterminal", Ouvrez un invite de commande / terminal depuis ce dossier puis faites cette commande pour installez toutes les dépendance `npm i terminal-kit twit node-fetch clipboardy markdown-chalk`. Téléchargez le fichier tweetConfig.json et tweet.js dans le dossier préceddement créé. Une fois ceci fait tout est bon : Rendez vous à l'étape pour lancer Twitterminal.
 
 
 ### Installation rapide (Compatible avec la plupart des distributions Linux et MacOS)
@@ -28,7 +28,7 @@ Ouvrez le fichier configTwitter.json et modifier les valeurs "consumer_key1", "c
 
 ## Comment lancer Twitterminal
 
-Ouvrez un invite de commande / terminal dans le dossier que vous avez créé lors de l'installation puis entrez la commande `node tweet.js`.
+Ouvrez un invite de commande / terminal dans le dossier que vous avez créé lors de l'installation puis entrez la commande `node tweet.js`, Si vous avez utiliser l'installateur pour Linux / MacOS faite cette commande `node Twitterminal/tweet`.
 
 
 ## Remplacement de texte
