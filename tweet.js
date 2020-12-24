@@ -20,6 +20,7 @@ if(!config.consumer_key2 | !config.consumer_secret2 | !config.access_token2 | !c
 } else {
   // Indication des touches
   term('Appuyer sur la touche "A" pour tweeter avec le compte principal, "B" pour tweeter avec le compte secondaire, "C" pour tweeter une image avec le compte principal (Bêta), "E" pour voir la liste des émojis, "G" pour chercher des gifs (Propulsé par Tenor).\n\n');
+  clipboardy.writeSync("Merci d'utiliser Twitterminal, Tu viens de trouver un easter egg !")
 }
 
 // Définition de numberInput
@@ -44,7 +45,9 @@ var autoComplete = [
   ':skull:' , ':frog:' , ':tiger:' , ':monkey:' , ':zebra:' , ':hamster:' ,
   ':cow:' , ':rabbit:' , ':bear:' , ':koala:' , ':elephant:' , ':dragon:' , ':racoon:' ,
   ':horse:' , ':unicorn:' , ':pizza:' , ':burger:' , ':french_fries:' , ':hot_dog:' ,
-  ':pop_corn:' , ':salt:' , ':bacon:' , ':egg:' , ':waffle:' , ':pancake:' , ':butter:'
+  ':pop_corn:' , ':salt:' , ':bacon:' , ':egg:' , ':waffle:' , ':pancake:' , ':butter:' ,
+  ':down_finger:' , ':left_finger:' , ':right_finger:' , ':fingers_crossed:' , ':ok:' ,
+  ':hand_shake:'
 ];
 
 // tweetClassic = Tweeter avec le compte principal
@@ -162,18 +165,17 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:rainbow:/g, "🌈") // Emoji :rainbow:
   .replace(/:santa:/g, "🎅") // Emoji :santa:
   .replace(/:eyes:/g, "👀") // Emoji :eyes:
-  
   .replace(/:100:/g, "💯") // Emoji :100:
   .replace(/:gift:/g, "🎁") // Emoji :gift:
-  .replace(/:skull:/g, "💀"); // Emoji :skull:
-   //gestes
-   .replace(/:down_finger:/g, "👇"); // Emoji :down_finger:
+  .replace(/:skull:/g, "💀") // Emoji :skull:
+   // Gestes
+   .replace(/:down_finger:/g, "👇") // Emoji :down_finger:
    .replace(/:left_finger:/g, "👈") // Emoji :left_finger:
    .replace(/:right_finger:/g, "👉") // Emoji :right_finger:
    .replace(/:fingers_crossed:/g, "🤞") // Emoji :fingers_crossed:
    .replace(/:middle_finger:/g, "🖕") // Emoji :middle_finger:
    .replace(/:hand_shake:/g, "👋") // Emoji :hand_shake:
-   .replace(/:ok:/g, "👌") // Emoji :ok:
+   .replace(/:ok:/g, "👌"); // Emoji :ok:
   
 
 		term("\nEnvoie du tweet..."); // Message pour dire que le tweet s'envoie
@@ -330,15 +332,15 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:eyes:/g, "👀") // Emoji :eyes:
   .replace(/:100:/g, "💯") // Emoji :100:
   .replace(/:gift:/g, "🎁") // Emoji :gift:
-  .replace(/:skull:/g, "💀"); // Emoji :skull:
-   //gestes
-   .replace(/:down_finger:/g, "👇"); // Emoji :down_finger:
+  .replace(/:skull:/g, "💀") // Emoji :skull:
+   // Gestes
+   .replace(/:down_finger:/g, "👇") // Emoji :down_finger:
    .replace(/:left_finger:/g, "👈") // Emoji :left_finger:
    .replace(/:right_finger:/g, "👉") // Emoji :right_finger:
    .replace(/:fingers_crossed:/g, "🤞") // Emoji :fingers_crossed:
    .replace(/:middle_finger:/g, "🖕") // Emoji :middle_finger:
    .replace(/:hand_shake:/g, "👋") // Emoji :hand_shake:
-   .replace(/:ok:/g, "👌") // Emoji :ok:
+   .replace(/:ok:/g, "👌"); // Emoji :ok:
 
 		term("\nEnvoie du tweet..."); // Message pour dire que le tweet s'envoie
 		T.post('statuses/update', { status: input }, function(err, data, response){ // Tweeter le tweet
@@ -507,109 +509,109 @@ T.post('media/upload', { media_data: b64content }, function (err, data, response
   term("Veuillez entrer le contenu du tweet : "); // Message de demande de texte
   term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoCompleteHint: true }, function( error , text ) { // Demande de texte et enregistrement sous la variable "text"
   
-// Définition de input (Remplacement de certains trucs de text)
-const input = text
-// Non émoji
-.replace(/%jump%/g, "\n") // Saut de ligne
-// Personnes
-.replace(/:joy:/g, "😂") // Emoji :joy:
-.replace(/:sob:/g, "😭") // Emoji :sob:
-.replace(/:clown:/g, "🤡") // Emoji :clown:
-.replace(/:love:/g, "🥰") // Emoji :love:
-.replace(/:sleeping:/g, "😴") // Emoji :sleeping:
-.replace(/:upside_down:/g, "🙃") // Emoji :upside_down:
-.replace(/:sunglasses:/g, "😎") // Emoji :sunglasses:
-.replace(/:thinking:/g, "🤔") // Emoji :thinking:
-.replace(/:scream:/g, "😱") // Emoji :scream:
-.replace(/:laughing:/g, "😆") // Emoji :laughing:
-.replace(/:smirk:/g, "😏") // Emoji :smirk:
-.replace(/:hot:/g, "🥵") // Emoji :hot:
-.replace(/:kiss:/g, "😘") // Emoji :kiss:
-// Animaux
-.replace(/:dog:/g, "🐶") // Emoji :dog:
-.replace(/:cat:/g, "🐱") // Emoji :cat:
-.replace(/:panda:/g, "🐼") // Emoji :panda:
-.replace(/:pig:/g, "🐷") // Emoji :pig:
-.replace(/:wolf:/g, "🐺") // Emoji :wolf:
-.replace(/:chicken:/g, "🐔") // Emoji :chicken:
-.replace(/:mouse:/g, "🐭") // Emoji :mouse:
-.replace(/:lion:/g, "🦁") // Emoji :lion:
-.replace(/:penguin:/g, "🐧") // Emoji :penguin:
-.replace(/:frog:/g, "🐸") // Emoji :frog:
-.replace(/:tiger:/g, "🐯") // Emoji :tiger:
-.replace(/:monkey:/g, "🐵") // Emoji :monkey:
-.replace(/:zebra:/g, "🦓") // Emoji :zebra:
-.replace(/:hamster:/g, "🐹") // Emoji :hamster:
-.replace(/:cow:/g, "🐮") // Emoji :cow:
-.replace(/:rabbit:/g, "🐰") // Emoji :rabbit:
-.replace(/:bear:/g, "🐻") // Emoji :bear:
-.replace(/:koala:/g, "🐨") // Emoji :koala:
-.replace(/:elephant:/g, "🐘") // Emoji :elefant:
-.replace(/:dragon:/g, "🐲") // Emoji :dragon:
-.replace(/:racoon:/g, "🦝") // Emoji :racoon:
-.replace(/:horse:/g, "🐴") // Emoji :horse:
-.replace(/:unicorn:/g, "🦄") // Emoji :unicorn:
-// Nombres
-.replace(/:zero:/g, "0️⃣") // Emoji :zero:
-.replace(/:one:/g, "1️⃣") // Emoji :one:
-.replace(/:two:/g, "2️⃣") // Emoji :two:
-.replace(/:three:/g, "3️⃣") // Emoji :three:
-.replace(/:four:/g, "4️⃣") // Emoji :four:
-.replace(/:five:/g, "5️⃣") // Emoji :five:
-.replace(/:six:/g, "6️⃣") // Emoji :six:
-.replace(/:seven:/g, "7️⃣") // Emoji :seven:
-.replace(/:eight:/g, "8️⃣") // Emoji :eight:
-.replace(/:nine:/g, "9️⃣") // Emoji :nine:
-.replace(/:ten:/g, "🔟") // Emoji :ten:
-// Nourriture
-.replace(/:pizza:/g, "🍕") // Emoji :pizza:
-.replace(/:burger:/g, "🍔") // Emoji :burger:
-.replace(/:french_fries:/g, "🍟") // Emoji :french_fries:
-.replace(/:hot_dog:/g, "🌭") // Emoji :hot_dog:
-.replace(/:pop_corn:/g, "🍿") // Emoji :pop_corn:
-.replace(/:salt:/g, "🧂") // Emoji :salt:
-.replace(/:bacon:/g, "🥓") // Emoji :bacon:
-.replace(/:egg:/g, "🥚") // Emoji :egg:
-.replace(/:waffle:/g, "🧇") // Emoji :waffle:
-.replace(/:pancake:/g, "🥞") // Emoji :pancake:
-.replace(/:butter:/g, "🧈") // Emoji :butter:
-// Coeur
-.replace(/:heart:/g, "❤️") // Emoji :heart:
-.replace(/:orange_heart:/g, "🧡") // Emoji :orange_heart:
-.replace(/:yellow_heart:/g, "💛") // Emoji :yellow_heart:
-.replace(/:green_heart:/g, "💚") // Emoji :green_heart:
-.replace(/:blue_heart:/g, "💙") // Emoji :blue_heart:
-.replace(/:purple_heart:/g, "💜") // Emoji :purple_heart:
-.replace(/:black_heart:/g, "🖤") // Emoji :black_heart:
-.replace(/:brown_heart:/g, "🤎") // Emoji :brown_heart:
-.replace(/:white_heart:/g, "🤍") // Emoji :white_heart:
-.replace(/:broken_heart:/g, "💔") // Emoji :broken_heart:
-.replace(/:heart_exclamation:/g, "❣️") // Emoji :heart_exclamation:
-.replace(/:two_hearts:/g, "💕") // Emoji :two_hearts:
-.replace(/:revolving_heart:/g, "💞") // Emoji :revolving_heart:
-.replace(/:heartbeat:/g, "💓") // Emoji :heartbeat:
-.replace(/:heartpulse:/g, "💗") // Emoji :heartpulse:
-.replace(/:sparkling_heart:/g, "💖") // Emoji :sparkling_heart:
-.replace(/:cupid:/g, "💘") // Emoji :cupid:
-.replace(/:gift_heart:/g, "💝") // Emoji :gift_heart:
-.replace(/:heart_decoration:/g, "💟") // Emoji :heart_decoration:
-// Autres
-.replace(/:fire:/g, "🔥") // Emoji :fire:
-.replace(/:tada:/g, "🎉") // Emoji :tadda:
-.replace(/:rainbow:/g, "🌈") // Emoji :rainbow:
-.replace(/:santa:/g, "🎅") // Emoji :santa:
-.replace(/:eyes:/g, "👀") // Emoji :eyes:
-.replace(/:100:/g, "💯") // Emoji :100:
-.replace(/:gift:/g, "🎁") // Emoji :gift:
-.replace(/:skull:/g, "💀"); // Emoji :skull:
-   //gestes
-   .replace(/:down_finger:/g, "👇"); // Emoji :down_finger:
+  // Définition de input (Remplacement de certains trucs de text)
+  const input = text
+  // Non émoji
+  .replace(/%jump%/g, "\n") // Saut de ligne
+  // Personnes
+  .replace(/:joy:/g, "😂") // Emoji :joy:
+  .replace(/:sob:/g, "😭") // Emoji :sob:
+  .replace(/:clown:/g, "🤡") // Emoji :clown:
+  .replace(/:love:/g, "🥰") // Emoji :love:
+  .replace(/:sleeping:/g, "😴") // Emoji :sleeping:
+  .replace(/:upside_down:/g, "🙃") // Emoji :upside_down:
+  .replace(/:sunglasses:/g, "😎") // Emoji :sunglasses:
+  .replace(/:thinking:/g, "🤔") // Emoji :thinking:
+  .replace(/:scream:/g, "😱") // Emoji :scream:
+  .replace(/:laughing:/g, "😆") // Emoji :laughing:
+  .replace(/:smirk:/g, "😏") // Emoji :smirk:
+  .replace(/:hot:/g, "🥵") // Emoji :hot:
+  .replace(/:kiss:/g, "😘") // Emoji :kiss:
+  // Animaux
+  .replace(/:dog:/g, "🐶") // Emoji :dog:
+  .replace(/:cat:/g, "🐱") // Emoji :cat:
+  .replace(/:panda:/g, "🐼") // Emoji :panda:
+  .replace(/:pig:/g, "🐷") // Emoji :pig:
+  .replace(/:wolf:/g, "🐺") // Emoji :wolf:
+  .replace(/:chicken:/g, "🐔") // Emoji :chicken:
+  .replace(/:mouse:/g, "🐭") // Emoji :mouse:
+  .replace(/:lion:/g, "🦁") // Emoji :lion:
+  .replace(/:penguin:/g, "🐧") // Emoji :penguin:
+  .replace(/:frog:/g, "🐸") // Emoji :frog:
+  .replace(/:tiger:/g, "🐯") // Emoji :tiger:
+  .replace(/:monkey:/g, "🐵") // Emoji :monkey:
+  .replace(/:zebra:/g, "🦓") // Emoji :zebra:
+  .replace(/:hamster:/g, "🐹") // Emoji :hamster:
+  .replace(/:cow:/g, "🐮") // Emoji :cow:
+  .replace(/:rabbit:/g, "🐰") // Emoji :rabbit:
+  .replace(/:bear:/g, "🐻") // Emoji :bear:
+  .replace(/:koala:/g, "🐨") // Emoji :koala:
+  .replace(/:elephant:/g, "🐘") // Emoji :elefant:
+  .replace(/:dragon:/g, "🐲") // Emoji :dragon:
+  .replace(/:racoon:/g, "🦝") // Emoji :racoon:
+  .replace(/:horse:/g, "🐴") // Emoji :horse:
+  .replace(/:unicorn:/g, "🦄") // Emoji :unicorn:
+  // Nombres
+  .replace(/:zero:/g, "0️⃣") // Emoji :zero:
+  .replace(/:one:/g, "1️⃣") // Emoji :one:
+  .replace(/:two:/g, "2️⃣") // Emoji :two:
+  .replace(/:three:/g, "3️⃣") // Emoji :three:
+  .replace(/:four:/g, "4️⃣") // Emoji :four:
+  .replace(/:five:/g, "5️⃣") // Emoji :five:
+  .replace(/:six:/g, "6️⃣") // Emoji :six:
+  .replace(/:seven:/g, "7️⃣") // Emoji :seven:
+  .replace(/:eight:/g, "8️⃣") // Emoji :eight:
+  .replace(/:nine:/g, "9️⃣") // Emoji :nine:
+  .replace(/:ten:/g, "🔟") // Emoji :ten:
+  // Nourriture
+  .replace(/:pizza:/g, "🍕") // Emoji :pizza:
+  .replace(/:burger:/g, "🍔") // Emoji :burger:
+  .replace(/:french_fries:/g, "🍟") // Emoji :french_fries:
+  .replace(/:hot_dog:/g, "🌭") // Emoji :hot_dog:
+  .replace(/:pop_corn:/g, "🍿") // Emoji :pop_corn:
+  .replace(/:salt:/g, "🧂") // Emoji :salt:
+  .replace(/:bacon:/g, "🥓") // Emoji :bacon:
+  .replace(/:egg:/g, "🥚") // Emoji :egg:
+  .replace(/:waffle:/g, "🧇") // Emoji :waffle:
+  .replace(/:pancake:/g, "🥞") // Emoji :pancake:
+  .replace(/:butter:/g, "🧈") // Emoji :butter:
+  // Coeur
+  .replace(/:heart:/g, "❤️") // Emoji :heart:
+  .replace(/:orange_heart:/g, "🧡") // Emoji :orange_heart:
+  .replace(/:yellow_heart:/g, "💛") // Emoji :yellow_heart:
+  .replace(/:green_heart:/g, "💚") // Emoji :green_heart:
+  .replace(/:blue_heart:/g, "💙") // Emoji :blue_heart:
+  .replace(/:purple_heart:/g, "💜") // Emoji :purple_heart:
+  .replace(/:black_heart:/g, "🖤") // Emoji :black_heart:
+  .replace(/:brown_heart:/g, "🤎") // Emoji :brown_heart:
+  .replace(/:white_heart:/g, "🤍") // Emoji :white_heart:
+  .replace(/:broken_heart:/g, "💔") // Emoji :broken_heart:
+  .replace(/:heart_exclamation:/g, "❣️") // Emoji :heart_exclamation:
+  .replace(/:two_hearts:/g, "💕") // Emoji :two_hearts:
+  .replace(/:revolving_heart:/g, "💞") // Emoji :revolving_heart:
+  .replace(/:heartbeat:/g, "💓") // Emoji :heartbeat:
+  .replace(/:heartpulse:/g, "💗") // Emoji :heartpulse:
+  .replace(/:sparkling_heart:/g, "💖") // Emoji :sparkling_heart:
+  .replace(/:cupid:/g, "💘") // Emoji :cupid:
+  .replace(/:gift_heart:/g, "💝") // Emoji :gift_heart:
+  .replace(/:heart_decoration:/g, "💟") // Emoji :heart_decoration:
+  // Autres
+  .replace(/:fire:/g, "🔥") // Emoji :fire:
+  .replace(/:tada:/g, "🎉") // Emoji :tadda:
+  .replace(/:rainbow:/g, "🌈") // Emoji :rainbow:
+  .replace(/:santa:/g, "🎅") // Emoji :santa:
+  .replace(/:eyes:/g, "👀") // Emoji :eyes:
+  .replace(/:100:/g, "💯") // Emoji :100:
+  .replace(/:gift:/g, "🎁") // Emoji :gift:
+  .replace(/:skull:/g, "💀") // Emoji :skull:
+   // Gestes
+   .replace(/:down_finger:/g, "👇") // Emoji :down_finger:
    .replace(/:left_finger:/g, "👈") // Emoji :left_finger:
    .replace(/:right_finger:/g, "👉") // Emoji :right_finger:
    .replace(/:fingers_crossed:/g, "🤞") // Emoji :fingers_crossed:
    .replace(/:middle_finger:/g, "🖕") // Emoji :middle_finger:
    .replace(/:hand_shake:/g, "👋") // Emoji :hand_shake:
-   .replace(/:ok:/g, "👌") // Emoji :ok:
+   .replace(/:ok:/g, "👌"); // Emoji :ok:
 
 // J'ai copier coller un exemple de la doc de twit donc j'ai aucune idée de ce que c'est ça mdrr
   T.post('media/metadata/create', meta_params, function (err, data, response) {
