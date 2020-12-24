@@ -178,7 +178,7 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
    .replace(/:ok:/g, "👌"); // Emoji :ok:
   
 
-		term("\nEnvoie du tweet..."); // Message pour dire que le tweet s'envoie
+		term("\nEnvoi du tweet..."); // Message pour dire que le tweet s'envoie
 		T.post('statuses/update', { status: input }, function(err, data, response){ // Tweeter le tweet
 		// Si il n'y a pas d'erreur
 		if(!err){
@@ -342,7 +342,7 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
    .replace(/:hand_shake:/g, "👋") // Emoji :hand_shake:
    .replace(/:ok:/g, "👌"); // Emoji :ok:
 
-		term("\nEnvoie du tweet..."); // Message pour dire que le tweet s'envoie
+		term("\nEnvoi du tweet..."); // Message pour dire que le tweet s'envoie
 		T.post('statuses/update', { status: input }, function(err, data, response){ // Tweeter le tweet
 		// Si il n'y a pas d'erreur
 		if(!err){
@@ -620,7 +620,7 @@ T.post('media/upload', { media_data: b64content }, function (err, data, response
  
       // Faire un tweet
       T.post('statuses/update', params, function (err, data, response) {
-        term("\nEnvoie du tweet..."); // Message pour dire que le tweet s'envoie
+        term("\nEnvoi du tweet..."); // Message pour dire que le tweet s'envoie
                 // Si il n'y a pas d'erreur
                 if(!err){
                   term("\nTweet envoyé..."); // Dire que le tweet est envoyé
