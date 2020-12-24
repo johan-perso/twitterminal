@@ -691,17 +691,17 @@ term.on('key', function(name, matches, data){
 	}
 });
 
-term.grabInput(true);
 term.on('key', function(name, matches, data){
   // Si W :ERROR404_CouldNotFindWhatSumokaiDid
-	if (name === 'w'){               
-term("Succès debloqué : Changez pour Windgets");
-term.cyan("Télécharger la alpha 4 : https://hiberfile.com/d/pMQbxyXU?p=@3thfeogLiM9TzPw");
-term.cyan(" Le site officiel : https://sumokai.com/windgets")
-term.cyan("Rejoindre le discord :https://discord.gg/rzqdGbY");
-term.Red("Joyeux noël à vous !");
-term("- Sumokai");
-	}
+    if (name === 'w'){               
+term("Succès debloqué : Changez pour Windgets\n");
+term.cyan("Télécharger la alpha 4 : https://hiberfile.com/d/pMQbxyXU?p=@3thfeogLiM9TzPw\n");
+term.cyan(" Le site officiel : https://sumokai.com/windgets\n")
+term.cyan("Rejoindre le discord :https://discord.gg/rzqdGbY\n");
+term.red("Joyeux noël à vous !\n");
+term("- Sumokai\n");
+process.exit()
+    }
   });
 
 term.on('key', function(name, matches, data){
