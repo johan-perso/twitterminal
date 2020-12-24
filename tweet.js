@@ -162,10 +162,19 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:rainbow:/g, "🌈") // Emoji :rainbow:
   .replace(/:santa:/g, "🎅") // Emoji :santa:
   .replace(/:eyes:/g, "👀") // Emoji :eyes:
-  .replace(/:middle_finger:/g, "🖕") // Emoji :middle_finger:
+  
   .replace(/:100:/g, "💯") // Emoji :100:
   .replace(/:gift:/g, "🎁") // Emoji :gift:
   .replace(/:skull:/g, "💀"); // Emoji :skull:
+   //gestes
+   .replace(/:down_finger:/g, "👇"); // Emoji :down_finger:
+   .replace(/:left_finger:/g, "👈") // Emoji :left_finger:
+   .replace(/:right_finger:/g, "👉") // Emoji :right_finger:
+   .replace(/:fingers_crossed:/g, "🤞") // Emoji :fingers_crossed:
+   .replace(/:middle_finger:/g, "🖕") // Emoji :middle_finger:
+   .replace(/:hand_shake:/g, "👋") // Emoji :hand_shake:
+   .replace(/:ok:/g, "👌") // Emoji :ok:
+  
 
 		term("\nEnvoie du tweet..."); // Message pour dire que le tweet s'envoie
 		T.post('statuses/update', { status: input }, function(err, data, response){ // Tweeter le tweet
@@ -319,10 +328,17 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:rainbow:/g, "🌈") // Emoji :rainbow:
   .replace(/:santa:/g, "🎅") // Emoji :santa:
   .replace(/:eyes:/g, "👀") // Emoji :eyes:
-  .replace(/:middle_finger:/g, "🖕") // Emoji :middle_finger:
   .replace(/:100:/g, "💯") // Emoji :100:
   .replace(/:gift:/g, "🎁") // Emoji :gift:
   .replace(/:skull:/g, "💀"); // Emoji :skull:
+   //gestes
+   .replace(/:down_finger:/g, "👇"); // Emoji :down_finger:
+   .replace(/:left_finger:/g, "👈") // Emoji :left_finger:
+   .replace(/:right_finger:/g, "👉") // Emoji :right_finger:
+   .replace(/:fingers_crossed:/g, "🤞") // Emoji :fingers_crossed:
+   .replace(/:middle_finger:/g, "🖕") // Emoji :middle_finger:
+   .replace(/:hand_shake:/g, "👋") // Emoji :hand_shake:
+   .replace(/:ok:/g, "👌") // Emoji :ok:
 
 		term("\nEnvoie du tweet..."); // Message pour dire que le tweet s'envoie
 		T.post('statuses/update', { status: input }, function(err, data, response){ // Tweeter le tweet
@@ -583,10 +599,17 @@ const input = text
 .replace(/:rainbow:/g, "🌈") // Emoji :rainbow:
 .replace(/:santa:/g, "🎅") // Emoji :santa:
 .replace(/:eyes:/g, "👀") // Emoji :eyes:
-.replace(/:middle_finger:/g, "🖕") // Emoji :middle_finger:
 .replace(/:100:/g, "💯") // Emoji :100:
 .replace(/:gift:/g, "🎁") // Emoji :gift:
 .replace(/:skull:/g, "💀"); // Emoji :skull:
+   //gestes
+   .replace(/:down_finger:/g, "👇"); // Emoji :down_finger:
+   .replace(/:left_finger:/g, "👈") // Emoji :left_finger:
+   .replace(/:right_finger:/g, "👉") // Emoji :right_finger:
+   .replace(/:fingers_crossed:/g, "🤞") // Emoji :fingers_crossed:
+   .replace(/:middle_finger:/g, "🖕") // Emoji :middle_finger:
+   .replace(/:hand_shake:/g, "👋") // Emoji :hand_shake:
+   .replace(/:ok:/g, "👌") // Emoji :ok:
 
 // J'ai copier coller un exemple de la doc de twit donc j'ai aucune idée de ce que c'est ça mdrr
   T.post('media/metadata/create', meta_params, function (err, data, response) {
