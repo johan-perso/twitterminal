@@ -169,6 +169,23 @@
 : sparkling_heart: 💖
 
 
+# Gestes
+
+: down_finger: 👇
+
+: left_finger: 👈
+
+: right_finger: 👉
+
+: fingers_crossed: 🤞
+
+: middle_finger: 🖕
+
+: hand_shake: 👋
+
+: ok: 👌
+
+
 ## Autres
 
 : fire: 🔥
@@ -183,14 +200,12 @@
 
 : 100: 💯
 
-: middle_finger: 🖕
-
 : gift: 🎁
 
 : skull: 💀
 
 
 
-# Liste des replacements de texte
+# Liste des autres replacements de texte
 
 %jump% permet de sauter une ligne
