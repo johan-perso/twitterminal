@@ -6,13 +6,42 @@ const markdownChalk = require('markdown-chalk'); // https://www.npmjs.com/packag
 const fetch = require('node-fetch'); // https://www.npmjs.com/package/node-fetch
 const clipboardy = require('clipboardy'); // https://www.npmjs.com/package/clipboardy
 const fs = require('fs'); // https://www.npmjs.com/package/fs
+var debug = "false" // Debug mode
 
+// Debug mode
+if(debug === "true"){
+  term.red("Debug mode activé !")
+  if(config.consumer_key1 === ""){
+    var key1 = "vide"
+  } else {
+    var key1 = "non vide"
+  }
+  if(config.consumer_secret1 === ""){
+    var key2 = "vide"
+  } else {
+    var key2 = "non vide"
+  }
+  if(config.access_token1 === ""){
+    var key3 = "vide"
+  } else {
+    var key3 = "non vide"
+  }
+  if(config.access_token_secret1 === ""){
+    var key4 = "vide"
+  } else {
+    var key4 = "non vide"
+  }
+  term.cyan("\nconsumer_key : " + key1)
+  term.cyan("\nconsumer_secret : " + key2)
+  term.cyan("\naccess_token : " + key3)
+  term.cyan("\naccess_token_secret : " + key4 + "\n\n")
+}
 
-// Vérification des champs 1 du fichier de config et si c'est vide : Afficher un message d'erreur et arrêter le processus
+// Vérification des champs 1 du fichier de config et si c'est vide : Afficher un message d'erreur et arrêter le processus (Sauf si le debug mod est activé)
 if(!config.consumer_key1 | !config.consumer_secret1 | !config.access_token1 | !config.access_token_secret1){
    term.red("Une erreur s'est produite, Les quatre premiers champs du fichier 'tweetConfig.json' sont incomplet, Veuillez les remplire. Si le problème continue, Veuillez me contacter sur Twitter (@Johan_Perso). | Code erreur #1\n");
-   return process.exit();
-}
+   if(debug === "false") return process.exit()
+   }
 
 // Vérification des champs 2 du fichier de config et si c'est vide : N'utiliser qu'un seul compte
 if(!config.consumer_key2 | !config.consumer_secret2 | !config.access_token2 | !config.access_token_secret2){
@@ -667,7 +696,7 @@ T.post('media/upload', { media_data: b64content }, function (err, data, response
 }
 
 function tweetImageSecond(){
-   console.log("Non développé")
+   term.red("La fonctionnalité d'envoi d'images sur le compte secondaire n'est pas encore disponible.")
    process.exit()
 }
 
@@ -690,28 +719,12 @@ term.on('key', function(name, matches, data){
 		tweetSecond();
 	}
 });
-
-term.grabInput(true);
-term.on('key', function(name, matches, data){
-  // Si W :ERROR404_CouldNotFindWhatSumokaiDid
-	if (name === 'w'){          
-    if(numberInput !== 0) return;     
-    term("Succès debloqué : Changez pour Windgets\n");
-    term.cyan("Télécharger la alpha 4 : https://hiberfile.com/d/pMQbxyXU?p=@3thfeogLiM9TzPw\n");
-    term.cyan("Le site officiel : https://sumokai.com/windgets\n")
-    term.cyan("Rejoindre le discord :https://discord.gg/rzqdGbY\n");
-    term.red("Joyeux noël à vous !\n");
-    term("- Sumokai\n");
-    numberInput++;
-    process.exit()
-	}
-  });
   
 term.on('key', function(name, matches, data){
   // Si ENTER 300 fois : Easter egg
   if (name === 'ENTER'){
-    numberInput++;      
-    if(numberInput != 300) return;     
+    numberInput++;
+    if(numberInput != 300) return;
     term("Pauvre touche...\n");
     process.exit()
   }
