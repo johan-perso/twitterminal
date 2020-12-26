@@ -218,20 +218,24 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
 		} else {
 		   // Si il y a une erreur
 
-		    // Tentative de détection de l'erreur
-		    if(err.message === "Status is a duplicate."){
-		    	var error = "Un tweet contenant le même contenu est déjà existant. | Code erreur #9";
-		    } else {
-		    if(err.message === "Missing required parameter: status."){
-		    	var error = "Votre tweet contient un caractère invalide ou est vide. | Code erreur #10";
-		    } else {
+		    // Détection de l'erreur
+        if(err.message === "Status is a duplicate."){
+          var error = "Un tweet contenant le même contenu est déjà existant. | Code erreur #9";
+        } else {
+        if(err.message === "Missing required parameter: status."){
+          var error = "Votre tweet contient un caractère invalide ou est vide. | Code erreur #10";
+        } else {
           if(err.message === "Tweet needs to be a bit shorter."){
             var error = "Votre tweet est trop long. | Code erreur #11";
           } else {
-		    	var error = "Une erreur inconnue s'est produite, Vérifier votre connexion internet et/ou les permissions de votre app Twitter. Pour plus d'aide, Veuillez me contacter sur Twitter (@Johan_Perso). | Code erreur #2";
-		    }
+            if(err.message === "Read-only application cannot POST."){
+              var error = "Votre application est en Read only, Pour utiliser Twitterminal vous avez besoin de la passer en \"Read and write\" via le Developer Portal de Twitter. | Code erreur #4"
+            } else {
+              var error = "Une erreur inconnue s'est produite, Vérifier votre connexion internet et/ou les permissions de votre app Twitter. Pour plus d'aide, Veuillez me contacter sur Twitter (@Johan_Perso). | Code erreur #2";
+            }
+          }
         }
-		    }
+        }
 
         // Affichage de l'erreur
 		    term.red("\nErreur de Twitter : " + err.message + "\n");
@@ -382,20 +386,24 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
 		} else {
 		   // Si il y a une erreur
 
-       // Tentative de détection de l'erreur
+       // Détection de l'erreur
        if(err.message === "Status is a duplicate."){
-         var error = "Un tweet contenant le même contenu est déjà existant. | Code erreur #9";
-       } else {
-       if(err.message === "Missing required parameter: status."){
-         var error = "Votre tweet contient un caractère invalide ou est vide. | Code erreur #10";
-       } else {
-         if(err.message === "Tweet needs to be a bit shorter."){
-           var error = "Votre tweet est trop long. | Code erreur #11";
-         } else {
-         var error = "Une erreur inconnue s'est produite, Vérifier votre connexion internet et/ou les permissions de votre app Twitter. Pour plus d'aide, Veuillez me contacter sur Twitter (@Johan_Perso). | Code erreur #2";
-       }
-       }
-       }
+        var error = "Un tweet contenant le même contenu est déjà existant. | Code erreur #9";
+      } else {
+      if(err.message === "Missing required parameter: status."){
+        var error = "Votre tweet contient un caractère invalide ou est vide. | Code erreur #10";
+      } else {
+        if(err.message === "Tweet needs to be a bit shorter."){
+          var error = "Votre tweet est trop long. | Code erreur #11";
+        } else {
+          if(err.message === "Read-only application cannot POST."){
+            var error = "Votre application est en Read only, Pour utiliser Twitterminal vous avez besoin de la passer en \"Read and write\" via le Developer Portal de Twitter. | Code erreur #4"
+          } else {
+            var error = "Une erreur inconnue s'est produite, Vérifier votre connexion internet et/ou les permissions de votre app Twitter. Pour plus d'aide, Veuillez me contacter sur Twitter (@Johan_Perso). | Code erreur #2";
+          }
+        }
+      }
+      }
 
         // Affichage de l'erreur
 		    term.red("\nErreur de Twitter : " + err.message + "\n");
@@ -659,7 +667,7 @@ T.post('media/upload', { media_data: b64content }, function (err, data, response
               } else {
                  // Si il y a une erreur
           
-                  // Tentative de détection de l'erreur
+                  // Détection de l'erreur
                   if(err.message === "Status is a duplicate."){
                     var error = "Un tweet contenant le même contenu est déjà existant. | Code erreur #9";
                   } else {
@@ -669,8 +677,12 @@ T.post('media/upload', { media_data: b64content }, function (err, data, response
                     if(err.message === "Tweet needs to be a bit shorter."){
                       var error = "Votre tweet est trop long. | Code erreur #11";
                     } else {
-                    var error = "Une erreur inconnue s'est produite, Vérifier votre connexion internet et/ou les permissions de votre app Twitter. Pour plus d'aide, Veuillez me contacter sur Twitter (@Johan_Perso). | Code erreur #2";
-                  }
+                      if(err.message === "Read-only application cannot POST."){
+                        var error = "Votre application est en Read only, Pour utiliser Twitterminal vous avez besoin de la passer en \"Read and write\" via le Developer Portal de Twitter. | Code erreur #4"
+                      } else {
+                        var error = "Une erreur inconnue s'est produite, Vérifier votre connexion internet et/ou les permissions de votre app Twitter. Pour plus d'aide, Veuillez me contacter sur Twitter (@Johan_Perso). | Code erreur #2";
+                      }
+                    }
                   }
                   }
           
