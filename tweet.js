@@ -1,4 +1,4 @@
-// Dépendances
+// Dépendances et variables importantes
 const term = require('terminal-kit').terminal; // https://www.npmjs.com/package/terminal-kit
 var Twit = require('twit'); // https://www.npmjs.com/package/twit
 const config = require('./tweetConfig.json'); // Fichier local
@@ -7,6 +7,18 @@ const fetch = require('node-fetch'); // https://www.npmjs.com/package/node-fetch
 const clipboardy = require('clipboardy'); // https://www.npmjs.com/package/clipboardy
 const fs = require('fs'); // https://www.npmjs.com/package/fs
 var debug = "false" // Debug mode
+var version = "2020.12.27"
+
+// Système de mise à jour
+fetch("https://raw.githubusercontent.com/anticoupable/twitterminal/main/version.json") // Envoyer une requête sur le Github de Twitterminal
+    .then(res => res.json())
+    .then(json => {
+      if(json.version !== version){
+        term.red("Dernière version de Twitterminal : ")
+        term.cyan(json.version)
+        term.red(". Vous n'êtes pas à jour. | Code erreur #16\n")
+      }
+    
 
 // Debug mode
 if(debug === "true"){
@@ -788,3 +800,8 @@ term.on('key', function(name, matches, data){
 	}
   });
 
+}).catch(err => {
+  // En cas d'erreur avec le système de détéction des majs
+  term.red("Il est impossible de récuperer les informations de mise à jour, Vérifiez votre connexion internet et si Github est down. Si le problème continue, Veuillez me contactez (Discord : Johan#8021     |     Twitter : @Johan_Perso). | Code erreur #15")
+  process.exit()
+});
