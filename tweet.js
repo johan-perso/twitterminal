@@ -10,7 +10,7 @@ var debug = "false" // Debug mode
 var version = "2020.12.27"
 
 // Système de mise à jour
-fetch("https://raw.githubusercontent.com/anticoupable/twitterminal/main/version.json") // Envoyer une requête sur le Github de Twitterminal
+fetch("https://raw.githubusercontent.com/johan-perso/twitterminal/main/version.json") // Envoyer une requête sur le Github de Twitterminal
     .then(res => res.json())
     .then(json => {
       if(json.version !== version){
@@ -430,11 +430,11 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
 
 // emojiList = Liste des émojis
 function emojiList(){
-  fetch('https://raw.githubusercontent.com/anticoupable/twitterminal/main/replace-text.md')
+  fetch('https://raw.githubusercontent.com/johan-perso/twitterminal/main/replace-text.md')
     .then(res => res.text())
     .then(body => {
-      console.log(markdownChalk(body) + "\nAccessible à cette adresse : https://github.com/anticoupable/twitterminal/blob/main/replace-text.md");
-      clipboardy.writeSync("https://github.com/anticoupable/twitterminal/blob/main/replace-text.md"); // Copier le lien dans le presse papier
+      console.log(markdownChalk(body) + "\nAccessible à cette adresse : https://github.com/johan-perso/twitterminal/blob/main/replace-text.md");
+      clipboardy.writeSync("https://github.com/johan-perso/twitterminal/blob/main/replace-text.md"); // Copier le lien dans le presse papier
       process.exit(); // Arrêter le processus
     });
 }
