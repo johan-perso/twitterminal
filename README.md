@@ -17,7 +17,7 @@ Installez Node.js depuis le site de [nodejs](https://nodejs.org/) ou un autre en
 ### Installation rapide (Compatible avec la plupart des distributions Linux et MacOS)
 Installez [nodejs](https://nodejs.org/) puis faites cette commande dans un terminal
 ```
-curl -curl -s -L https://raw.githubusercontent.com/anticoupable/twitterminal/main/installer.txt | bash
+curl -curl -s -L https://raw.githubusercontent.com/johan-perso/twitterminal/main/installer.txt | bash
 ```
 
 
@@ -33,7 +33,7 @@ Ouvrez un invite de commande / terminal dans le dossier que vous avez créé lor
 
 ## Remplacement de texte
 
-Liste des remplacements de texte disponible dans les nouvelles version de Twitterminal (Si vous utilisez une version récente mais pas trop, Twitterminal affichera des remplacements de textes qui ne sont pas dans votre version mais dans la dernière) ou [ici](https://github.com/anticoupable/twitterminal/blob/main/replace-text.md).
+Liste des remplacements de texte disponible dans les nouvelles version de Twitterminal (Si vous utilisez une version récente mais pas trop, Twitterminal affichera des remplacements de textes qui ne sont pas dans votre version mais dans la dernière) ou [ici](https://github.com/johan-perso/twitterminal/blob/main/replace-text.md).
 
 
 ## J'ai besoin d'aide
