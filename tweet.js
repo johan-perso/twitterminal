@@ -2,12 +2,11 @@
 const term = require('terminal-kit').terminal; // https://www.npmjs.com/package/terminal-kit
 var Twit = require('twit'); // https://www.npmjs.com/package/twit
 const config = require('./tweetConfig.json'); // Fichier local
-const markdownChalk = require('markdown-chalk'); // https://www.npmjs.com/package/markdown-chalk
 const fetch = require('node-fetch'); // https://www.npmjs.com/package/node-fetch
 const clipboardy = require('clipboardy'); // https://www.npmjs.com/package/clipboardy
 const fs = require('fs'); // https://www.npmjs.com/package/fs
 var debug = "false" // Debug mode
-var version = "2020.12.27"
+var version = "2021.01.19"
 
 // Système de mise à jour
 fetch("https://raw.githubusercontent.com/johan-perso/twitterminal/main/version.json") // Envoyer une requête sur le Github de Twitterminal
@@ -46,12 +45,15 @@ if(debug === "true"){
   term.cyan("\nconsumer_key : " + key1)
   term.cyan("\nconsumer_secret : " + key2)
   term.cyan("\naccess_token : " + key3)
-  term.cyan("\naccess_token_secret : " + key4 + "\n\n")
+  term.cyan("\naccess_token_secret : " + key4)
+  term.cyan("\nChemin de Twitterminal : " + __dirname + "\n\n")
 }
 
 // Vérification des champs 1 du fichier de config et si c'est vide : Afficher un message d'erreur et arrêter le processus (Sauf si le debug mod est activé)
 if(!config.consumer_key1 | !config.consumer_secret1 | !config.access_token1 | !config.access_token_secret1){
    term.red("Une erreur s'est produite, Les quatre premiers champs du fichier 'tweetConfig.json' sont incomplet, Veuillez les remplire. Si le problème continue, Veuillez me contacter sur Twitter (@Johan_Perso). | Code erreur #1\n");
+   term.red("Chemin du fichier de config : ")
+   term.cyan(__dirname + "\\tweetConfig.json\n")
    if(debug === "false") return process.exit()
    }
 
@@ -88,7 +90,7 @@ var autoComplete = [
   ':horse:' , ':unicorn:' , ':pizza:' , ':burger:' , ':french_fries:' , ':hot_dog:' ,
   ':pop_corn:' , ':salt:' , ':bacon:' , ':egg:' , ':waffle:' , ':pancake:' , ':butter:' ,
   ':down_finger:' , ':left_finger:' , ':right_finger:' , ':fingers_crossed:' , ':ok:' ,
-  ':hand_shake:'
+  ':hand_shake:' , ':eyes:'
 ];
 
 // tweetClassic = Tweeter avec le compte principal
@@ -433,6 +435,7 @@ function emojiList(){
   fetch('https://raw.githubusercontent.com/johan-perso/twitterminal/main/replace-text.md')
     .then(res => res.text())
     .then(body => {
+      const markdownChalk = require('markdown-chalk'); // https://www.npmjs.com/package/markdown-chalk
       console.log(markdownChalk(body) + "\nAccessible à cette adresse : https://github.com/johan-perso/twitterminal/blob/main/replace-text.md");
       clipboardy.writeSync("https://github.com/johan-perso/twitterminal/blob/main/replace-text.md"); // Copier le lien dans le presse papier
       process.exit(); // Arrêter le processus
@@ -708,14 +711,10 @@ T.post('media/upload', { media_data: b64content }, function (err, data, response
     }
   })
 })
-    
-
-    });
-    }
-    )
-
-
-	}
+});
+}
+)
+}
 );
 }
 
@@ -790,7 +789,6 @@ term.on('key', function(name, matches, data){
 		gif();
 	}
 });
-
 
 term.grabInput(true);
 term.on('key', function(name, matches, data){
