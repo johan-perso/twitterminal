@@ -28,7 +28,7 @@ Ouvrez le fichier configTwitter.json et modifier les valeurs "consumer_key1", "c
 
 ## Comment lancer Twitterminal
 
-Ouvrez un invite de commande / terminal dans le dossier que vous avez créé lors de l'installation puis entrez la commande `node tweet.js`, Si vous avez utiliser l'installateur pour Linux / MacOS faite cette commande `node Twitterminal/tweet`.
+Ouvrez un invite de commande / terminal dans le dossier que vous avez créé lors de l'installation puis entrez la commande `twitterminal`, Si vous avez utiliser l'installateur pour Linux / MacOS faite cette commande `node Twitterminal` ou `twitterminal`.
 
 
 ## Remplacement de texte
