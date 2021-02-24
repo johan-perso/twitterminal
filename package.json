@@ -24,5 +24,12 @@
   "bugs": {
     "url": "https://github.com/anticoupable/twitterminal/issues"
   },
-  "homepage": "https://github.com/anticoupable/twitterminal#readme"
+  "homepage": "https://github.com/anticoupable/twitterminal#readme",
+  "dependencies": {
+    "clipboardy": "^2.3.0",
+    "markdown-chalk": "^2.1.0",
+    "node-fetch": "^2.6.1",
+    "terminal-kit": "^2.0.3",
+    "twit": "^2.2.11"
+  }
 }
