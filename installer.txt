@@ -11,7 +11,10 @@ npm i clipboardy
 npm i terminal-kit
 npm i node-fetch
 npm i markdown-chalk
-curl -O https://raw.githubusercontent.com/anticoupable/twitterminal/main/tweet.js
+cd ..
+curl -O https://raw.githubusercontent.com/anticoupable/twitterminal/main/index.js
 curl -O https://raw.githubusercontent.com/anticoupable/twitterminal/main/tweetConfig.json
-cd ../..
-echo "Pour lancer Twitterminal : node Twitterminal/tweet"
+curl -O https://raw.githubusercontent.com/anticoupable/twitterminal/main/debug.js
+npm link
+cd ..
+echo "Pour lancer Twitterminal : twitterminal OU node Twitterminal/"
