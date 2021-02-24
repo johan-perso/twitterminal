@@ -15,6 +15,7 @@ cd ..
 curl -O https://raw.githubusercontent.com/anticoupable/twitterminal/main/index.js
 curl -O https://raw.githubusercontent.com/anticoupable/twitterminal/main/tweetConfig.json
 curl -O https://raw.githubusercontent.com/anticoupable/twitterminal/main/debug.js
+curl -O https://raw.githubusercontent.com/anticoupable/twitterminal/main/package.json
 npm link
 cd ..
 echo "Pour lancer Twitterminal : twitterminal OU node Twitterminal/"
