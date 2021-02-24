@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 // Dépendances et variables importantes
 const term = require('terminal-kit').terminal; // https://www.npmjs.com/package/terminal-kit
 var Twit = require('twit'); // https://www.npmjs.com/package/twit
@@ -5,8 +7,7 @@ const config = require('./tweetConfig.json'); // Fichier local
 const fetch = require('node-fetch'); // https://www.npmjs.com/package/node-fetch
 const clipboardy = require('clipboardy'); // https://www.npmjs.com/package/clipboardy
 const fs = require('fs'); // https://www.npmjs.com/package/fs
-var debug = "false" // Debug mode
-var version = "2021.01.19"
+var version = "2021.02.24"
 
 // Système de mise à jour
 fetch("https://raw.githubusercontent.com/johan-perso/twitterminal/main/version.json") // Envoyer une requête sur le Github de Twitterminal
@@ -18,43 +19,12 @@ fetch("https://raw.githubusercontent.com/johan-perso/twitterminal/main/version.j
         term.red(". Vous n'êtes pas à jour. | Code erreur #16\n")
       }
     
-
-// Debug mode
-if(debug === "true"){
-  term.red("Debug mode activé !")
-  if(config.consumer_key1 === ""){
-    var key1 = "vide"
-  } else {
-    var key1 = "non vide"
-  }
-  if(config.consumer_secret1 === ""){
-    var key2 = "vide"
-  } else {
-    var key2 = "non vide"
-  }
-  if(config.access_token1 === ""){
-    var key3 = "vide"
-  } else {
-    var key3 = "non vide"
-  }
-  if(config.access_token_secret1 === ""){
-    var key4 = "vide"
-  } else {
-    var key4 = "non vide"
-  }
-  term.cyan("\nconsumer_key : " + key1)
-  term.cyan("\nconsumer_secret : " + key2)
-  term.cyan("\naccess_token : " + key3)
-  term.cyan("\naccess_token_secret : " + key4)
-  term.cyan("\nChemin de Twitterminal : " + __dirname + "\n\n")
-}
-
-// Vérification des champs 1 du fichier de config et si c'est vide : Afficher un message d'erreur et arrêter le processus (Sauf si le debug mod est activé)
+// Vérification des champs 1 du fichier de config et si c'est vide : Afficher un message d'erreur et arrêter le processus
 if(!config.consumer_key1 | !config.consumer_secret1 | !config.access_token1 | !config.access_token_secret1){
    term.red("Une erreur s'est produite, Les quatre premiers champs du fichier 'tweetConfig.json' sont incomplet, Veuillez les remplire. Si le problème continue, Veuillez me contacter sur Twitter (@Johan_Perso). | Code erreur #1\n");
    term.red("Chemin du fichier de config : ")
    term.cyan(__dirname + "\\tweetConfig.json\n")
-   if(debug === "false") return process.exit()
+   process.exit()
    }
 
 // Vérification des champs 2 du fichier de config et si c'est vide : N'utiliser qu'un seul compte
@@ -63,7 +33,6 @@ if(!config.consumer_key2 | !config.consumer_secret2 | !config.access_token2 | !c
 } else {
   // Indication des touches
   term('Appuyer sur la touche "A" pour tweeter avec le compte principal, "B" pour tweeter avec le compte secondaire, "C" pour tweeter une image avec le compte principal (Bêta), "E" pour voir la liste des émojis, "G" pour chercher des gifs (Propulsé par Tenor).\n\n');
-  clipboardy.writeSync("Merci d'utiliser Twitterminal, Tu viens de trouver un easter egg !")
 }
 
 // Définition de numberInput
@@ -212,13 +181,13 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:gift:/g, "🎁") // Emoji :gift:
   .replace(/:skull:/g, "💀") // Emoji :skull:
    // Gestes
-   .replace(/:down_finger:/g, "👇") // Emoji :down_finger:
-   .replace(/:left_finger:/g, "👈") // Emoji :left_finger:
-   .replace(/:right_finger:/g, "👉") // Emoji :right_finger:
-   .replace(/:fingers_crossed:/g, "🤞") // Emoji :fingers_crossed:
-   .replace(/:middle_finger:/g, "🖕") // Emoji :middle_finger:
-   .replace(/:hand_shake:/g, "👋") // Emoji :hand_shake:
-   .replace(/:ok:/g, "👌"); // Emoji :ok:
+  .replace(/:down_finger:/g, "👇") // Emoji :down_finger:
+  .replace(/:left_finger:/g, "👈") // Emoji :left_finger:
+  .replace(/:right_finger:/g, "👉") // Emoji :right_finger:
+  .replace(/:fingers_crossed:/g, "🤞") // Emoji :fingers_crossed:
+  .replace(/:middle_finger:/g, "🖕") // Emoji :middle_finger:
+  .replace(/:hand_shake:/g, "👋") // Emoji :hand_shake:
+  .replace(/:ok:/g, "👌"); // Emoji :ok:
   
 
 		term("\nEnvoie du tweet..."); // Message pour dire que le tweet s'envoie
@@ -794,6 +763,14 @@ term.grabInput(true);
 term.on('key', function(name, matches, data){
   // Si CTRL_Z : Arrêtez le processus
 	if (name === 'CTRL_Z'){
+		process.exit();
+	}
+  // Si CTRL_C : Arrêtez le processus
+	if (name === 'CTRL_C'){
+		process.exit();
+	}
+  // Si CTRL_D : Arrêtez le processus
+	if (name === 'CTRL_D'){
 		process.exit();
 	}
   });
