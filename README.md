@@ -38,4 +38,4 @@ Liste des remplacements de texte disponible dans les nouvelles version de Twitte
 
 ## J'ai besoin d'aide
 
-Si vous avez besoin d'aide, Venez m'envoyer un message privé sur Discord ou Twitter (https://twitter.com/Johan_Perso) (Johan#8021). Vous pouvez aussi utiliser les issues disponible sur GitHub.
+Si vous avez besoin d'aide, Venez m'envoyer un message privé sur Discord ou Twitter (https://twitter.com/Johan_Stickman) (Johan#8021). Vous pouvez aussi utiliser les issues disponible sur GitHub.
