@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anticoupable/twitterminal.git"
+    "url": "git+https://github.com/johan-perso/twitterminal.git"
   },
   "keywords": [
     "twitter",
@@ -19,12 +19,12 @@
     "twitterminal",
     "cli"
   ],
-  "author": "Johan_Perso",
+  "author": "JohanStickman",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/anticoupable/twitterminal/issues"
+    "url": "https://github.com/johan-perso/twitterminal/issues"
   },
-  "homepage": "https://github.com/anticoupable/twitterminal#readme",
+  "homepage": "https://github.com/johan-perso/twitterminal#readme",
   "dependencies": {
     "clipboardy": "^2.3.0",
     "markdown-chalk": "^2.1.0",
