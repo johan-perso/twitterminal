@@ -7,10 +7,14 @@ const config = require('./tweetConfig.json'); // Fichier local
 const fetch = require('node-fetch'); // https://www.npmjs.com/package/node-fetch
 const clipboardy = require('clipboardy'); // https://www.npmjs.com/package/clipboardy
 const fs = require('fs'); // https://www.npmjs.com/package/fs
-var version = "2021.02.24"
+var version = "2021.08.08-Outdated"
+
+// Afficher une alerte comme quoi Twitterminal est outdated
+term.bgRed.white("Cette version de Twitterminal n'est plus mis à jour.")
+term.red("\nVeuillez effectuer la mise à jour dès que possible : https://twiterminal.carrd.co\n") 
 
 // Système de mise à jour
-fetch("https://raw.githubusercontent.com/johan-perso/twitterminal/main/version.json") // Envoyer une requête sur le Github de Twitterminal
+fetch("https://raw.githubusercontent.com/johan-perso/twitterminal/old/version.json") // Envoyer une requête sur le Github de Twitterminal
     .then(res => res.json())
     .then(json => {
       if(json.version !== version){
@@ -18,7 +22,7 @@ fetch("https://raw.githubusercontent.com/johan-perso/twitterminal/main/version.j
         term.cyan(json.version)
         term.red(". Vous n'êtes pas à jour. | Code erreur #16\n")
       }
-    
+
 // Vérification des champs 1 du fichier de config et si c'est vide : Afficher un message d'erreur et arrêter le processus
 if(!config.consumer_key1 | !config.consumer_secret1 | !config.access_token1 | !config.access_token_secret1){
    term.red("Une erreur s'est produite, Les quatre premiers champs du fichier 'tweetConfig.json' sont incomplet, Veuillez les remplire. Si le problème continue, Veuillez me contacter sur Twitter (@Johan_Perso). | Code erreur #1\n");
@@ -188,7 +192,7 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
   .replace(/:middle_finger:/g, "🖕") // Emoji :middle_finger:
   .replace(/:hand_shake:/g, "👋") // Emoji :hand_shake:
   .replace(/:ok:/g, "👌"); // Emoji :ok:
-  
+
 
 		term("\nEnvoie du tweet..."); // Message pour dire que le tweet s'envoie
 		T.post('statuses/update', { status: input }, function(err, data, response){ // Tweeter le tweet
@@ -401,12 +405,12 @@ term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoComplet
 
 // emojiList = Liste des émojis
 function emojiList(){
-  fetch('https://raw.githubusercontent.com/johan-perso/twitterminal/main/replace-text.md')
+  fetch('https://raw.githubusercontent.com/johan-perso/twitterminal/old/replace-text.md')
     .then(res => res.text())
     .then(body => {
       const markdownChalk = require('markdown-chalk'); // https://www.npmjs.com/package/markdown-chalk
-      console.log(markdownChalk(body) + "\nAccessible à cette adresse : https://github.com/johan-perso/twitterminal/blob/main/replace-text.md");
-      clipboardy.writeSync("https://github.com/johan-perso/twitterminal/blob/main/replace-text.md"); // Copier le lien dans le presse papier
+      console.log(markdownChalk(body) + "\nAccessible à cette adresse : https://github.com/johan-perso/twitterminal/blob/old/replace-text.md");
+      clipboardy.writeSync("https://github.com/johan-perso/twitterminal/blob/old/replace-text.md"); // Copier le lien dans le presse papier
       process.exit(); // Arrêter le processus
     });
 }
@@ -489,7 +493,7 @@ term.fileInput({baseDir: ''},
 			term.white("\nVotre fichier : ");
       term.cyan(input + "\n")
     }
-    
+
     // Regarddez l'état du fichier (Vérifiez si il existe)
     fs.readFile(input,  'utf8', function(err, data) {
       if(err){
@@ -509,7 +513,7 @@ term.fileInput({baseDir: ''},
 
         } else {
           if(input.includes(".gif")){
-            
+
           } else {
             term.red("Votre fichier doit être une image au format .png / .jpg / .jpeg / .gif | Code erreur #13")
             process.exit()
@@ -520,16 +524,16 @@ term.fileInput({baseDir: ''},
 
     // Encoder le fichier en base64
     var b64content = fs.readFileSync(input, { encoding: 'base64' })
- 
+
     // Envoyer le fichier à Twitter
 T.post('media/upload', { media_data: b64content }, function (err, data, response) {
   var mediaIdStr = data.media_id_string
   var altText = "no altText."
   var meta_params = { media_id: mediaIdStr, alt_text: { text: altText } }
- 
+
   term("Veuillez entrer le contenu du tweet : "); // Message de demande de texte
   term.inputField({autoComplete: autoComplete, autoCompleteMenu: true, autoCompleteHint: true }, function( error , text ) { // Demande de texte et enregistrement sous la variable "text"
-  
+
   // Définition de input (Remplacement de certains trucs de text)
   const input = text
   // Non émoji
@@ -638,7 +642,7 @@ T.post('media/upload', { media_data: b64content }, function (err, data, response
   T.post('media/metadata/create', meta_params, function (err, data, response) {
     if (!err) {
       var params = { status: input, media_ids: [mediaIdStr] }
- 
+
       // Faire un tweet
       T.post('statuses/update', params, function (err, data, response) {
         term("\nEnvoie du tweet..."); // Message pour dire que le tweet s'envoie
@@ -650,7 +654,7 @@ T.post('media/upload', { media_data: b64content }, function (err, data, response
                   process.exit(); // Arrêter le processus
               } else {
                  // Si il y a une erreur
-          
+
                   // Détection de l'erreur
                   if(err.message === "Status is a duplicate."){
                     var error = "Un tweet contenant le même contenu est déjà existant. | Code erreur #9";
@@ -669,13 +673,13 @@ T.post('media/upload', { media_data: b64content }, function (err, data, response
                     }
                   }
                   }
-          
+
                   // Affichage de l'erreur
                   term.red("\nErreur de Twitter : " + err.message + "\n");
                   term.red("Erreur détecté par Twitterminal : " + error + "\n");
                   return process.exit(); // Arrêter le processus
               }
-          
+
       })
     }
   })
@@ -711,7 +715,7 @@ term.on('key', function(name, matches, data){
 		tweetSecond();
 	}
 });
-  
+
 term.on('key', function(name, matches, data){
   // Si ENTER 300 fois : Easter egg
   if (name === 'ENTER'){
