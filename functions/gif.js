@@ -5,7 +5,7 @@ const fetch = require('node-fetch')
 module.exports = async function(text){
 	// Faire une requête vers tenor
 	var gif = await fetch(`https://api.tenor.com/v1/search?q=${text}&key=LIVDSRZULELA&limit=1`)
-    .then(res => res.json())
+	.then(res => res.json())
 	.catch(err => { return "" })
 
 	// Retourner le lien du gif
