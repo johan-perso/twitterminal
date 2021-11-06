@@ -18,6 +18,10 @@ module.exports.truefalse = async function(content){
 	return content.replace(/true/g,"activé").replace(/false/g,"désactivé")
 }
 
+module.exports.reverseBoolean = function(content){
+	return (!(content === 'true') + "")
+}
+
 module.exports.tweet = async function(content){
 	// Regex pour l'extraction de gifs // l'extraction de texte gras
 	var regexGif = /%GIF_..*%/g
