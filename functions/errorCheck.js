@@ -5,9 +5,7 @@
 
 // Fonction pour valider si c'est du JSON ou non (https://stackoverflow.com/a/33369954/16155654)
 function isJson(item) {
-	item = typeof item !== "string"
-		? JSON.stringify(item)
-		: item;
+	item = typeof item !== "string" ? JSON.stringify(item) : item;
 
 	try {
 		item = JSON.parse(item);
@@ -15,9 +13,7 @@ function isJson(item) {
 		return false;
 	}
 
-	if (typeof item === "object" && item !== null) {
-		return true;
-	}
+	if (typeof item === "object" && item !== null) return true;
 
 	return false;
 }
