@@ -10,7 +10,7 @@ module.exports = async function(requestInfo, oauth, token){
 	}
 
 	// Effectuer un fetch
-	var fetched = await fetch(newRequestInfo.url, {
+	const fetched = await fetch(newRequestInfo.url, {
         method: newRequestInfo.method,
         headers: oauth.toHeader(oauth.authorize(newRequestInfo, token)),
     })
