@@ -1,6 +1,6 @@
 {
   "name": "twitterminal",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "Permet d'utiliser Twitter via un terminal",
   "main": "index.js",
   "bin": {
@@ -13,18 +13,15 @@
     "terminal"
   ],
   "author": "JohanStickman",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
-    "boxen": "^5.0.1",
     "chalk": "^4.1.1",
     "clipboardy": "^2.3.0",
-    "conf": "^10.0.1",
+    "conf": "^10.1.1",
     "express": "^4.17.1",
-    "hastebin.js": "^1.3.2",
     "inquirer": "^8.2.0",
     "moment": "^2.29.1",
     "node-fetch": "^2.6.1",
-    "node-json-minify": "^1.0.0",
     "oauth-1.0a": "^2.2.6",
     "open": "^8.2.1",
     "ora": "^5.4.1",
