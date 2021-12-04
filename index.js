@@ -1,29 +1,183 @@
 #!/usr/bin/env node
 
-// Importer les fonctions locales de Twitterminal
-var replaceText = require('./functions/replaceText.js')
-var fetch = require('./functions/fetch.js')
-var errorCheck = require('./functions/errorCheck.js')
-var writeClipboard = require('./functions/writeClipboard.js')
+// Importer quelques modules + le package.json
+	// Les définir
+	var chalk
+	var OAuth
+	var crypto
+	var updateNotifier
+	var moment
+	var boxen
+	var ora
+	var path
+	var inquirer
+	var Conf
+	var open
+	var spinner
+	var pkg
 
-// Importer quelques modules / fichiers locales
-const OAuth = require('oauth-1.0a');
-const crypto = require('crypto');
-const chalk = require('chalk');
-const updateNotifier = require('update-notifier');
-const moment = require('moment');
-const boxen = require('boxen');
-const ora = require('ora'); const spinner = ora('');
-const open = require('open');
-const inquirer = require('inquirer');
-const Conf = require('conf');
-const config = new Conf({projectName: "twitterminal", projectSuffix: ""});
-const pkg = require('./package.json');
+	// Les importer
+	try { chalk = require('chalk') } catch (e){ failRequireModule("chalk","4.1.1") }
+	try { OAuth = require('oauth-1.0a') } catch (e){ failRequireModule("oauth-1.0a") }
+	try { crypto = require('crypto') } catch (e){ failRequireModule("crypto") }
+	try { updateNotifier = require('update-notifier') } catch (e){ failRequireModule("update-notifier","5.1.0") }
+	try { moment = require('moment') } catch (e){ failRequireModule("moment") }
+	try { boxen = require('boxen') } catch (e){ failRequireModule("boxen","5.1.2") }
+	try { ora = require('ora'); spinner = ora('')} catch (e){ failRequireModule("ora","5.4.1") }
+	try { path = require('path') } catch (e){ failRequireModule("path") }
+	try { inquirer = require('inquirer') } catch (e){ failRequireModule("inquirer") }
+	try { Conf = require('conf') } catch (e){ failRequireModule("conf") }
+	try { open = require('open') } catch (e){ failRequireModule("open","8.2.1") }
+	try { pkg = require('./package.json') } catch (e){ failRequireModule("package.json") }
+
+	// Vérifier le package.json
+	if(!pkg.name || pkg.name !== "twitterminal") failRequireModule("package.json")
+	if(!pkg.version) failRequireModule("package.json")
+	if(!pkg.author || pkg.author !== "JohanStickman") failRequireModule("package.json")
+
+	// Quelques importations supplémentaire (pas pour les utiliser mais pour check si ils sont installé)
+	try { require('node-fetch') } catch (e){ failRequireModule("node-fetch","2.6.1") }
+	try { require('clipboardy') } catch (e){ failRequireModule("clipboardy","2.3.0") }
+	try { require('express') } catch (e){ failRequireModule("express") }
+	try { require('twitter-lite') } catch (e){ failRequireModule("twitter-lite") }
+
+// Vérifier la version de NodeJS utilisé
+if(parseInt(process.versions.node) < 15){
+	// Si il y'a une erreur, le dire
+	console.log(chalk.red(`Impossible de démarrer Twitterminal : votre version de NodeJS (${process.version}) est trop ancienne.`))
+
+	// Afficher l'erreur
+	console.log("-".repeat(parseInt(process.stdout.columns)))
+	console.log(chalk.dim("- Tenter d'installer NodeJS 15 ou plus"))
+
+	// Arrêter le processus
+	process.exit();
+}
+
+// Argument pour afficher la version
+if(process.argv.slice(2)[0] === "--version" || process.argv.slice(2)[0] === "-v"){
+	// Afficher la version
+	console.log("Twitterminal utilise actuellement la version " + chalk.cyan(pkg.version))
+	console.log(chalk.dim("────────────────────────────────────────────"))
+
+	// Afficher le chemin de Twitterminal
+	console.log("Chemin de Twitterminal")
+	console.log(chalk.cyan(`	${path.join(__dirname)}`))
+	console.log(chalk.dim("────────────────────────────────────────────"))
+
+	// Afficher le chemin de la configuration
+	console.log("Chemin de la configuration")
+	if(require('os').platform() === "win32") console.log(`	${chalk.cyan(path.join(process.env.APPDATA, "twitterminal", "config", "config.json"))}`)
+	if(require('os').platform() === "darwin") console.log(`	${chalk.cyan(path.join(require('os').homedir(), "library", "Preferences", "twitterminal", "config.json"))}`)
+	if(require('os').platform() === "linux") console.log(`	${chalk.cyan(path.join(require('os').homedir(), ".config", "twitterminal", "config.json"))}`)
+	console.log(chalk.dim("────────────────────────────────────────────"))
+
+	// Afficher que ✨ le grand maitre stickman ✨ est le créateur de Twitterminal
+	console.log("Développé par Johan le stickman")
+	console.log(chalk.cyan("	https://johanstickman.com"))
+	return process.exit()
+}
+// Argument pour afficher le chemin de la configuration
+if(process.argv.slice(2)[0] === "-cp"){
+	if(require('os').platform() === "win32") console.log(path.join(process.env.APPDATA, "twitterminal", "config", "config.json"))
+	if(require('os').platform() === "darwin") console.log(path.join(require('os').homedir(), "library", "Preferences", "twitterminal", "config.json"))
+	if(require('os').platform() === "linux") console.log(path.join(require('os').homedir(), ".config", "twitterminal", "config.json"))
+	return process.exit()
+}
+
+// Préparer une configuration
+var config
+try {
+	config = new Conf({projectName: "twitterminal", projectSuffix: ""})
+} catch(e){
+	// Si il y'a une erreur, le dire
+	console.log(chalk.red(`Impossible de démarrer Twitterminal : le chargement de la configuration de Twitterminal a rencontré une erreur fatal empêchant le démarrage.`))
+
+	// Afficher le chemin de la configuration
+	if(require('os').platform() === "win32") console.log(`Chemin de la configuration : ${chalk.cyan(path.join(process.env.APPDATA, "twitterminal", "config", "config.json"))}`)
+	if(require('os').platform() === "darwin") console.log(`Chemin de la configuration : ${chalk.cyan(path.join(require('os').homedir(), "library", "Preferences", "twitterminal", "config.json"))}`)
+	if(require('os').platform() === "linux") console.log(`Chemin de la configuration : ${chalk.cyan(path.join(require('os').homedir(), ".config", "twitterminal", "config.json"))}`)
+
+	// Afficher l'erreur
+	console.log("-".repeat(parseInt(process.stdout.columns)))
+	console.log(chalk.dim(e))
+
+	// Arrêter le processus
+	process.exit();
+}
+
+// Importer les fonctions locales de Twitterminal
+	// Les définir
+	var replaceText
+	var fetch
+	var errorCheck
+	var writeClipboard
+
+	// Les importer
+	try { replaceText = require('./functions/replaceText.js') } catch (e){ failRequireFunction("replaceText.js") }
+	try { fetch = require('./functions/fetch.js') } catch (e){ failRequireFunction("fetch.js") }
+	try { errorCheck = require('./functions/errorCheck.js') } catch (e){ failRequireFunction("errorCheck.js") }
+	try { writeClipboard = require('./functions/writeClipboard.js') } catch (e){ failRequireFunction("writeClipboard.js") }
+
+	// Vérifier des fonctions locales non utilisé dans l'index.js
+	try { require('./functions/checkInternet.js') } catch (e){ failRequireFunction("checkInternet.js") }
+	try { require('./functions/config.js') } catch (e){ failRequireFunction("config.js") }
+	try { require('./functions/configOauth.js') } catch (e){ failRequireFunction("configOauth.js") }
+	try { require('./functions/gif.js') } catch (e){ failRequireFunction("gif.js") }
+	try { require('./functions/timeline.js') } catch (e){ failRequireFunction("timeline.js") }
+
+// Fonction pour afficher qu'il faut installer un module
+function failRequireModule(moduleName, version){
+	path = require('path')
+
+	// Afficher le fait que Twitterminal ne peut démarrer
+	if(moduleName !== "chalk") console.log(chalk.red(`Impossible de démarrer Twitterminal : le chargement du module ${chalk.cyan(moduleName)} n'a pas pu aboutir.`))
+	if(moduleName === "chalk") console.log(`Impossible de démarrer Twitterminal : le chargement du module ${moduleName} n'a pas pu aboutir.`)
+
+	// Si le module manquant est le package.json
+	if(moduleName === "package.json"){
+		console.log("-".repeat(parseInt(process.stdout.columns)))
+		console.log(chalk.dim(`- Tenter une réinstallation de Twitterminal`))
+		console.log(chalk.dim(`- ou télécharger le package.json de Twitterminal sur GitHub`))
+		console.log(chalk.dim(`	github.com/johan-perso/twitterminal/blob/main/package.json`))
+		process.exit()
+	}
+
+	// Afficher une commande pour installer le module
+	console.log(`---  Installer le module  ${"-".repeat(parseInt(process.stdout.columns-26))}`)
+	if(moduleName !== "chalk") console.log(chalk.dim(`cd "${path.join(__dirname)}"\nnpm install ${moduleName}${(version) ? `@${version}` : ''}`))
+	if(moduleName === "chalk") console.log(`cd "${path.join(__dirname)}"\nnpm install ${moduleName}${(version) ? `@${version}` : ''}`)
+
+	// Afficher une commande pour installer TOUT les modules
+	var allModule = `chalk@4.1.1 boxen@5.1.2 ora@5.4.1 node-fetch@2.6.1 clipboardy@2.3.0 open@8.2.1 oauth-1.0a crypto update-notifier moment inquirer conf express twitter-lite`
+	console.log(`\n---  Installer TOUT les modules  ${"-".repeat(parseInt(process.stdout.columns-33))}`)
+	if(moduleName !== "chalk") console.log(chalk.dim(`cd "${path.join(__dirname)}"\nnpm install ${allModule}`))
+	if(moduleName === "chalk") console.log(`cd "${path.join(__dirname)}"\nnpm install ${allModule}`)
+
+	// Arrêter le processus
+	process.exit();
+}
+
+// Fonction pour afficher qu'un fichier fonction est manquant
+function failRequireFunction(functionName){
+	path = require('path')
+
+	// Afficher le fait que Twitterminal ne peut démarrer
+	console.log(chalk.red(`Impossible de démarrer Twitterminal : le chargement de la fonction ${chalk.cyan(functionName)} n'a pas pu aboutir.`))
+
+	// Afficher des informations pour réparer le problème
+	console.log("-".repeat(parseInt(process.stdout.columns)))
+	console.log(chalk.dim(`- Tenter une réinstallation de Twitterminal`))
+	console.log(chalk.dim(`- ou télécharger le ${functionName} de Twitterminal sur GitHub`))
+	console.log(chalk.dim(`	github.com/johan-perso/twitterminal/blob/main/functions/${functionName}`))
+
+	// Arrêter le processus
+	process.exit();
+}
 
 // Système de mise à jour
-const notifier = updateNotifier({ pkg, updateCheckInterval: 10 });
-
-if (notifier.update && pkg.version !== notifier.update.latest){
+const notifier = updateNotifier({ pkg, updateCheckInterval: 10 })
+if(notifier.update && pkg.version !== notifier.update.latest){
 	console.log(boxen("Mise à jour disponible " + chalk.dim(pkg.version) + chalk.reset(" → ") + chalk.green(notifier.update.latest) + "\n" + chalk.cyan("npm i -g " + pkg.name) + " pour mettre à jour", {
 		padding: 1,
 		margin: 1,
@@ -34,8 +188,8 @@ if (notifier.update && pkg.version !== notifier.update.latest){
 }
 
 // Accèder a des valeurs de la config
-    // Information du compte
-    let account = config.get('account')
+	// Information du compte
+	let account = config.get('account')
 	if(!account || account && !account.name) config.set({ 'account.name': '' });
 	if(!account || account && !account.consumer_key) config.set({ 'account.consumer_key': '' });
 	if(!account || account && !account.consumer_secret) config.set({ 'account.consumer_secret': '' });
@@ -45,6 +199,9 @@ if (notifier.update && pkg.version !== notifier.update.latest){
 	// Version de la configuration
 	if(!(config.get('configVersion'))) config.set('configVersion', pkg.version);
 	if((config.get('configVersion')) !== pkg.version) config.set('configVersion', pkg.version);
+
+	// Liste des backups
+	if(config.get('configBackupList') && !config.get('configBackupList')[0]) config.delete('configBackupList');
 
 // Définir oauth
 const oauth = OAuth({
@@ -122,25 +279,28 @@ async function main(){
 	if((await checkFirstStart()) === true) return firstStart()
 	await checkAccount()
 
+	// Obtenir la liste des choix
+	var choices = []
+	if(config?.get('experiments')?.includes("SHOW_TIMELINE")) choices.push("Voir sa timeline (experiments)")
+	choices.push('Tweeter','Créer un thread','Profil','Configuration')
+
 	// Afficher un menu
 	inquirer.prompt([
 		{
 			type: 'list',
 			name: 'action',
 			message: 'Que voulez-vous faire ?',
-			choices: [
-				'Tweeter',
-				'Créer un thread',
-				'Profil',
-				'Configuration'
-			]
+			choices: choices
 		}
 	])
 	.then(answer => {
+		if(answer.action.toLowerCase() === "voir sa timeline (experiments)") return require('./functions/timeline.js')(oauth, token)
 		if(answer.action.toLowerCase() === "tweeter") return tweet()
 		if(answer.action.toLowerCase() === "créer un thread") return thread() 
 		if(answer.action.toLowerCase() === "profil") return showProfil()
-		if(answer.action.toLowerCase() === "configuration") return require('./functions/config.js')()
+
+		if(answer.action.toLowerCase() === "configuration" && !config?.get("experiments")?.includes("CONFIG_IN_TEXT_EDITOR")) return require('./functions/config.js')()
+		if(answer.action.toLowerCase() === "configuration" && config?.get("experiments")?.includes("CONFIG_IN_TEXT_EDITOR")) return open(path.join(config.path))
 	});
 }
 
@@ -152,9 +312,9 @@ async function tweet(){
 			type: 'input',
 			name: 'tweetContent',
 			message: 'Contenu du tweet',
-			validate(text) {
-				if (text.length < 1) { return 'Veuillez entrer un texte' }
-				if (text.length > 255) { return `Ce texte est trop grand (${text.length} caractères)` }
+			validate(text){
+				if(text.length < 1){ return 'Veuillez entrer un texte' }
+				if(text.length > 255){ return `Ce texte est trop grand (${text.length} caractères)` }
 				return true;
 			}
 		}
@@ -210,9 +370,9 @@ async function thread(){
 			type: 'input',
 			name: 'tweetContent',
 			message: 'Contenu du tweet',
-			validate(text) {
-				if (text.length < 1) { return 'Veuillez entrer un texte' }
-				if (text.length > 9999) { return `Ce texte est trop grand (${text.length} caractères, max 9999 caractères)` }
+			validate(text){
+				if(text.length < 1){ return 'Veuillez entrer un texte' }
+				if(text.length > 9999){ return `Ce texte est trop grand (${text.length} caractères, max 9999 caractères)` }
 				return true;
 			}
 		}
@@ -345,8 +505,8 @@ async function showProfil(){
 	// Afficher des informations
 		// Obtenir les badges
 		var badge = []
-		if(accountInfo.verified === true) badge.push("✔")
-		if(accountInfo.protected === true) badge.push("🔐")
+		if(accountInfo.verified === true) badge.push("✔️")
+		if(accountInfo.protected === true) badge.push("🔒")
 
 		// Afficher dans le terminal - Basique
 		console.log("\n" + ((badge[0]) ? `${badge.map(b => b).join("")}  ` : '') + chalk.bold.underline("Basique"))
