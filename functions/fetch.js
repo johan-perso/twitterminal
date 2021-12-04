@@ -1,6 +1,3 @@
-// Importer node-fetch
-const fetch = require('node-fetch')
-
 // Exporter en tant que module
 module.exports = async function(requestInfo, oauth, token){
 	// Obtenir les informations de requêtes modifié
@@ -10,11 +7,11 @@ module.exports = async function(requestInfo, oauth, token){
 	}
 
 	// Effectuer un fetch
-	const fetched = await fetch(newRequestInfo.url, {
-        method: newRequestInfo.method,
-        headers: oauth.toHeader(oauth.authorize(newRequestInfo, token)),
-    })
-    .then(res => res.json())
+	const fetched = await require('node-fetch')(newRequestInfo.url, {
+		method: newRequestInfo.method,
+		headers: oauth.toHeader(oauth.authorize(newRequestInfo, token)),
+	})
+	.then(res => res.json())
 	.catch(err => { return { error: true, description: err, code: 2429391 } })
 
 	// Retourner l'information
