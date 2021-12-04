@@ -1,10 +1,7 @@
-// Importer node-fetch
-const fetch = require('node-fetch')
-
 // Exporter en tant que module
 module.exports = async function(text){
 	// Faire une requête vers tenor
-	var gif = await fetch(`https://api.tenor.com/v1/search?q=${text}&key=LIVDSRZULELA&limit=1`)
+	var gif = await require('node-fetch')(`https://api.tenor.com/v1/search?q=${text}&key=LIVDSRZULELA&limit=1`)
 	.then(res => res.json())
 	.catch(err => { return "" })
 
