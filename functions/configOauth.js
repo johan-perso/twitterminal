@@ -31,10 +31,10 @@ module.exports = async function(){
 
 	// Demander un token oauth
 	var request_token = await fetch('https://api.twitter.com/oauth/request_token', {
-        method: 'post',
-        headers: oauth.toHeader(oauth.authorize({ url: 'https://api.twitter.com/oauth/request_token', method: 'post' })),
-    })
-    .then(res => res.text())
+		method: 'post',
+		headers: oauth.toHeader(oauth.authorize({ url: 'https://api.twitter.com/oauth/request_token', method: 'post' })),
+	})
+	.then(res => res.text())
 	.catch(err => console.log(chalk.red("Impossible d'obtenir un token oauth : vérifier votre connexion, sinon veuillez contacter @Johan_Stickman") + chalk.cyan(" (Code erreur #7.1)")) && process.exit())
 
 	var oauth_token = request_token.split("&oauth_token_secret=")[0]
@@ -74,7 +74,7 @@ module.exports = async function(){
 // Convertir les tokens oauth en token utilisables
 async function convertToken(query){
 	var request_convert = await fetch(`https://api.twitter.com/oauth/access_token?oauth_token=${query.oauth_token}&oauth_verifier=${query.oauth_verifier}`, { method: 'post' })
-    .then(res => res.text())
+	.then(res => res.text())
 	.catch(err => console.log(chalk.red("Impossible de convertir les tokens oauth : vérifier votre connexion, sinon veuillez contacter @Johan_Stickman") + chalk.cyan(" (Code erreur #7.2)")) && process.exit())
 
 	// Arrêter le spinner
