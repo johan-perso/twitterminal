@@ -1,6 +1,6 @@
 // Crée une config / l'importer
 const Conf = require('conf');
-const config = new Conf({projectName: "twitterminal", projectSuffix: ""});
+var config = new Conf({ cwd: require('./configPath')(false), configName: 'twitterminalConfig' })
 
 // Ajouter une valeur par défaut à la configuration
 let clipboardyConfig = config.get('clipboardy')
