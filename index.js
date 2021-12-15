@@ -13,6 +13,7 @@
 	var inquirer
 	var Conf
 	var open
+	var fs
 	var spinner
 	var pkg
 
@@ -28,6 +29,7 @@
 	try { inquirer = require('inquirer') } catch (e){ failRequireModule("inquirer") }
 	try { Conf = require('conf') } catch (e){ failRequireModule("conf") }
 	try { open = require('open') } catch (e){ failRequireModule("open","8.2.1") }
+	try { fs = require('fs') } catch (e){ failRequireModule("fs") }
 	try { pkg = require('./package.json') } catch (e){ failRequireModule("package.json") }
 
 	// Vérifier le package.json
@@ -47,7 +49,7 @@ if(parseInt(process.versions.node) < 15){
 	console.log(chalk.red(`Impossible de démarrer Twitterminal : votre version de NodeJS (${process.version}) est trop ancienne.`))
 
 	// Afficher l'erreur
-	console.log("-".repeat(parseInt(process.stdout.columns)))
+	console.log("─".repeat(parseInt(process.stdout.columns)))
 	console.log(chalk.dim("- Tenter d'installer NodeJS 15 ou plus"))
 
 	// Arrêter le processus
@@ -67,9 +69,7 @@ if(process.argv.slice(2)[0] === "--version" || process.argv.slice(2)[0] === "-v"
 
 	// Afficher le chemin de la configuration
 	console.log("Chemin de la configuration")
-	if(require('os').platform() === "win32") console.log(`	${chalk.cyan(path.join(process.env.APPDATA, "twitterminal", "config", "config.json"))}`)
-	if(require('os').platform() === "darwin") console.log(`	${chalk.cyan(path.join(require('os').homedir(), "library", "Preferences", "twitterminal", "config.json"))}`)
-	if(require('os').platform() === "linux") console.log(`	${chalk.cyan(path.join(require('os').homedir(), ".config", "twitterminal", "config.json"))}`)
+	console.log(`	${chalk.cyan(require('./functions/configPath')())}`)
 	console.log(chalk.dim("────────────────────────────────────────────"))
 
 	// Afficher que ✨ le grand maitre stickman ✨ est le créateur de Twitterminal
@@ -79,27 +79,23 @@ if(process.argv.slice(2)[0] === "--version" || process.argv.slice(2)[0] === "-v"
 }
 // Argument pour afficher le chemin de la configuration
 if(process.argv.slice(2)[0] === "-cp"){
-	if(require('os').platform() === "win32") console.log(path.join(process.env.APPDATA, "twitterminal", "config", "config.json"))
-	if(require('os').platform() === "darwin") console.log(path.join(require('os').homedir(), "library", "Preferences", "twitterminal", "config.json"))
-	if(require('os').platform() === "linux") console.log(path.join(require('os').homedir(), ".config", "twitterminal", "config.json"))
+	console.log(require('./functions/configPath')())
 	return process.exit()
 }
 
 // Préparer une configuration
 var config
 try {
-	config = new Conf({projectName: "twitterminal", projectSuffix: ""})
+	config = new Conf({ cwd: require('./functions/configPath')(false), configName: 'twitterminalConfig' })
 } catch(e){
 	// Si il y'a une erreur, le dire
 	console.log(chalk.red(`Impossible de démarrer Twitterminal : le chargement de la configuration de Twitterminal a rencontré une erreur fatal empêchant le démarrage.`))
 
 	// Afficher le chemin de la configuration
-	if(require('os').platform() === "win32") console.log(`Chemin de la configuration : ${chalk.cyan(path.join(process.env.APPDATA, "twitterminal", "config", "config.json"))}`)
-	if(require('os').platform() === "darwin") console.log(`Chemin de la configuration : ${chalk.cyan(path.join(require('os').homedir(), "library", "Preferences", "twitterminal", "config.json"))}`)
-	if(require('os').platform() === "linux") console.log(`Chemin de la configuration : ${chalk.cyan(path.join(require('os').homedir(), ".config", "twitterminal", "config.json"))}`)
+	console.log(`Chemin de la configuration : ${chalk.cyan(require('./functions/configPath')())}`)
 
 	// Afficher l'erreur
-	console.log("-".repeat(parseInt(process.stdout.columns)))
+	console.log("─".repeat(parseInt(process.stdout.columns)))
 	console.log(chalk.dim(e))
 
 	// Arrêter le processus
@@ -136,21 +132,23 @@ function failRequireModule(moduleName, version){
 
 	// Si le module manquant est le package.json
 	if(moduleName === "package.json"){
-		console.log("-".repeat(parseInt(process.stdout.columns)))
+		console.log("─".repeat(parseInt(process.stdout.columns)))
 		console.log(chalk.dim(`- Tenter une réinstallation de Twitterminal`))
 		console.log(chalk.dim(`- ou télécharger le package.json de Twitterminal sur GitHub`))
 		console.log(chalk.dim(`	github.com/johan-perso/twitterminal/blob/main/package.json`))
+		console.log("─".repeat(parseInt(process.stdout.columns)))
+		console.log(`Chemin de Twitterminal : ${chalk.cyan(path.join(__dirname))}`)
 		process.exit()
 	}
 
 	// Afficher une commande pour installer le module
-	console.log(`---  Installer le module  ${"-".repeat(parseInt(process.stdout.columns-26))}`)
+	console.log(`───  Installer le module  ${"─".repeat(parseInt(process.stdout.columns-26))}`)
 	if(moduleName !== "chalk") console.log(chalk.dim(`cd "${path.join(__dirname)}"\nnpm install ${moduleName}${(version) ? `@${version}` : ''}`))
 	if(moduleName === "chalk") console.log(`cd "${path.join(__dirname)}"\nnpm install ${moduleName}${(version) ? `@${version}` : ''}`)
 
 	// Afficher une commande pour installer TOUT les modules
 	var allModule = `chalk@4.1.1 boxen@5.1.2 ora@5.4.1 node-fetch@2.6.1 clipboardy@2.3.0 open@8.2.1 oauth-1.0a crypto update-notifier moment inquirer conf express twitter-lite`
-	console.log(`\n---  Installer TOUT les modules  ${"-".repeat(parseInt(process.stdout.columns-33))}`)
+	console.log(`\n───  Installer TOUT les modules  ${"─".repeat(parseInt(process.stdout.columns-33))}`)
 	if(moduleName !== "chalk") console.log(chalk.dim(`cd "${path.join(__dirname)}"\nnpm install ${allModule}`))
 	if(moduleName === "chalk") console.log(`cd "${path.join(__dirname)}"\nnpm install ${allModule}`)
 
@@ -166,7 +164,7 @@ function failRequireFunction(functionName){
 	console.log(chalk.red(`Impossible de démarrer Twitterminal : le chargement de la fonction ${chalk.cyan(functionName)} n'a pas pu aboutir.`))
 
 	// Afficher des informations pour réparer le problème
-	console.log("-".repeat(parseInt(process.stdout.columns)))
+	console.log("─".repeat(parseInt(process.stdout.columns)))
 	console.log(chalk.dim(`- Tenter une réinstallation de Twitterminal`))
 	console.log(chalk.dim(`- ou télécharger le ${functionName} de Twitterminal sur GitHub`))
 	console.log(chalk.dim(`	github.com/johan-perso/twitterminal/blob/main/functions/${functionName}`))
@@ -235,11 +233,76 @@ async function checkAccount(){
 
 	// Mettre un message de bienvenue
 	console.log(greet + chalk.cyan(accountInfo.name) + " !\n(Connecté en tant que " + chalk.cyan("@" + accountInfo.screen_name) + ")")
-	console.log(chalk.yellow("[-----------------------------------------------]"))
+	console.log(chalk.yellow("[───────────────────────────────────────────────]"))
 }
 
 // Fonction à executer au premier démarrage
-function firstStart(){
+async function firstStart(){
+	// Si aucun compte est trouvé, en profiter pour check si une configuration est trouvable dans l'ancien chemin de la configuration
+	var checkOldConfig = new Promise(async (resolve, reject) => {
+		if(!config.get('accountList')){
+			// Déterminer le chemin de la potentiel configuration en fonction de l'OS
+			if(require('os').platform() === "win32") var configPath = path.join(process.env.APPDATA, "twitterminal", "config", "config.json")
+			if(require('os').platform() === "darwin") var configPath = path.join(require('os').homedir(), "library", "Preferences", "twitterminal", "config.json")
+			if(require('os').platform() === "linux") var configPath = path.join(require('os').homedir(), ".config", "twitterminal", "config.json")
+
+			// Vérifier si le fichier de la configuration est trouvable
+			if(fs.existsSync(configPath)){
+				// Si oui, la convertir en JSON
+				var oldConfig
+				try { oldConfig = JSON.parse(fs.readFileSync(configPath)) } catch (e){}
+				
+				// Afficher que la configuration existe
+				if(oldConfig && oldConfig.accountList || oldConfig.account){
+					// Afficher que la configuration a été trouvée
+					console.log(chalk.bold(`Ancienne configuration Twittterminal trouvée (version ${chalk.cyan(oldConfig.configVersion || "inconnue")})`))
+					console.log("La configuration se trouve ici --> " + chalk.cyan(configPath))
+					console.log(chalk.yellow("─".repeat(parseInt(process.stdout.columns))))
+
+					// Afficher des informations supplémentaires
+						// Les obtenir
+						if(oldConfig.accountList) var accountsNumber = Object?.keys(oldConfig?.accountList)?.length
+						if(oldConfig.account) var mainAccountName = oldConfig?.account?.name
+						if(oldConfig.configBackupList) var backupsCount = parseInt(oldConfig?.configBackupList?.length)
+
+						// Les afficher
+						if(accountsNumber) console.log(chalk.dim(`- ${accountsNumber} compte${(accountsNumber > 1) ? "s" : ""} trouvé${(accountsNumber > 1) ? "s" : ""}`))
+						if(mainAccountName) console.log(chalk.dim(`- Compte principal : ${mainAccountName}`))
+						if(backupsCount) console.log(chalk.dim(`- Contient ${backupsCount} sauvegarde${(backupsCount > 1) ? "s" : ""}`))
+
+					// Afficher un menu pour choisir entre l'ignorer, ou l'utiliser
+					console.log(chalk.yellow("─".repeat(parseInt(process.stdout.columns))))
+					inquirer.prompt([
+						{
+							type: "list",
+							name: "action",
+							message: "Que souhaitez-vous faire ?",
+							choices: [
+								"Utiliser cette configuration",
+								"Ignorer cette configuration"
+							]
+						}
+					]).then(async answer => {
+						// Si la réponse est de l'utiliser
+						if(answer.action === "Utiliser cette configuration"){
+							// Si la configuration existe, la remplacer
+							await fs.writeFileSync(require('./functions/configPath')(), fs.readFileSync(configPath))
+
+							// Afficher que hop c'est bon
+							console.log(chalk.green("Pour appliquer les modifications, Twitterminal a besoin d'être redémarrer."))
+						} else { resolve() }
+					})
+				}
+			}
+		}
+	})
+
+	// Vérifier si une ancienne ncoonfiguration existe
+	await checkOldConfig
+
+	// Vider l'écran
+	process.stdout.write("\x1Bc")
+
 	// Afficher des messages
 	console.log(chalk.bold("Hmm salutation cher entrepreneur !"))
 	console.log("Bienvenue à toi dans Twitterminal 👋")
