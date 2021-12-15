@@ -1,7 +1,7 @@
 // Importer node-fetch et conf
 const fetch = require('node-fetch')
 const Conf = require('conf')
-var config = new Conf({projectName: "twitterminal", projectSuffix: ""})
+var config = new Conf({ cwd: require('./configPath')(false), configName: 'twitterminalConfig' })
 
 // Exporter en tant que module
 module.exports = async function(text){
