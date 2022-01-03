@@ -293,7 +293,7 @@ async function firstStart(){
 						} else { resolve() }
 					})
 				}
-			}
+			} else { resolve() }
 		}
 	})
 
