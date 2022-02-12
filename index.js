@@ -304,7 +304,7 @@ async function firstStart(){
 	process.stdout.write("\x1Bc")
 
 	// Afficher des messages
-	console.log(chalk.bold("Hmm salutation cher entrepreneur !"))
+	console.log(chalk.bold("Hmm salutation !"))
 	console.log("Bienvenue à toi dans Twitterminal 👋")
 	console.log("Twitterminal permet d'intéragir avec Twitter depuis son terminal...\n")
 
@@ -318,7 +318,7 @@ async function firstStart(){
 				'Se connecter',
 				'Importer une configuration',
 				'Sortir'
-		]
+			]
 		}
 	])
 	.then(answer => {
@@ -337,12 +337,21 @@ async function checkFirstStart(){
 // Fonction principale
 main()
 async function main(){
-	// Vérifier la connexion, si Twitterminal a déjà été démarré et le compte
+	// Vérifier la connexion et si Twitterminal a déjà été démarré
 	if(await require('./functions/checkInternet.js')() === false) console.log(chalk.red(`Oupsi, Je n'ai pas l'impression que tu as accès à internet..`)) & process.exit();
 	if((await checkFirstStart()) === true) return firstStart()
+
+	// Arguments
+	if(process.argv.slice(2)[0] === "tweet") return tweet()
+	if(process.argv.slice(2)[0] === "thread") return thread()
+	if(process.argv.slice(2)[0] === "config") return open(path.join(config.path))
+	if(process.argv.slice(2)[0] === "timeline") return require('./functions/timeline.js')(oauth, token)
+	if(process.argv.slice(2)[0] === "profil") return showProfil()
+
+	// Vérifier le compte
 	await checkAccount()
 
-	// Obtenir la liste des choix
+	// Obtenir la liste des choix pour le menu
 	var choices = []
 	if(config?.get('experiments')?.includes("SHOW_TIMELINE")) choices.push("Voir sa timeline (experiments)")
 	choices.push('Tweeter','Créer un thread','Profil','Configuration')
