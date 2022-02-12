@@ -30,7 +30,23 @@ function isJson(item){
 // Exporter en tant que module
 module.exports = async function(option){
 	// Si une option a été ajouté
-	if(option === "importConfig") importConfig()
+	if(option === "importConfig"){
+		return inquirer.prompt([
+			{
+				type: 'list',
+				name: 'action',
+				message: 'Que voulez-vous faire ?',
+				choices: [
+					'Importer une configuration - cloud',
+					'Importer une configuration - local'
+				]
+			}
+		])
+		.then(answer => {
+			if(answer.action.toLowerCase() === "importer une configuration - cloud") return importConfig('cloud')
+			if(answer.action.toLowerCase() === "importer une configuration - local") return importConfig('local')
+		});
+	}
 
 	// Afficher un menu
 	if(!option) inquirer.prompt([
@@ -207,8 +223,8 @@ async function clipboardSettings(){
 async function importExportConfig(){
 	// Obtenir la liste des choix
 	var choices = []
-	if(!config.get('johanstickman_account_uuid')) choices.push('Configurer son compte');
-	else choices.push('Importer une configuration') && choices.push('Exporter la configuration') && choices.push('Supprimer une sauvegarde') 
+	if(!config.get('johanstickman_account_uuid')) choices.push('Configurer son compte ☁️☁️') && choices.push('Importer une configuration (local)') && choices.push('Exporter une configuration (local)');
+	else choices.push('Importer une configuration (cloud)') && choices.push('Importer une configuration (local)') && choices.push('Exporter la configuration (cloud)') && choices.push('Exporter la configuration (local)') && choices.push('Supprimer une sauvegarde') 
 
 	// Afficher un menu
 	var action = await inquirer.prompt([
@@ -222,17 +238,25 @@ async function importExportConfig(){
 	var action = action.action
 
 	// Selon le choix
-	if(action.toLowerCase() === 'configurer son compte'){
-		console.log(`\nPour sauvegarder votre configuration Twitterminal, accéder à ${chalk.cyan("johanstickman.com/uuid")} et entrer votre UUID de compte.`)
+	if(action.toLowerCase() === 'configurer son compte ☁️☁️'){
+		console.log(`\nPour sauvegarder ou importer une configuration Twitterminal à partir du cloud, accéder à ${chalk.cyan("johanstickman.com/uuid")} et entrer votre UUID de compte.`)
 		setTimeout(() => addJohanstickmanAccount(), 500);
 	}
-	if(action.toLowerCase() === 'importer une configuration'){
+	if(action.toLowerCase() === 'importer une configuration (local)'){
 		console.log("\nVotre configuration actuelle sera remplacer...")
-		setTimeout(() => importConfig(), 2000);
+		setTimeout(() => importConfig('local'), 2000);
 	}
-	if(action.toLowerCase() === 'exporter la configuration'){
+	if(action.toLowerCase() === 'importer une configuration (cloud)'){
+		console.log("\nVotre configuration actuelle sera remplacer...")
+		setTimeout(() => importConfig('cloud'), 2000);
+	}
+	if(action.toLowerCase() === 'exporter la configuration (local)'){
 		console.log(`\nVotre configuration Twitterminal contient l'accès à vos comptes enregistrés (telle que ${config.get('account.name')}) : faites attention à qui vous la partager.`)
-		setTimeout(() => exportConfig(), 3250);
+		setTimeout(() => exportConfig('local'), 3250);
+	}
+	if(action.toLowerCase() === 'exporter la configuration (cloud)'){
+		console.log(`\nVotre configuration Twitterminal contient l'accès à vos comptes enregistrés (telle que ${config.get('account.name')}) : faites attention à qui vous la partager.`)
+		setTimeout(() => exportConfig('cloud'), 3250);
 	}
 	if(action.toLowerCase() === 'supprimer une sauvegarde'){
 		deleteBackup()
@@ -240,58 +264,94 @@ async function importExportConfig(){
 }
 
 // Fonction pour importer une configuration
-async function importConfig(){
-	// Obtenir la liste des sauvegarde dans la configuration
-	var configBackupList = []
-	if(config.get('configBackupList')) config.get('configBackupList').sort((a,b) => b.createdAt-a.createdAt).forEach((backupInfo,i) => { configBackupList.push(`(${i+1}) Backup du ${moment.unix(backupInfo.createdAt).format("DD/MM/YYYY [à] HH:mm:ss")}`) })
-	if(config.get('configBackupList')) configBackupList.push("Entrer un identifiant")
+async function importConfig(type='cloud'){
+	var backup;
 
-	// Si une backup est dans la liste, demander quel backup utilisé
-	if(configBackupList[0]) var backupId = await inquirer.prompt([
-		{
-			type: 'list',
-			name: 'backupId',
-			message: 'Quel sauvegarde voulez-vous utiliser ?',
-			choices: configBackupList
-		}
-	])
-	if(configBackupList[0]) var backupId = backupId.backupId
+	// Si on souhaite importer à partir du cloud
+	if(type === 'cloud'){
+		// Obtenir la liste des sauvegarde dans la configuration
+		var configBackupList = []
+		if(config.get('configBackupList')) config.get('configBackupList').sort((a,b) => b.createdAt-a.createdAt).forEach((backupInfo,i) => { configBackupList.push(`(${i+1}) Backup du ${moment.unix(backupInfo.createdAt).format("DD/MM/YYYY [à] HH:mm:ss")}`) })
+		if(config.get('configBackupList')) configBackupList.push("Entrer un identifiant")
 
-	// Si la liste des backups est vide, demander un identifiant
-	if(!configBackupList[0] || backupId === "Entrer un identifiant") var backupIdI = await inquirer.prompt([
-		{
-			type: 'input',
-			name: 'backupId',
-			message: 'Identifiant de la sauvegarde',
-			validate(text){
-				if(text.length < 1){ return 'Veuillez entrer un identifiant' }
-				return true;
+		// Si une backup est dans la liste, demander quel backup utilisé
+		if(configBackupList[0]) var backupId = await inquirer.prompt([
+			{
+				type: 'list',
+				name: 'backupId',
+				message: 'Quel sauvegarde voulez-vous utiliser ?',
+				choices: configBackupList
 			}
+		])
+		if(configBackupList[0]) var backupId = backupId.backupId
+
+		// Si la liste des backups est vide, demander un identifiant
+		if(!configBackupList[0] || backupId === "Entrer un identifiant") var backupIdI = await inquirer.prompt([
+			{
+				type: 'input',
+				name: 'backupId',
+				message: 'Identifiant de la sauvegarde',
+				validate(text){
+					if(text.length < 1){ return 'Veuillez entrer un identifiant' }
+					return true;
+				}
+			}
+		])
+		if(!configBackupList[0] || backupId === "Entrer un identifiant") var backupId = backupIdI.backupId
+
+		// Obtenir l'identifiant
+		if(configBackupList[0] && !backupIdI) var backupId = config.get('configBackupList').sort((a,b) => b.createdAt-a.createdAt)[(parseInt(backupId.split(')')[0].substr(1))-1)].id
+
+		// Vérifier si l'identifiant contient un tiret (toute les backups contiennent ce caractère)
+		if(!backupId.includes("-")){
+			spinner.text = 'L\'identifiant est invalide.'
+			spinner.fail()
+			return process.exit()
 		}
-	])
-	if(!configBackupList[0] || backupId === "Entrer un identifiant") var backupId = backupIdI.backupId
 
-	// Obtenir l'identifiant
-	if(configBackupList[0] && !backupIdI) var backupId = config.get('configBackupList').sort((a,b) => b.createdAt-a.createdAt)[(parseInt(backupId.split(')')[0].substr(1))-1)].id
+		// Afficher un spinner
+		spinner.text = "Importation en cours..."
+		spinner.start()
 
-	// Vérifier si l'identifiant contient un tiret (toute les backups contiennent ce caractère)
-	if(!backupId.includes("-")){
-		spinner.text = 'L\'identifiant est invalide.'
-		spinner.fail()
-		return process.exit()
+		// Obtenir la configuration originale
+		var backup = await fetch(`https://text.johanstickman.com/raw/${backupId}`)
+		.then(res => res.text())
+		.catch(async err => {
+			spinner.text = "FETCHERR_UNABLE_GET_BACKUP"
+			return spinner.fail()
+		})
 	}
 
-	// Afficher un spinner
-	spinner.text = "Importation en cours..."
-	spinner.start()
+	// Si on souhaite importer à partir du local
+	if(type === 'local'){
+		// Demander le chemin du fichier
+		var backupPath = await inquirer.prompt([
+			{
+				type: 'input',
+				name: 'backupPath',
+				message: 'Chemin du fichier de sauvegarde',
+				validate(text){
+					if(text.length < 1){ return 'Veuillez entrer un chemin' }
+					return true;
+				}
+			}
+		])
+		var backupPath = backupPath.backupPath
 
-	// Obtenir la configuration originale
-	var backup = await fetch(`https://text.johanstickman.com/raw/${backupId}`)
-	.then(res => res.text())
-	.catch(async err => {
-		spinner.text = "FETCHERR_UNABLE_GET_BACKUP"
-		return spinner.fail()
-	})
+		// Afficher un spinner
+		spinner.text = "Importation en cours..."
+		spinner.start()
+
+		// Vérifier si le fichier existe
+		if(!fs.existsSync(backupPath)){
+			spinner.text = 'Le fichier de sauvegarde n\'existe pas.'
+			spinner.fail()
+			return process.exit()
+		}
+
+		// Obtenir la configuration originale
+		var backup = fs.readFileSync(backupPath, 'utf8')
+	}
 
 	// Si la taille du texte est supérieure à 99999 bits
 	if(encodeURI(backup).split(/%..|./).length - 1 > 99999){
@@ -330,7 +390,7 @@ async function importConfig(){
 }
 
 // Fonction pour exporter la configuration
-async function exportConfig(){
+async function exportConfig(type='cloud'){
 	// Afficher un spinner
 	spinner.text = "Exportation de la configuration..."
 	spinner.start()
@@ -350,34 +410,62 @@ async function exportConfig(){
 			return process.exit()
 		}
 
-		// Crée un texte contenant la configuration
-		var backup = await fetch(`https://text.johanstickman.com/api/create`, { method: 'post', body: new URLSearchParams({ title: `Twitterminal backup, ${moment().format("DD/MM/YYYY [at] HH:mm:ss")}`, content: data, type: 'code', codeLanguage: 'json', uuid: config.get('johanstickman_account_uuid') }) })
-		.then(res => res.json())
-		.catch(async err => {
-			spinner.text = "FETCHERR_UNABLE_CREATE_BACKUP"
-			return spinner.fail()
-		})
+		// Si on souhaite exporter vers le cloud
+		if(type === 'cloud'){
+			// Crée un texte contenant la configuration
+			var backup = await fetch(`https://text.johanstickman.com/api/create`, { method: 'post', body: new URLSearchParams({ title: `Twitterminal backup, ${moment().format("DD/MM/YYYY [at] HH:mm:ss")}`, content: data, type: 'code', codeLanguage: 'json', uuid: config.get('johanstickman_account_uuid') }) })
+			.then(res => res.json())
+			.catch(async err => {
+				spinner.text = "FETCHERR_UNABLE_CREATE_BACKUP"
+				return spinner.fail()
+			})
 
-		// Si Johan Text a renvoyé une erreur
-		if(backup.error === true){
-			spinner.text = backup.message.replace("Impossible de crée le texte.","Impossible de crée une sauvegarde : problème avec l'API")
-			return spinner.fail()
+			// Si Johan Text a renvoyé une erreur
+			if(backup.error === true){
+				spinner.text = backup.message.replace("Impossible de crée le texte.","Impossible de crée une sauvegarde : problème avec l'API")
+				return spinner.fail()
+			}
+
+			// Ajouter l'id du haste au presse papier
+			writeClipboard(`${backup.advancedInfo.id}-${backup.advancedInfo.encryptionKey}`)
+
+			// Arrêter le spinner
+			spinner.text = `Configuration exportée, identifiant ${chalk.cyan(`${backup.advancedInfo.id}-${backup.advancedInfo.encryptionKey}`)}, clé de suppression ${chalk.cyan(backup.advancedInfo.secretKey)}`
+			spinner.succeed()
+
+			// Ajouter la backup à la liste dans la configuration
+			if(await config.get('configBackupList')) var configBackupList = config.get('configBackupList'); else var configBackupList = []
+			var configBackupList = configBackupList.concat({ id: `${backup.advancedInfo.id}-${backup.advancedInfo.encryptionKey}`, secretKey: backup.advancedInfo.secretKey, createdAt: moment().unix() })
+			config.set('configBackupList', configBackupList)
+
+			// Arrêter le processus
+			return process.exit()
 		}
 
-		// Ajouter l'id du haste au presse papier
-		writeClipboard(`${backup.advancedInfo.id}-${backup.advancedInfo.encryptionKey}`)
+		// Si on souhaite exporter en locale
+		if(type === 'local'){
+			// Préparer le chemin
+			var filePath = `${process.cwd()}/twitterminal-backup-${moment().format("DD-MM-YYYY-HH-mm-ss")}.json`
 
-		// Arrêter le spinner
-		spinner.text = `Configuration exportée, identifiant ${chalk.cyan(`${backup.advancedInfo.id}-${backup.advancedInfo.encryptionKey}`)}, clé de suppression ${chalk.cyan(backup.advancedInfo.secretKey)}`
-		spinner.succeed()
+			// Crée un fichier contenant la configuration
+			fs.writeFile(filePath, data, function (err){
+				// En cas d'erreur
+				if(err){
+					spinner.text = chalk.red(`Impossible d'accèder au fichier de configuration : ${err.message}`) + chalk.cyan(" (Code erreur #5.2)")
+					spinner.fail()
+				}
 
-		// Ajouter la backup à la liste dans la configuration
-		if(await config.get('configBackupList')) var configBackupList = config.get('configBackupList'); else var configBackupList = []
-		var configBackupList = configBackupList.concat({ id: `${backup.advancedInfo.id}-${backup.advancedInfo.encryptionKey}`, secretKey: backup.advancedInfo.secretKey, createdAt: moment().unix() })
-		config.set('configBackupList', configBackupList)
+				// Arrêter le spinner
+				spinner.text = "Configuration exportée avec succès :"
+				spinner.succeed()
 
-		// Arrêter le processus
-		return process.exit()
+				// Donner le chemin
+				console.log(`    ${chalk.cyan(require('path').join(filePath))}`)
+
+				// Arrêter le processus
+				return process.exit()
+			});
+		}
 	});
 }
 
