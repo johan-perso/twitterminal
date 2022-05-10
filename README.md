@@ -13,7 +13,7 @@ $ (sudo) npm install --global twitterminal
 
 ## Changelog
 
-* [5.0.0](https://twiterminal.carrd.co/#changelog-500)
+~~* [5.0.0](https://twiterminal.carrd.co/#changelog-500)~~
 * [4.2.0](https://twiterminal.carrd.co/#changelog-420)
 * [4.1.0](https://twiterminal.carrd.co/#changelog-410)
 * [4.0.0](https://twiterminal.carrd.co/#changelog-400)
