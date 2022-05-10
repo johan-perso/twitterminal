@@ -1,10 +1,12 @@
 {
   "name": "twitterminal",
-  "version": "4.2.0",
+  "version": "5.0.0",
   "description": "Permet d'utiliser Twitter via un terminal",
   "main": "index.js",
   "bin": {
     "twitterminal": "index.js",
+    "twitterminal-config-analyzer": "config-analyzer.js",
+    "twitterminal-repair": "config-analyzer.js",
     "twitter": "index.js"
   },
   "keywords": [
@@ -21,11 +23,13 @@
     "env-paths": "^2.2.1",
     "express": "^4.17.1",
     "inquirer": "^8.2.0",
+    "jsonrepair": "^2.2.1",
     "moment": "^2.29.1",
     "node-fetch": "^2.6.7",
     "oauth-1.0a": "^2.2.6",
     "open": "^8.2.1",
     "ora": "^5.4.1",
+    "terminal-kit": "^2.4.0",
     "twitter-lite": "^1.1.0",
     "update-notifier": "^5.1.0"
   },
