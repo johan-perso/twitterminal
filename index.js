@@ -38,9 +38,11 @@
 	if(!pkg.author || pkg.author !== "JohanStickman") failRequireModule("package.json")
 
 	// Quelques importations supplémentaire (pas pour les utiliser mais pour check si ils sont installé)
+	try { require('terminal-kit') } catch (e){ failRequireModule("terminal-kit") }
 	try { require('node-fetch') } catch (e){ failRequireModule("node-fetch","2.6.1") }
 	try { require('clipboardy') } catch (e){ failRequireModule("clipboardy","2.3.0") }
 	try { require('express') } catch (e){ failRequireModule("express") }
+	try { require('jsonrepair') } catch (e){ failRequireModule("jsonrepair") }
 	try { require('twitter-lite') } catch (e){ failRequireModule("twitter-lite") }
 
 // Vérifier la version de NodeJS utilisé
@@ -75,12 +77,12 @@ if(process.argv.slice(2)[0] === "--version" || process.argv.slice(2)[0] === "-v"
 	// Afficher que ✨ le grand maitre stickman ✨ est le créateur de Twitterminal
 	console.log("Développé par Johan le stickman")
 	console.log(chalk.cyan("	https://johanstickman.com"))
-	return process.exit()
+	process.exit()
 }
 // Argument pour afficher le chemin de la configuration
 if(process.argv.slice(2)[0] === "-cp"){
 	console.log(require('./functions/configPath')())
-	return process.exit()
+	process.exit()
 }
 
 // Préparer une configuration
@@ -169,8 +171,8 @@ function failRequireFunction(functionName){
 	console.log(chalk.dim(`- ou télécharger le ${functionName} de Twitterminal sur GitHub`))
 	console.log(chalk.dim(`	github.com/johan-perso/twitterminal/blob/main/functions/${functionName}`))
 
-	// Arrêter le processus
-	process.exit();
+	// Arrêter le processus, si le flag debug n'est pas présent
+	if(!process.argv.includes("--debug")) process.exit();
 }
 
 // Système de mise à jour
@@ -234,6 +236,9 @@ async function checkAccount(){
 	// Mettre un message de bienvenue
 	console.log(greet + chalk.cyan(accountInfo.name) + " !\n(Connecté en tant que " + chalk.cyan("@" + accountInfo.screen_name) + ")")
 	console.log(chalk.yellow("[───────────────────────────────────────────────]"))
+
+	// Retourner le compte
+	return accountInfo
 }
 
 // Fonction à executer au premier démarrage
@@ -295,6 +300,7 @@ async function firstStart(){
 				}
 			} else { resolve() }
 		}
+		resolve()
 	})
 
 	// Vérifier si une ancienne ncoonfiguration existe
@@ -316,6 +322,7 @@ async function firstStart(){
 			message: 'Que voulez-vous faire ?',
 			choices: [
 				'Se connecter',
+				'Connexion manuelle (déconseillée)',
 				'Importer une configuration',
 				'Sortir'
 			]
@@ -323,6 +330,7 @@ async function firstStart(){
 	])
 	.then(answer => {
 		if(answer.action.toLowerCase() === "se connecter") return require('./functions/configOauth.js')()
+		if(answer.action.toLowerCase() === "connexion manuelle (déconseillée)") return require('./functions/config.js')("addAccountLegacy")
 		if(answer.action.toLowerCase() === "importer une configuration") return require('./functions/config.js')("importConfig")
 		if(answer.action.toLowerCase() === "sortir") return process.exit()
 	});
@@ -341,20 +349,19 @@ async function main(){
 	if(await require('./functions/checkInternet.js')() === false) console.log(chalk.red(`Oupsi, Je n'ai pas l'impression que tu as accès à internet..`)) & process.exit();
 	if((await checkFirstStart()) === true) return firstStart()
 
+	// Vérifier le compte
+	var accountInfo = await checkAccount()
+
 	// Arguments
 	if(process.argv.slice(2)[0] === "tweet") return tweet()
 	if(process.argv.slice(2)[0] === "thread") return thread()
 	if(process.argv.slice(2)[0] === "config") return open(path.join(config.path))
-	if(process.argv.slice(2)[0] === "timeline") return require('./functions/timeline.js')(oauth, token)
+	if(process.argv.slice(2)[0] === "timeline") return require('./functions/timeline.js')(oauth, token, accountInfo)
 	if(process.argv.slice(2)[0] === "profil") return showProfil()
-
-	// Vérifier le compte
-	await checkAccount()
 
 	// Obtenir la liste des choix pour le menu
 	var choices = []
-	if(config?.get('experiments')?.includes("SHOW_TIMELINE")) choices.push("Voir sa timeline (experiments)")
-	choices.push('Tweeter','Créer un thread','Profil','Configuration')
+	choices.push('Tweeter','Voir sa timeline','Créer un thread','Profil','Configuration')
 
 	// Afficher un menu
 	inquirer.prompt([
@@ -366,7 +373,7 @@ async function main(){
 		}
 	])
 	.then(answer => {
-		if(answer.action.toLowerCase() === "voir sa timeline (experiments)") return require('./functions/timeline.js')(oauth, token)
+		if(answer.action.toLowerCase() === "voir sa timeline") return require('./functions/timeline.js')(oauth, token, accountInfo)
 		if(answer.action.toLowerCase() === "tweeter") return tweet()
 		if(answer.action.toLowerCase() === "créer un thread") return thread() 
 		if(answer.action.toLowerCase() === "profil") return showProfil()
@@ -421,6 +428,9 @@ async function tweet(){
 		.catch(async err => {
 			// Arrêter le spinner
 			spinner.stop()
+
+			// Donner des infos en plus avec le flag --debug
+			if(process.argv.includes("--debug")) console.log(err)
 
 			// Obtenir des informations via un check, puis les donner
 			var error = await (errorCheck(err))
@@ -507,14 +517,14 @@ async function thread(){
 			// Si c'est le premier tweet
 			if(threadArray.indexOf(status) === 0){
 				// Modifier le presse-papier
-				writeClipboard(`https://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`)
+				writeClipboard(`https://twitter.com/${tweet?.user?.screen_name}/status/${tweet.id_str}`)
 
 				// Modifier le spinner
-				spinner.text = "Thread en cours de publication : " + chalk.cyan(`https://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`);
+				spinner.text = "Thread en cours de publication : " + chalk.cyan(`https://twitter.com/${tweet?.user.screen_name}/status/${tweet?.id_str}`);
 				spinner.start()
 
 				// Définir que le premier tweet est... le premier tweet
-				firstTweet = `https://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`;
+				firstTweet = `https://twitter.com/${tweet?.user?.screen_name}/status/${tweet?.id_str}`;
 			}
 
 			// Si c'est le dernier tweet
