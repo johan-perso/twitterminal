@@ -69,7 +69,8 @@ module.exports = async function(option){
 				new inquirer.Separator(),
 				'Importer/exporter',
 				'Réinitialiser Twitterminal',
-			]
+			],
+			pageSize: (process.stdout.rows-10 > 4) ? process.stdout.rows-10 : null
 		}
 	])
 	.then(answer => {
@@ -251,7 +252,8 @@ async function importExportConfig(){
 			type: 'list',
 			name: 'action',
 			message: 'Que voulez-vous faire ?',
-			choices: choices
+			choices: choices,
+			pageSize: (process.stdout.rows-10 > 4) ? process.stdout.rows-10 : null
 		}
 	])
 	var action = action.action
