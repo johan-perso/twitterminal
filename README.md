@@ -13,6 +13,7 @@ $ (sudo) npm install --global twitterminal
 
 ## Changelog
 
+* [5.0.0](https://twiterminal.carrd.co/#changelog-500)
 * [4.2.0](https://twiterminal.carrd.co/#changelog-420)
 * [4.1.0](https://twiterminal.carrd.co/#changelog-410)
 * [4.0.0](https://twiterminal.carrd.co/#changelog-400)
@@ -38,4 +39,4 @@ La plupart des modules pour interagir avec l'API de Twitter ne sont pas suffisan
 
 ## Licence
 
-ISC © [Johan](https://johanstickman.com)
+MIT © [Johan](https://johanstickman.com)
