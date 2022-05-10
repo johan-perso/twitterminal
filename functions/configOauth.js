@@ -56,7 +56,7 @@ module.exports = async function(){
 	// Démarrer un serveur web prêt à recevoir les requêtes callback
 	app.get('/twitterminalCallback', (req, res) => {
 		// Renvoyer un message via le serveur
-		res.send(`<!DOCTYPE html><html class="bg-gray-800 flex h-screen"><head><title>Connexion à Twitterminal</title><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0" ><link href="https://firebasestorage.googleapis.com/v0/b/storage-bf183.appspot.com/o/otherContent%2Fstyle.css?alt=media" rel="stylesheet"><script src="https://kit.fontawesome.com/4b4e1c29fe.js" crossorigin="anonymous"></script></head><body class="bg-gray-800 flex m-auto items-center" id="body"><div class="text-center w-full mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 z-20"><h2 class="text-8xl font-extrabold"><span class="block text-green-400"><i class="far fa-check-circle"></i></span></h2><p class="text-xl mt-4 max-w-lg mx-auto text-gray-400">Connexion réussie !<br>Vous pouvez fermer cet onglet et retourner à Twitterminal.</p><footer class="mt-4 max-w-lg mx-auto items-center p-6 footer text-neutral-content invisible md:visible"><div class="items-center grid-flow-col text-gray-400"><p>Crée par <a href="https://johanstickman.com" class="underline">Johan</a> le stickman</p></div><div class="grid-flow-col gap-4 md:place-self-center md:justify-self-end"><a href="https://twitter.com/Johan_Stickman" class="text-gray-400 hover:text-gray-200"><span class="w-6 h-6" style="font-size: 1.25em;"><i class="fab fa-twitter"></i> </span></a><a href="https://github.com/johan-perso" class="text-gray-400 hover:text-gray-200"><span class="w-6 h-6" style="font-size: 1.25em;"><i class="fab fa-github"></i> </span></a><a href="https://johanstickman.com" class="text-gray-400 hover:text-gray-200"><span class="w-6 h-6" style="font-size: 1.25em;"><i class="fas fa-globe"></i> </span></a></div></footer></div></body></html>`)
+		res.send(`<!DOCTYPE html><html class="bg-gray-800 flex"><head><title>Connexion à Twitterminal</title><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="https://firebasestorage.googleapis.com/v0/b/storage-bf183.appspot.com/o/otherContent%2Fstyle.css?alt=media" rel="stylesheet"><script src="https://kit.fontawesome.com/4b4e1c29fe.js" crossorigin="anonymous"></script></head><body class="bg-gray-800 flex m-auto items-center" style="height: 92vh;"><div class="text-center w-full mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 z-20"><h2 class="text-8xl font-extrabold"><span class="block text-green-400"><i class="far fa-check-circle"></i></span></h2><p class="text-xl mt-4 max-w-lg mx-auto text-gray-400"><b>Connexion réussie !</b><br>Vous pouvez fermer cet onglet et retourner à Twitterminal.</p><footer class="mt-4 max-w-lg mx-auto items-center p-6 footer text-neutral-content invisible md:visible"><div class="items-center grid-flow-col text-gray-400"><p>Crée par <a href="https://johanstickman.com" class="underline">Johan</a> le stickman</p></div><div class="grid-flow-col gap-4 md:place-self-center md:justify-self-end"><a href="https://twitter.com/Johan_Stickman" class="text-gray-400 hover:text-gray-200"><span class="w-6 h-6" style="font-size: 1.25em;"><i class="fab fa-twitter"></i> </span></a><a href="https://github.com/johan-perso" class="text-gray-400 hover:text-gray-200"><span class="w-6 h-6" style="font-size: 1.25em;"><i class="fab fa-github"></i> </span></a><a href="https://johanstickman.com" class="text-gray-400 hover:text-gray-200"><span class="w-6 h-6" style="font-size: 1.25em;"><i class="fas fa-globe"></i> </span></a></div></footer></div></body></html>`)
 
 		// Arrêter le spinner, en afficher un autre
 		spinner.text = "Veuillez autoriser Twitterminal à accèder à votre compte Twitter."
@@ -93,24 +93,25 @@ async function addToConfig(token){
 			type: 'list',
 			name: 'emplacement',
 			message: 'Quel emplacement souhaitez vous utiliser pour sauvegarder ce compte ?',
-			choices: [
-				'Emplacement 1',
-				'Emplacement 2',
-				'Emplacement 3',
-				'Emplacement 4',
-				'Emplacement 5'
-			]
+			choices: require('./emplacement.js').emplacementList(1),
+			pageSize: (process.stdout.rows-10 > 4) ? process.stdout.rows-10 : null
 		}
 	])
-	var emplacement = emplacement.emplacement
+	emplacement = emplacement.emplacement
 
 	// Enregistrer dans la configuration
+		// Obtenir le numéro de l'emplacement
+		var emplacementNumber = emplacement?.replace('Emplacement ','')?.split(' ')[0]?.trim()
+
 		// Ajouter un emplacement
-		if(emplacement === 'Emplacement 1') config.set({ 'accountList.1.name': `@${token.get('screen_name')}`, 'accountList.1.consumer_key': oauth.consumer.key, 'accountList.1.consumer_secret': oauth.consumer.secret, 'accountList.1.access_token': token.get('oauth_token'), 'accountList.1.access_token_secret': token.get('oauth_token_secret'), 'accountList.1.type': "oauth" });
-		if(emplacement === 'Emplacement 2') config.set({ 'accountList.2.name': `@${token.get('screen_name')}`, 'accountList.2.consumer_key': oauth.consumer.key, 'accountList.2.consumer_secret': oauth.consumer.secret, 'accountList.2.access_token': token.get('oauth_token'), 'accountList.2.access_token_secret': token.get('oauth_token_secret'), 'accountList.2.type': "oauth" });
-		if(emplacement === 'Emplacement 3') config.set({ 'accountList.3.name': `@${token.get('screen_name')}`, 'accountList.3.consumer_key': oauth.consumer.key, 'accountList.3.consumer_secret': oauth.consumer.secret, 'accountList.3.access_token': token.get('oauth_token'), 'accountList.3.access_token_secret': token.get('oauth_token_secret'), 'accountList.3.type': "oauth" });
-		if(emplacement === 'Emplacement 4') config.set({ 'accountList.4.name': `@${token.get('screen_name')}`, 'accountList.4.consumer_key': oauth.consumer.key, 'accountList.4.consumer_secret': oauth.consumer.secret, 'accountList.4.access_token': token.get('oauth_token'), 'accountList.4.access_token_secret': token.get('oauth_token_secret'), 'accountList.4.type': "oauth" });
-		if(emplacement === 'Emplacement 5') config.set({ 'accountList.5.name': `@${token.get('screen_name')}`, 'accountList.5.consumer_key': oauth.consumer.key, 'accountList.5.consumer_secret': oauth.consumer.secret, 'accountList.5.access_token': token.get('oauth_token'), 'accountList.5.access_token_secret': token.get('oauth_token_secret'), 'accountList.5.type': "oauth" });
+		config.set({
+			[`accountList.${emplacementNumber}.name`]: `@${token.get('screen_name')}`,
+			[`accountList.${emplacementNumber}.consumer_key`]: oauth.consumer.key,
+			[`accountList.${emplacementNumber}.consumer_secret`]: oauth.consumer.secret,
+			[`accountList.${emplacementNumber}.access_token`]: token.get('oauth_token'),
+			[`accountList.${emplacementNumber}.access_token_secret`]: token.get('oauth_token_secret'),
+			[`accountList.${emplacementNumber}.type`]: 'oauth'
+		})
 
 		// Définir le compte par défaut
 		config.set({ 'account.name': `@${token.get('screen_name')}`, 'account.consumer_key': oauth.consumer.key, 'account.consumer_secret': oauth.consumer.secret, 'account.access_token': token.get('oauth_token'), 'account.access_token_secret': token.get('oauth_token_secret') });
