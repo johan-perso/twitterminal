@@ -29,7 +29,7 @@ function isJson(item){
 
 // Exporter en tant que module
 module.exports = async function(option){
-	// Si une option a été ajouté
+	// Si une option a été ajouté - pour importer une sauvegarde
 	if(option === "importConfig"){
 		return inquirer.prompt([
 			{
@@ -48,6 +48,11 @@ module.exports = async function(option){
 		});
 	}
 
+	// Si une option a été ajouté - pour ajouter un compte développeur
+	if(option === "addAccountLegacy"){
+		return addAccountLegacy()
+	}
+
 	// Afficher un menu
 	if(!option) inquirer.prompt([
 		{
@@ -58,9 +63,11 @@ module.exports = async function(option){
 				'Ajouter un compte',
 				'Ajouter un compte (dev/manuellement)',
 				'Choisir un compte par défaut',
+				new inquirer.Separator(),
 				'Gestion du presse-papier',
-				'Importer/exporter',
 				'Gérer les expérimentation',
+				new inquirer.Separator(),
+				'Importer/exporter',
 				'Réinitialiser Twitterminal',
 			]
 		}
@@ -113,24 +120,25 @@ async function addAccountLegacy(){
 			type: 'list',
 			name: 'emplacement',
 			message: 'Quel emplacement souhaitez vous utiliser pour sauvegarder ce compte ?',
-			choices: [
-				'Emplacement 1',
-				'Emplacement 2',
-				'Emplacement 3',
-				'Emplacement 4',
-				'Emplacement 5'
-			]
+			choices: require('./emplacement.js').emplacementList(1),
+			pageSize: (process.stdout.rows-10 > 4) ? process.stdout.rows-10 : null
 		}
 	])
 	var emplacement = emplacement.emplacement
 
 	// Enregistrer dans la configuration
-		// Ajouter un emplacement
-		if(emplacement === 'Emplacement 1') config.set({ 'accountList.1.name': account.name, 'accountList.1.consumer_key': account.consumer_key, 'accountList.1.consumer_secret': account.consumer_secret, 'accountList.1.access_token': account.access_token, 'accountList.1.access_token_secret': account.access_token_secret, 'accountList.1.type': "legacy" });
-		if(emplacement === 'Emplacement 2') config.set({ 'accountList.2.name': account.name, 'accountList.2.consumer_key': account.consumer_key, 'accountList.2.consumer_secret': account.consumer_secret, 'accountList.2.access_token': account.access_token, 'accountList.2.access_token_secret': account.access_token_secret, 'accountList.2.type': "legacy" });
-		if(emplacement === 'Emplacement 3') config.set({ 'accountList.3.name': account.name, 'accountList.3.consumer_key': account.consumer_key, 'accountList.3.consumer_secret': account.consumer_secret, 'accountList.3.access_token': account.access_token, 'accountList.3.access_token_secret': account.access_token_secret, 'accountList.3.type': "legacy" });
-		if(emplacement === 'Emplacement 4') config.set({ 'accountList.4.name': account.name, 'accountList.4.consumer_key': account.consumer_key, 'accountList.4.consumer_secret': account.consumer_secret, 'accountList.4.access_token': account.access_token, 'accountList.4.access_token_secret': account.access_token_secret, 'accountList.4.type': "legacy" });
-		if(emplacement === 'Emplacement 5') config.set({ 'accountList.5.name': account.name, 'accountList.5.consumer_key': account.consumer_key, 'accountList.5.consumer_secret': account.consumer_secret, 'accountList.5.access_token': account.access_token, 'accountList.5.access_token_secret': account.access_token_secret, 'accountList.5.type': "legacy" });
+		// Obtenir le numéro de l'emplacement
+		var emplacementNumber = emplacement?.replace('Emplacement ','')?.split(' ')[0]?.trim()
+
+		// Ajouter le compte dans la liste
+		config.set({
+			[`accountList.${emplacementNumber}.name`]: account.name,
+			[`accountList.${emplacementNumber}.consumer_key`]: account.consumer_key,
+			[`accountList.${emplacementNumber}.consumer_secret`]: account.consumer_secret,
+			[`accountList.${emplacementNumber}.access_token`]: account.access_token,
+			[`accountList.${emplacementNumber}.access_token_secret`]: account.access_token_secret,
+			[`accountList.${emplacementNumber}.type`]: 'legacy'
+		});
 
 		// Définir le compte par défaut
 		config.set({ 'account.name': account.name, 'account.consumer_key': account.consumer_key, 'account.consumer_secret': account.consumer_secret, 'account.access_token': account.access_token, 'account.access_token_secret': account.access_token_secret });
@@ -143,16 +151,8 @@ async function addAccountLegacy(){
 
 // Choisir le compte par défaut
 async function defaultAccount(){
-	// Obtenir la liste des comptes
-	var listAccount = []
-	if(config.get('accountList.1.name')) listAccount.push(`(1) ${config.get('accountList.1.name')}`)
-	if(config.get('accountList.2.name')) listAccount.push(`(2) ${config.get('accountList.2.name')}`)
-	if(config.get('accountList.3.name')) listAccount.push(`(3) ${config.get('accountList.3.name')}`)
-	if(config.get('accountList.4.name')) listAccount.push(`(4) ${config.get('accountList.4.name')}`)
-	if(config.get('accountList.5.name')) listAccount.push(`(5) ${config.get('accountList.5.name')}`)
-
-	// Si il n'y a aucun compte
-	if(listAccount.length === 0){
+	// Si il n'y a aucun compte dans la configuration
+	if(Object.keys(config.get('accountList') || []).length == 0){
 		console.log(chalk.red(`Vous ne possédez aucun compte, retournez dans la configuration pour en ajouter un.`))
 		return process.exit()
 	}
@@ -163,10 +163,11 @@ async function defaultAccount(){
 			type: 'list',
 			name: 'account',
 			message: 'Quel compte souhaitez-vous définir par défaut ?',
-			choices: listAccount
+			choices: require('./emplacement.js').emplacementList(0),
+			pageSize: (process.stdout.rows-10 > 4) ? process.stdout.rows-10 : null
 		}
 	])
-	var account = account.account.split(')')[0].replace('(','')
+	var account = account?.account?.replace('Emplacement ','')?.split(' ')[0]?.trim()
 
 	// Définir le compte par défaut
 		// Obtenir plus d'information sur le compte
@@ -222,9 +223,27 @@ async function clipboardSettings(){
 // Importer/exporter la configuration
 async function importExportConfig(){
 	// Obtenir la liste des choix
-	var choices = []
-	if(!config.get('johanstickman_account_uuid')) choices.push('Configurer son compte ☁️☁️') && choices.push('Importer une configuration (local)') && choices.push('Exporter une configuration (local)');
-	else choices.push('Importer une configuration (cloud)') && choices.push('Importer une configuration (local)') && choices.push('Exporter la configuration (cloud)') && choices.push('Exporter la configuration (local)') && choices.push('Supprimer une sauvegarde') 
+		// Préparer un array vide
+		var choices = []
+
+		// Si on est pas connecté
+		if(!config.get('johanstickman_account_uuid')) choices.push(
+			'Configurer son compte ☁️☁️',
+			new inquirer.Separator(),
+			'Importer une configuration (local)',
+			'Exporter une configuration (local)'
+		)
+
+		// Dans le cas contraire : si on est connecté
+		else choices.push(
+			'Importer une configuration (cloud)',
+			'Importer une configuration (local)',
+			new inquirer.Separator(),
+			'Exporter la configuration (cloud)',
+			'Exporter la configuration (local)',
+			new inquirer.Separator(),
+			'Supprimer une sauvegarde'
+		)
 
 	// Afficher un menu
 	var action = await inquirer.prompt([
@@ -314,7 +333,7 @@ async function importConfig(type='cloud'){
 		spinner.start()
 
 		// Obtenir la configuration originale
-		var backup = await fetch(`https://text.johanstickman.com/raw/${backupId}`)
+		var backup = await fetch(`https://text.johanstickman.com/raw/${backupId}`, { headers: { 'User-Agent': `Twitterminal/${require('../package.json').version} (+https://github.com/johan-perso/twitterminal)` } })
 		.then(res => res.text())
 		.catch(async err => {
 			spinner.text = "FETCHERR_UNABLE_GET_BACKUP"
@@ -413,7 +432,7 @@ async function exportConfig(type='cloud'){
 		// Si on souhaite exporter vers le cloud
 		if(type === 'cloud'){
 			// Crée un texte contenant la configuration
-			var backup = await fetch(`https://text.johanstickman.com/api/create`, { method: 'post', body: new URLSearchParams({ title: `Twitterminal backup, ${moment().format("DD/MM/YYYY [at] HH:mm:ss")}`, content: data, type: 'code', codeLanguage: 'json', uuid: config.get('johanstickman_account_uuid') }) })
+			var backup = await fetch(`https://text.johanstickman.com/api/create`, { method: 'post', body: new URLSearchParams({ title: `Twitterminal backup, ${moment().format("DD/MM/YYYY [at] HH:mm:ss")}`, content: data, type: 'code', codeLanguage: 'json', uuid: config.get('johanstickman_account_uuid'), headers: { 'User-Agent': `Twitterminal/${require('../package.json').version} (+https://github.com/johan-perso/twitterminal)` } }) })
 			.then(res => res.json())
 			.catch(async err => {
 				spinner.text = "FETCHERR_UNABLE_CREATE_BACKUP"
@@ -522,7 +541,7 @@ async function deleteBackup(){
 	spinner.start()
 
 	// Supprimer la sauvegarde
-	var deleted = await fetch(`https://text.johanstickman.com/api/delete`, { method: 'delete', body: new URLSearchParams({ id: backup.id.split("-")[0], secretKey: backup.secretKey }) })
+	var deleted = await fetch(`https://text.johanstickman.com/api/delete`, { method: 'delete', body: new URLSearchParams({ id: backup.id.split("-")[0], secretKey: backup.secretKey }), headers: { 'User-Agent': `Twitterminal/${require('../package.json').version} (+https://github.com/johan-perso/twitterminal)` }})
 	.then(res => res.json())
 	.catch(async err => {
 		spinner.text = "FETCHERR_UNABLE_DELETE_BACKUP"
@@ -562,7 +581,7 @@ async function addJohanstickmanAccount(){
 	spinner.start()
 
 	// Obtenir des informations sur le compte
-	var johanstickmanAccount = await fetch(`https://johanstickman.com/api/info?uuid=${johanstickmanUuid}`)
+	var johanstickmanAccount = await fetch(`https://johanstickman.com/api/info?uuid=${johanstickmanUuid}`, { headers: { 'User-Agent': `Twitterminal/${require('../package.json').version} (+https://github.com/johan-perso/twitterminal)` } })
 	.then(res => res.json())
 	.catch(async err => {
 		spinner.text = "FETCHERR_UNABLE_GET_USERINFO"
@@ -624,12 +643,12 @@ async function resetTwitterminal(){
 // Fonction pour activer/désactiver des expérimentation
 async function manageExperiments(){
 	// Afficher des informations sur les expérimentation
-	console.log(chalk.red(`Notez que ces fonctionnalités sont en cours de développement, signaler les bugs à @Johan_Stickman :)\n`))
+	console.log(chalk.red(`Notez que ces fonctionnalités sont en cours de développement (ou juste elles sont là pour aucune raison), signaler les bugs à @Johan_Stickman :)\n`))
 
 	// Obtenir la liste des expérimentation
 	var experimentChoices = []
 	await config.get('experiments')?.forEach(experiment => { if(!JSON.stringify(experimentChoices).includes(`"name":"${experiment}"`)) experimentChoices.push({ name: experiment, checked: true }) })
-	var allExperiments = ["CONFIG_IN_TEXT_EDITOR","DISABLE_CONNECTION_CHECK","SHOW_TIMELINE"]
+	var allExperiments = ["CONFIG_IN_TEXT_EDITOR","DISABLE_CONNECTION_CHECK"]
 	allExperiments.forEach(experiment => { if(!JSON.stringify(experimentChoices).includes(`"name":"${experiment}"`)) experimentChoices.push({ name: experiment, checked: false }) })
 
 	// Afficher un menu avec la liste des expérimentation
