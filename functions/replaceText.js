@@ -16,7 +16,7 @@ module.exports.truefalse = async function(content){
 }
 
 module.exports.reverseBoolean = function(content){
-	return (!(content === 'true') + "")
+	return (!(content == 'true') + "")
 }
 
 module.exports.tweet = async function(content){
@@ -34,7 +34,7 @@ module.exports.tweet = async function(content){
 	if(content.match(regexBold)) var content = content.replace(regexBold, (await toBold(content.match(regexBold).toString().replace(/%BOLD_/gi,"").slice(0, -1))))
 
 	// Ajouter des sauts de ligne avec \n et %JUMP%
-	var content = content.replace(/\\n/gi, "\n").replace(/%JUMP%/gi, "\n")
+	content = content.replace(/\\n/gi, "\n").replace(/%JUMP%/gi, "\n")
 
 	// Retourner le contenu modifié
 	return content;
