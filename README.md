@@ -1,25 +1,35 @@
 # Twitterminal
 
-Twitterminal permet d'interagir avec l'API de Twitter dans un terminal. De cette façon, vous pourrez tweeter, voir un profil ou même crée un thread sans même ouvrir un navigateur !
+Twitterminal est un CLI permettant d'utiliser Twitter depuis son terminal, tout en ayant la possibilité d'utiliser des comptes développeurs (ou compte utilisateur/régulier), sans jamais avoir à sortir du terminal.
 
 
 ## Installation
 
-(vous avez besoin de [nodejs](https://nodejs.org) et [npm](https://npmjs.com/))
+**Installer avec npm :** *(le plus simple)*
+
+```bash
+npm install --global twitterminal
 ```
-$ (sudo) npm install --global twitterminal
+
+**Installer manuellement :**
+
+```bash
+git clone https://github.com/johan-perso/twitterminal.git
+cd twitterminal
+npm install
+npm link
 ```
 
 
 ## Changelog
 
-~~* [5.0.0](https://twiterminal.carrd.co/#changelog-500)~~
-* [4.2.0](https://twiterminal.carrd.co/#changelog-420)
-* [4.1.0](https://twiterminal.carrd.co/#changelog-410)
-* [4.0.0](https://twiterminal.carrd.co/#changelog-400)
-* [3.0.0](https://twiterminal.carrd.co/#changelog-300)
-* [2.0.0](https://twiterminal.carrd.co/#changelog-200)
-* [0.2.0](https://twiterminal.carrd.co/#changelog-020)
+* [5.0.0](https://github.com/johan-perso/twitterminal/wiki/Changelog#v500)
+* [4.2.0](https://github.com/johan-perso/twitterminal/wiki/Changelog#v420)
+* [4.1.0](https://github.com/johan-perso/twitterminal/wiki/Changelog#v410)
+* [4.0.0](https://github.com/johan-perso/twitterminal/wiki/Changelog#v400)
+* [3.0.0](https://github.com/johan-perso/twitterminal/wiki/Changelog#v300)
+* [2.0.0](https://github.com/johan-perso/twitterminal/wiki/Changelog#v200)
+* [0.2.0](https://github.com/johan-perso/twitterminal/wiki/Changelog#v020-refonte-entière-du-code-depuis-la-branche-old)
 
 
 ## Comment utiliser Twitterminal
