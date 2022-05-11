@@ -254,7 +254,7 @@ module.exports = async function(oauth, token, selfInfo){
 
 		// Afficher le tweet
 		console.log(boxen(`${content}`.match(regex).join('\n'), {
-			title: `${chalk.dim((tweet.user.verified === true) ? `✔️  ` : '')}${chalk.dim("@"+tweet?.user?.screen_name)}${chalk.dim((favText?.length > 2) ? ` ─────── ${favText}` : '')}${chalk.dim((tweet.source === `<a href="https://twiterminal.carrd.co" rel="nofollow">Twitterminal </a>`) ? ` ────────── Via Twitterminal` : '')}`,
+			title: `${chalk.dim((tweet.user.verified === true) ? `✔️  ` : '')}${chalk.dim("@"+tweet?.user?.screen_name)}${chalk.dim((favText?.length > 2) ? ` ─────── ${favText}` : '')}${chalk.dim((tweet.source === `<a href="https://github.com/johan-perso/twitterminal" rel="nofollow">Twitterminal </a>`) ? ` ────────── Via Twitterminal` : '')}`,
 			titleAlignment: 'left',
 			padding: 1,
 			margin: 1,
