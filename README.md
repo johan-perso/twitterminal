@@ -1,7 +1,8 @@
 # Twitterminal
 
-Twitterminal est un CLI permettant d'utiliser Twitter depuis son terminal, tout en ayant la possibilité d'utiliser des comptes développeurs (ou compte utilisateur/régulier), sans jamais avoir à sortir du terminal.
+https://user-images.githubusercontent.com/41506568/167869027-2867e8e0-876c-45d3-aeeb-373ac54420c0.mp4
 
+Twitterminal est un CLI permettant d'utiliser Twitter depuis son terminal, tout en ayant la possibilité d'utiliser des comptes développeurs (ou compte utilisateur/régulier), sans jamais avoir à sortir du terminal.
 
 ## Installation
 
