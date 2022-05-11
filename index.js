@@ -299,8 +299,7 @@ async function firstStart(){
 					})
 				}
 			} else { resolve() }
-		}
-		resolve()
+		} else resolve()
 	})
 
 	// Vérifier si une ancienne ncoonfiguration existe
