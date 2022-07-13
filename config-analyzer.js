@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// Importer quelques modules + le package.json
+// Importer quelques modules
 	// Les définir
 	var chalk
 	var jsonrepair
@@ -10,7 +10,6 @@
 	var fetch
 	var open
 	var fs
-	var pkg
 
 	// Les importer
 	try { chalk = require('chalk') } catch (e){ failRequireModule("chalk") }
@@ -21,12 +20,6 @@
 	try { fetch = require('node-fetch') } catch (e){ failRequireModule("node-fetch") }
 	try { open = require('open') } catch (e){ failRequireModule("open") }
 	try { fs = require('fs') } catch (e){ failRequireModule("fs") }
-	try { pkg = require('./package.json') } catch (e){ failRequireModule("package.json") }
-
-	// Vérifier le package.json
-	if(!pkg.name || pkg.name !== "twitterminal") failRequireModule("package.json")
-	if(!pkg.version) failRequireModule("package.json")
-	if(!pkg.author || pkg.author !== "JohanStickman") failRequireModule("package.json")
 
 // Vérifier la version de NodeJS utilisé
 if(parseInt(process.versions.node) < 15){
@@ -163,7 +156,7 @@ async function checkCloudSave(){
 	cloudSaveID = cloudSaveID.cloudSaveID
 
 	// Obtenir la configuration originale
-	var backup = await fetch(`https://text.johanstickman.com/raw/${cloudSaveID}`, { headers: { 'User-Agent': `Twitterminal/${require('../package.json').version} (+https://github.com/johan-perso/twitterminal)` } })
+	var backup = await fetch(`https://text.johanstickman.com/raw/${cloudSaveID}`, { headers: { 'User-Agent': `Twitterminal/${require('../package.json')?.version || 'undefined'} (+https://github.com/johan-perso/twitterminal)` } })
 	.then(res => res.text())
 	.catch(async err => {
 		console.log(`${chalk.red('[FATAL]')} Impossible d'accéder à la sauvegarde.`)
@@ -217,9 +210,9 @@ async function showConfiguration(jsonConfig){
 	}
 
 	// Afficher la liste des comptes
-	if(Object.keys(jsonConfig.accountList)?.length){
+	if(Object.keys(jsonConfig.accountList || [])?.length){
 		console.log(chalk.bold.cyan(`\nListe des comptes :`))
-		console.log(Object.keys(jsonConfig.accountList).map(account => `- ${jsonConfig.accountList[account].name}`).join('\n'))
+		console.log(Object.keys(jsonConfig.accountList || []).map(account => `- ${jsonConfig.accountList[account].name}`).join('\n'))
 	}
 
 	// Afficher la liste des sauvegardes
@@ -291,7 +284,7 @@ async function editConfiguration(){
 			var choices = []
 
 			// Ajouter les actions possibles
-			if(Object.keys(jsonConfig.accountList)?.length) choices.push({ name: 'Supprimer un compte', value: 'removeAccount' })
+			if(Object?.keys(jsonConfig?.accountList || [])?.length) choices.push({ name: 'Supprimer un compte', value: 'removeAccount' })
 			if(jsonConfig.clipboardy) choices.push({ name: 'Réinitialiser le presse-papier', value: 'resetClipboard' })
 			if(jsonConfig.johanstickman_account_uuid) choices.push({ name: 'Déconnexion johanstickman.com', value: 'disconnectJohanstickman' })
 			if(jsonConfig.experiments?.length) choices.push({ name: 'Réinitialiser les expérimentations', value: 'resetExperiments' })
@@ -319,7 +312,7 @@ async function editConfiguration(){
 					type: 'list',
 					name: 'account',
 					message: 'Quel compte souhaitez-vous supprimer ?',
-					choices: Object.keys(jsonConfig.accountList).map(account => ({ name: jsonConfig.accountList[account].name, value: account }))
+					choices: Object.keys(jsonConfig.accountList || []).map(account => ({ name: jsonConfig.accountList[account].name, value: account }))
 				}
 			])
 
