@@ -1,12 +1,25 @@
 # Twitterminal
 
-https://user-images.githubusercontent.com/41506568/167869027-2867e8e0-876c-45d3-aeeb-373ac54420c0.mp4
-
 Twitterminal est un CLI permettant d'utiliser Twitter depuis son terminal, tout en ayant la possibilité d'utiliser des comptes développeurs (ou compte utilisateur/régulier), sans jamais avoir à sortir du terminal.
+
+## Fonctionnalité
+
+* Tweeter (avec/sans géolocalisation)
+* Affichage de sa timeline, et de ses notifications
+* Support de comptes illimités (compte dev supportés)
+* Recherche d'utilisateur et de tweets
+* Système de sauvegarde intégré (cloud et local)
+* [Actions de masse](https://github.com/johan-perso/twitterminal/wiki/Actions-de-masse)
+* User-friendly (même dans un terminal)
+
 
 ## Installation
 
-**Installer avec npm :** *(le plus simple)*
+> [Node.js](https://nodejs.org/) v15 ou plus nécessaire
+
+> [Git](https://git-scm.com/) nécessaire dans l'installation manuelle
+
+**Installer avec npm *(recommendé)* :**
 
 ```bash
 npm install --global twitterminal
@@ -24,6 +37,7 @@ npm link
 
 ## Changelog
 
+* [6.0.0](https://github.com/johan-perso/twitterminal/wiki/Changelog#v600)
 * [5.0.0](https://github.com/johan-perso/twitterminal/wiki/Changelog#v500)
 * [4.2.0](https://github.com/johan-perso/twitterminal/wiki/Changelog#v420)
 * [4.1.0](https://github.com/johan-perso/twitterminal/wiki/Changelog#v410)
@@ -45,7 +59,7 @@ Lancer Twitterminal et sélectionnez l'option "Configuration" puis "Ajouter un c
 
 ## Pour la création
 
-La plupart des modules pour interagir avec l'API de Twitter ne sont pas suffisant pour ce que je souhaite. Du coup j'utilise mes propres "modules" pour interagir avec l'API (ainsi que twitter-lite), les fichiers peuvent être trouvés dans le dossier functions. Cependant, j'utilise également quelques modules tiers.
+La plupart des modules pour interagir avec l'API de Twitter ne sont pas suffisant pour ce que je souhaite. Du coup j'utilise mes propres "modules" pour interagir avec l'API (ainsi que [twitter-lite](https://npmjs.com/package/twitter-lite)), les fichiers peuvent être trouvés dans le dossier functions. Cependant, j'utilise également quelques modules tiers.
 
 
 ## Licence
