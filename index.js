@@ -335,7 +335,7 @@ async function checkFirstStart(){
 main()
 async function main(){
 	// Vérifier la connexion et si Twitterminal a déjà été démarré
-	if(await checkInternet() === false) console.log(chalk.red(`Oupsi, Je n'ai pas l'impression que tu as accès à internet..`)) & process.exit();
+	if(await checkInternet() === false) console.log(chalk.red(`Oupsi, je n'ai pas l'impression que tu as accès à internet..`)) & process.exit();
 	if((await checkFirstStart()) === true) return firstStart()
 
 	// Vérifier le compte
