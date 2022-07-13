@@ -17,9 +17,10 @@ term.on('key', function(name, matches, data){
 var regex = new RegExp(`.{1,${parseInt(process.stdout.columns/2)}}`, "g");
 
 // Exporter en tant que module
-module.exports = async function(oauth, token, selfInfo){
+module.exports = async function(oauth, token, selfInfo, experimentLists=[], showUser, tweetLists=[]){
 	// Demander avec Inquirer si on veut afficher les tweets de son profil, ses notifications ou sa timeline
-	var showWhat = await inquirer.prompt([
+	// Apart si on veut directement voir les tweets d'un utilisateur (argument spécifié)
+	if(!showUser && !tweetLists.length) var showWhat = await inquirer.prompt([
 		{
 			type: 'list',
 			name: 'showWhat',
@@ -31,16 +32,20 @@ module.exports = async function(oauth, token, selfInfo){
 			]
 		}
 	])
-	showWhat = showWhat.showWhat;
+	if(!showUser && !tweetLists.length) showWhat = showWhat.showWhat;
+	else if(!tweetLists.length) showWhat = `@${showUser}`;
+	else showWhat = 'alreadyDefined_searchResults'
 
 	// Afficher un spinner
-	spinner.text = `Obtention de ${showWhat.replace('tweets', 'vos tweets').replace('notifications','vos notifications').replace('timeline','votre timeline')}...`;
+	spinner.text = `Obtention de ${showWhat.replace('tweets', 'vos tweets').replace('notifications','vos notifications').replace('timeline','votre timeline').replace('alreadyDefined_searchResults', 'résultats de recherche')}...`;
 	spinner.start();
 
 	// Obtenir la timeline
 	if(showWhat == 'tweets') var timeline = await fetch({url: 'https://api.twitter.com/1.1/statuses/user_timeline.json?count=100', method: 'GET'}, oauth, token)
 	if(showWhat == 'notifications') var timeline = await fetch({url: 'https://api.twitter.com/1.1/statuses/mentions_timeline.json?count=100', method: 'GET'}, oauth, token)
 	if(showWhat == 'timeline') var timeline = await fetch({url: 'https://api.twitter.com/1.1/statuses/home_timeline.json?exclude_replies=true&count=100', method: 'GET'}, oauth, token)
+	if(showUser) var timeline = await fetch({url: `https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=${showUser}&count=100`, method: 'GET'}, oauth, token)
+	if(tweetLists.length) var timeline = tweetLists
 
 	// Vérifiez si l'information contient une erreur
 	var error = await (errorCheck(timeline))
@@ -66,6 +71,7 @@ module.exports = async function(oauth, token, selfInfo){
 	console.log(`${chalk.blue('R')}             :    Répondre au tweet affiché`)
 	console.log(`${chalk.blue('F')}             :    Like le tweet affiché`)
 	console.log(`${chalk.blue('Q')}             :    RT le tweet affiché`)
+	console.log(`${chalk.blue('G')}             :    Cite le tweet affiché`)
 	console.log(`${chalk.blue('S')}             :    Supprimer le tweet affiché (si vous êtes l'auteur)`)
 	console.log(`${chalk.blue('I')}             :    Ouvrir dans le navigateur`)
 
@@ -116,7 +122,7 @@ module.exports = async function(oauth, token, selfInfo){
 			}
 		}
 		// R - Répondre au tweet affiché
-		if((name == 'r' || name == 'r') && timeline[i]){
+		if((name == 'r' || name == 'R') && timeline[i]){
 			// Récupérer le tweet
 			var tweet = timeline[i]
 
@@ -150,26 +156,82 @@ module.exports = async function(oauth, token, selfInfo){
 			})
 
 			// Répondre au tweet
-			await client.post('statuses/update', { status: await(require('./replaceText.js').tweet(response)), in_reply_to_status_id: tweet.id_str, auto_populate_reply_metadata: true })
+			if(!experimentLists.includes('DISABLE_TWITTER_REQUEST_MAJOR_ACTIONS')){
+				await client.post('statuses/update', { status: await(require('./replaceText.js').tweet(response)), in_reply_to_status_id: tweet.id_str, auto_populate_reply_metadata: true })
+				.then(results => {
+					require('./writeClipboard.js')(`https://twitter.com/${results.user.screen_name}/status/${results.id_str}`)
+					console.log('Réponse envoyé !')
+				})
+				.catch(async err => {
+					// Donner des infos en plus avec le flag --debug
+					if(process.argv.includes("--debug")) console.log(err)
 
-			// Si ça a marché
-			.then(results => {
-				require('./writeClipboard.js')(`https://twitter.com/${results.user.screen_name}/status/${results.id_str}`)
-				console.log('Réponse envoyé !')
+					// Obtenir des informations via un check, puis les donner
+					var error = await (errorCheck(err))
+					if(error.error === true) return console.log(chalk.red(`Impossible de tweeter : ${error.frenchDescription}`) + chalk.cyan(` (Code erreur #${error.code})`))
+
+					// Sinon, donner l'erreurs comme Twitter la donne
+					return console.log(chalk.red(err.errors || err))
+				});
+			}
+
+			// Récouter les appuis de touche
+			isListening = true
+			term.grabInput(true)
+		}
+		// G - Cité le tweet affiché (quote-rt)
+		if((name == 'g' || name == 'G') && timeline[i]){
+			// Récupérer le tweet
+			var tweet = timeline[i]
+
+			// Arrêter d'écouter les appuis de touche
+			isListening = false
+
+			// Demander ce qu'on veut dire
+			var response = await inquirer.prompt([
+				{
+					type: 'input',
+					name: 'response',
+					message: 'Que voulez-vous dire ?',
+					validate(text){
+						if(text.length < 1){ return 'Veuillez entrer un texte' }
+						if(text.length > 255){ return `Ce texte est trop grand (${text.length} caractères)` }
+						return true;
+					}
+				}
+			])
+			var response = response.response
+
+			// Préparer twitter-lite
+			var Twitter = require('twitter-lite');
+			const client = new Twitter({
+				subdomain: "api",
+				version: "1.1",
+				consumer_key: oauth?.consumer?.key,
+				consumer_secret: oauth?.consumer?.secret,
+				access_token_key: token?.key,
+				access_token_secret: token?.secret
 			})
 
-			// Si y'a une erreur
-			.catch(async err => {
-				// Donner des infos en plus avec le flag --debug
-				if(!process.argv.includes("--debug")) console.log(err)
+			// Répondre au tweet
+			if(!experimentLists.includes('DISABLE_TWITTER_REQUEST_MAJOR_ACTIONS')){
+				await client.post('statuses/update', { status: await(require('./replaceText.js').tweet(response)), attachment_url: `https://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}` })
+				.then(results => {
+					require('./writeClipboard.js')(`https://twitter.com/${results.user.screen_name}/status/${results.id_str}`)
+					console.log('Réponse envoyé !')
+				})
+				.catch(async err => {
+					// Donner des infos en plus avec le flag --debug
+					if(process.argv.includes("--debug")) console.log(err)
 
-				// Obtenir des informations via un check, puis les donner
-				var error = await (errorCheck(err))
-				if(error.error === true) return console.log(chalk.red(`Impossible de tweeter : ${error.frenchDescription}`) + chalk.cyan(` (Code erreur #${error.code})`))
+					// Obtenir des informations via un check, puis les donner
+					var error = await (errorCheck(err))
+					if(error.error === true) return console.log(chalk.red(`Impossible de tweeter : ${error.frenchDescription}`) + chalk.cyan(` (Code erreur #${error.code})`))
 
-				// Sinon, donner l'erreurs comme Twitter la donne
-				return console.log(chalk.red(err.errors || err))
-			});
+					// Sinon, donner l'erreurs comme Twitter la donne
+					return console.log(chalk.red(err.errors || err))
+				});
+			}
 
 			// Récouter les appuis de touche
 			isListening = true
@@ -194,43 +256,38 @@ module.exports = async function(oauth, token, selfInfo){
 			])
 			var confirm = confirm.confirm
 
-			// Si on refuse
-			if(!confirm){
-				isListening = true
-				term.grabInput(true)
+			// Si on accepte
+			if(confirm) {
+				// Préparer twitter-lite
+				var Twitter = require('twitter-lite');
+				const client = new Twitter({
+					subdomain: "api",
+					version: "1.1",
+					consumer_key: oauth?.consumer?.key,
+					consumer_secret: oauth?.consumer?.secret,
+					access_token_key: token?.key,
+					access_token_secret: token?.secret
+				})
+
+				// Répondre au tweet
+				if(!experimentLists.includes('DISABLE_TWITTER_REQUEST_MAJOR_ACTIONS')){
+					await client.post(`statuses/destroy/${tweet.id_str}`)
+					.then(results => {
+						console.log('Tweet supprimé !')
+					})
+					.catch(async err => {
+						// Donner des infos en plus avec le flag --debug
+						if(process.argv.includes("--debug")) console.log(err)
+
+						// Obtenir des informations via un check, puis les donner
+						var error = await (errorCheck(err))
+						if(error.error === true) return console.log(chalk.red(`Impossible de supprimer : ${error.frenchDescription}`) + chalk.cyan(` (Code erreur #${error.code})`))
+
+						// Sinon, donner l'erreurs comme Twitter la donne
+						return console.log(chalk.red(err.errors || err))
+					});
+				}
 			}
-
-			// Préparer twitter-lite
-			var Twitter = require('twitter-lite');
-			const client = new Twitter({
-				subdomain: "api",
-				version: "1.1",
-				consumer_key: oauth?.consumer?.key,
-				consumer_secret: oauth?.consumer?.secret,
-				access_token_key: token?.key,
-				access_token_secret: token?.secret
-			})
-
-			// Répondre au tweet
-			await client.post(`statuses/destroy/${tweet.id_str}`)
-
-			// Si ça a marché
-			.then(results => {
-				console.log('Tweet supprimé !')
-			})
-
-			// Si y'a une erreur
-			.catch(async err => {
-				// Donner des infos en plus avec le flag --debug
-				if(!process.argv.includes("--debug")) console.log(err)
-
-				// Obtenir des informations via un check, puis les donner
-				var error = await (errorCheck(err))
-				if(error.error === true) return console.log(chalk.red(`Impossible de supprimer : ${error.frenchDescription}`) + chalk.cyan(` (Code erreur #${error.code})`))
-
-				// Sinon, donner l'erreurs comme Twitter la donne
-				return console.log(chalk.red(err.errors || err))
-			});
 
 			// Récouter les appuis de touche
 			isListening = true
