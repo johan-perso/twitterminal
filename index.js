@@ -4,13 +4,13 @@
 	// Les définir
 	var chalk
 	var OAuth
-	var crypto
 	var updateNotifier
 	var moment
 	var boxen
 	var ora
 	var path
 	var inquirer
+	var FormData
 	var Conf
 	var open
 	var fs
@@ -20,29 +20,26 @@
 	// Les importer
 	try { chalk = require('chalk') } catch (e){ failRequireModule("chalk","4.1.1") }
 	try { OAuth = require('oauth-1.0a') } catch (e){ failRequireModule("oauth-1.0a") }
-	try { crypto = require('crypto') } catch (e){ failRequireModule("crypto") }
 	try { updateNotifier = require('update-notifier') } catch (e){ failRequireModule("update-notifier","5.1.0") }
 	try { moment = require('moment') } catch (e){ failRequireModule("moment") }
 	try { boxen = require('boxen') } catch (e){ failRequireModule("boxen","5.1.2") }
 	try { ora = require('ora'); spinner = ora('')} catch (e){ failRequireModule("ora","5.4.1") }
 	try { path = require('path') } catch (e){ failRequireModule("path") }
-	try { inquirer = require('inquirer') } catch (e){ failRequireModule("inquirer") }
+	try { inquirer = require('inquirer') } catch (e){ failRequireModule("inquirer", "8.2.4") }
+	try { FormData = require('form-data') } catch (e){ failRequireModule("form-data") }
 	try { Conf = require('conf') } catch (e){ failRequireModule("conf") }
 	try { open = require('open') } catch (e){ failRequireModule("open","8.2.1") }
 	try { fs = require('fs') } catch (e){ failRequireModule("fs") }
-	try { pkg = require('./package.json') } catch (e){ failRequireModule("package.json") }
+	try { pkg = require('./package.json') } catch (e){ pkg = { name: 'twitterminal', version: 'undefined' } }
 
-	// Vérifier le package.json
-	if(!pkg.name || pkg.name !== "twitterminal") failRequireModule("package.json")
-	if(!pkg.version) failRequireModule("package.json")
-	if(!pkg.author || pkg.author !== "JohanStickman") failRequireModule("package.json")
+	// Importer crypto sans vérification (préinstallé dans NodeJS)
+	var crypto = require('crypto')
 
 	// Quelques importations supplémentaire (pas pour les utiliser mais pour check si ils sont installé)
 	try { require('terminal-kit') } catch (e){ failRequireModule("terminal-kit") }
 	try { require('node-fetch') } catch (e){ failRequireModule("node-fetch","2.6.1") }
 	try { require('clipboardy') } catch (e){ failRequireModule("clipboardy","2.3.0") }
 	try { require('express') } catch (e){ failRequireModule("express") }
-	try { require('jsonrepair') } catch (e){ failRequireModule("jsonrepair") }
 	try { require('twitter-lite') } catch (e){ failRequireModule("twitter-lite") }
 
 // Vérifier la version de NodeJS utilisé
@@ -80,7 +77,7 @@ if(process.argv.slice(2)[0] === "--version" || process.argv.slice(2)[0] === "-v"
 	process.exit()
 }
 // Argument pour afficher le chemin de la configuration
-if(process.argv.slice(2)[0] === "-cp"){
+if(process.argv.slice(2)[0] === "-cp" || process.argv.slice(2)[0] === "--cp"){
 	console.log(require('./functions/configPath')())
 	process.exit()
 }
@@ -110,19 +107,19 @@ try {
 	var fetch
 	var errorCheck
 	var writeClipboard
+	var checkInternet
 
 	// Les importer
 	try { replaceText = require('./functions/replaceText.js') } catch (e){ failRequireFunction("replaceText.js") }
 	try { fetch = require('./functions/fetch.js') } catch (e){ failRequireFunction("fetch.js") }
 	try { errorCheck = require('./functions/errorCheck.js') } catch (e){ failRequireFunction("errorCheck.js") }
 	try { writeClipboard = require('./functions/writeClipboard.js') } catch (e){ failRequireFunction("writeClipboard.js") }
+	try { checkInternet = require('./functions/checkInternet.js') } catch (e){ failRequireFunction("checkInternet.js") }
 
 	// Vérifier des fonctions locales non utilisé dans l'index.js
-	try { require('./functions/checkInternet.js') } catch (e){ failRequireFunction("checkInternet.js") }
 	try { require('./functions/config.js') } catch (e){ failRequireFunction("config.js") }
 	try { require('./functions/configOauth.js') } catch (e){ failRequireFunction("configOauth.js") }
 	try { require('./functions/gif.js') } catch (e){ failRequireFunction("gif.js") }
-	try { require('./functions/timeline.js') } catch (e){ failRequireFunction("timeline.js") }
 
 // Fonction pour afficher qu'il faut installer un module
 function failRequireModule(moduleName, version){
@@ -132,24 +129,13 @@ function failRequireModule(moduleName, version){
 	if(moduleName !== "chalk") console.log(chalk.red(`Impossible de démarrer Twitterminal : le chargement du module ${chalk.cyan(moduleName)} n'a pas pu aboutir.`))
 	if(moduleName === "chalk") console.log(`Impossible de démarrer Twitterminal : le chargement du module ${moduleName} n'a pas pu aboutir.`)
 
-	// Si le module manquant est le package.json
-	if(moduleName === "package.json"){
-		console.log("─".repeat(parseInt(process.stdout.columns)))
-		console.log(chalk.dim(`- Tenter une réinstallation de Twitterminal`))
-		console.log(chalk.dim(`- ou télécharger le package.json de Twitterminal sur GitHub`))
-		console.log(chalk.dim(`	github.com/johan-perso/twitterminal/blob/main/package.json`))
-		console.log("─".repeat(parseInt(process.stdout.columns)))
-		console.log(`Chemin de Twitterminal : ${chalk.cyan(path.join(__dirname))}`)
-		process.exit()
-	}
-
 	// Afficher une commande pour installer le module
 	console.log(`───  Installer le module  ${"─".repeat(parseInt(process.stdout.columns-26))}`)
 	if(moduleName !== "chalk") console.log(chalk.dim(`cd "${path.join(__dirname)}"\nnpm install ${moduleName}${(version) ? `@${version}` : ''}`))
 	if(moduleName === "chalk") console.log(`cd "${path.join(__dirname)}"\nnpm install ${moduleName}${(version) ? `@${version}` : ''}`)
 
 	// Afficher une commande pour installer TOUT les modules
-	var allModule = `chalk@4.1.1 boxen@5.1.2 ora@5.4.1 node-fetch@2.6.1 clipboardy@2.3.0 open@8.2.1 oauth-1.0a crypto update-notifier moment inquirer conf express twitter-lite`
+	var allModule = `chalk@4.1.1 boxen@5.1.2 ora@5.4.1 node-fetch@2.6.1 clipboardy@2.3.0 open@8.2.1 oauth-1.0a update-notifier moment inquirer conf express twitter-lite`
 	console.log(`\n───  Installer TOUT les modules  ${"─".repeat(parseInt(process.stdout.columns-33))}`)
 	if(moduleName !== "chalk") console.log(chalk.dim(`cd "${path.join(__dirname)}"\nnpm install ${allModule}`))
 	if(moduleName === "chalk") console.log(`cd "${path.join(__dirname)}"\nnpm install ${allModule}`)
@@ -222,6 +208,7 @@ const token = {
 }
 
 // Fonction pour vérifier le compte
+var connectedAccountUsername;
 async function checkAccount(){
 	// Obtenir les informations du compte
 	var accountInfo = await fetch({url: 'https://api.twitter.com/1.1/account/verify_credentials.json', method: 'GET'}, oauth, token)
@@ -236,6 +223,9 @@ async function checkAccount(){
 	// Mettre un message de bienvenue
 	console.log(greet + chalk.cyan(accountInfo.name) + " !\n(Connecté en tant que " + chalk.cyan("@" + accountInfo.screen_name) + ")")
 	console.log(chalk.yellow("[───────────────────────────────────────────────]"))
+
+	// Définir une variable pour plus tard
+	connectedAccountUsername = accountInfo.screen_name
 
 	// Retourner le compte
 	return accountInfo
@@ -345,7 +335,7 @@ async function checkFirstStart(){
 main()
 async function main(){
 	// Vérifier la connexion et si Twitterminal a déjà été démarré
-	if(await require('./functions/checkInternet.js')() === false) console.log(chalk.red(`Oupsi, Je n'ai pas l'impression que tu as accès à internet..`)) & process.exit();
+	if(await checkInternet() === false) console.log(chalk.red(`Oupsi, Je n'ai pas l'impression que tu as accès à internet..`)) & process.exit();
 	if((await checkFirstStart()) === true) return firstStart()
 
 	// Vérifier le compte
@@ -355,12 +345,18 @@ async function main(){
 	if(process.argv.slice(2)[0] === "tweet") return tweet()
 	if(process.argv.slice(2)[0] === "thread") return thread()
 	if(process.argv.slice(2)[0] === "config") return open(path.join(config.path))
-	if(process.argv.slice(2)[0] === "timeline") return require('./functions/timeline.js')(oauth, token, accountInfo)
-	if(process.argv.slice(2)[0] === "profil") return showProfil()
+	if(process.argv.slice(2)[0] === "timeline") return require('./functions/timeline.js')(oauth, token, accountInfo, config?.get("experiments"))
+	if(process.argv.slice(2)[0] === "profil") return showProfil(accountInfo)
+	if(process.argv.slice(2)[0] === "search") return search(accountInfo)
+
+	if(process.argv.slice(2)[0] === "mass-follow") return massFollow()
+	if(process.argv.slice(2)[0] === "mass-like") return massLike()
+	if(process.argv.slice(2)[0] === "mass-rt") return massRt()
+	if(process.argv.slice(2)[0] === "mass-comment") return massComment()
 
 	// Obtenir la liste des choix pour le menu
 	var choices = []
-	choices.push('Tweeter','Voir sa timeline','Créer un thread','Profil','Configuration')
+	choices.push('Tweeter','Voir sa timeline','Créer un thread','Profil','Rechercher','Configuration')
 
 	// Afficher un menu
 	inquirer.prompt([
@@ -372,10 +368,11 @@ async function main(){
 		}
 	])
 	.then(answer => {
-		if(answer.action.toLowerCase() === "voir sa timeline") return require('./functions/timeline.js')(oauth, token, accountInfo)
+		if(answer.action.toLowerCase() === "voir sa timeline") return require('./functions/timeline.js')(oauth, token, accountInfo, config?.get("experiments"))
 		if(answer.action.toLowerCase() === "tweeter") return tweet()
 		if(answer.action.toLowerCase() === "créer un thread") return thread() 
-		if(answer.action.toLowerCase() === "profil") return showProfil()
+		if(answer.action.toLowerCase() === "profil") return showProfil(accountInfo)
+		if(answer.action.toLowerCase() === "rechercher") return search(accountInfo)
 
 		if(answer.action.toLowerCase() === "configuration" && !config?.get("experiments")?.includes("CONFIG_IN_TEXT_EDITOR")) return require('./functions/config.js')()
 		if(answer.action.toLowerCase() === "configuration" && config?.get("experiments")?.includes("CONFIG_IN_TEXT_EDITOR")) return open(path.join(config.path))
@@ -384,8 +381,8 @@ async function main(){
 
 // Fonction pour tweeter
 async function tweet(){
-	// Obtenir le contenu du texte à tweeter
-	var tweetContent = await inquirer.prompt([
+	// Obtenir quelques informations
+	var questions = await inquirer.prompt([
 		{
 			type: 'input',
 			name: 'tweetContent',
@@ -395,9 +392,38 @@ async function tweet(){
 				if(text.length > 255){ return `Ce texte est trop grand (${text.length} caractères)` }
 				return true;
 			}
+		},
+		{
+			type: 'confirm',
+			name: 'addLocalization',
+			message: 'Ajouter une localisation ?',
+			default: false
 		}
 	])
-	var tweetContent = tweetContent.tweetContent
+	var tweetContent = questions.tweetContent
+
+	// Si on veut ajouter une localisation
+	if(questions.addLocalization) console.log(chalk.dim("Vous devez activer la géolocalisation pour tout les tweets dans les paramètres de votre profil Twitter pour que cette option puisse s'appliquer."))
+	if(questions.addLocalization) var localisation = await inquirer.prompt([
+		{
+			type: 'input',
+			name: 'lat',
+			message: 'Latitude',
+			validate(text){
+				if(!RegExp('^-?([1-8]?[1-9]|[1-9]0)\\.{1}\\d{1,6}').test(text)){ return 'Veuillez entrer une donnée valide, exemple : 63.4333' }
+				return true;
+			}
+		},
+		{
+			type: 'input',
+			name: 'long',
+			message: 'Longitude',
+			validate(text){
+				if(!RegExp('^-?([1-8]?[1-9]|[1-9]0)\\.{1}\\d{1,6}').test(text)){ return 'Veuillez entrer une donnée valide, exemple : 10.9000' }
+				return true;
+			}
+		}
+	]);
 
 	// Afficher un spinner
 	spinner.text = "Tweet en cours de publication...";
@@ -414,8 +440,12 @@ async function tweet(){
 		access_token_secret: account.access_token_secret
 	});
 
+	// Préparer les paramètres du tweet
+	var settings = { status: await(replaceText.tweet(tweetContent)) }
+	if(localisation) settings = { ...settings, ...localisation }
+
 	// Poster le tweet
-	var tweet = await client.post("statuses/update", { status: await(replaceText.tweet(tweetContent)) })
+	var tweet = await client.post((config?.get("experiments")?.includes('DISABLE_TWITTER_REQUEST_MAJOR_ACTIONS') ? 'EXPERIMENT-DISABLE_TWITTER_REQUEST_MAJOR_ACTIONS-IS-ENABLED' : 'statuses/update'), settings)
 		// Une fois le tweet posté
 		.then(results => {
 			writeClipboard(`https://twitter.com/${results.user.screen_name}/status/${results.id_str}`)
@@ -488,10 +518,10 @@ async function thread(){
 		var status = await replaceText.tweet(status)
 
 		// Si le tweet n'est pas le dernier de la liste, ajouter des points de suspensions
-		if(threadArray.indexOf(status) + 1 !== threadArray.length) var statusTW = status + "..."
+		if(threadArray.indexOf(status) + 1 !== threadArray.length) var statusTW = `${status}...`
 
 		// Poster le tweet
-		const tweet = await client.post("statuses/update", {
+		var tweet = await client.post((config?.get("experiments")?.includes('DISABLE_TWITTER_REQUEST_MAJOR_ACTIONS') ? 'EXPERIMENT-DISABLE_TWITTER_REQUEST_MAJOR_ACTIONS-IS-ENABLED' : 'statuses/update'), {
 			status: `${statusTW || status} [${threadArray.indexOf(status) + 1}/${threadArray.length}]`.replace(/\\n/g, "\n").replace(/%JUMP%/g, "\n"),
 			in_reply_to_status_id: lastTweetID,
 			auto_populate_reply_metadata: true
@@ -542,7 +572,7 @@ async function thread(){
 }
 
 // Fonction pour afficher un profil
-async function showProfil(){
+async function showProfil(ownAccountInfo){
 	var username = await inquirer.prompt([
 		{
 			type: 'input',
@@ -554,21 +584,10 @@ async function showProfil(){
 
 	// Afficher un spinner
 	if(!username) spinner.text = 'Obtention de votre profil...'
-	if(username) spinner.text = `Obtention du profil de ${chalk.cyan(`@${username}`)}...`
-	spinner.start()
+	if(username) spinner.text = `Obtention du profil de ${chalk.cyan(`@${username}`)}...` && spinner.start()
 
 	// Si y'a pas de pseudo donné : obtenir les informations sur soi-même
-	if(!username){
-		// Obtenir les informations du compte
-		var accountInfo = await fetch({url: 'https://api.twitter.com/1.1/account/verify_credentials.json', method: 'GET'}, oauth, token)
-
-		// Arrêter le spinner
-		spinner.stop()
-
-		// Vérifiez si l'information contient une erreur
-		var error = await (errorCheck(accountInfo))
-		if(error.error === true) return console.log(chalk.red(`\nImpossible d'obtenir votre profil : ${error.frenchDescription}`) + chalk.cyan(` (Code erreur #${error.code})`))
-	}
+	if(!username) var accountInfo = ownAccountInfo
 
 	// Si y'a un pseudo donné : obtenir les informations sur ce pseudo
 	if(username){
@@ -599,8 +618,8 @@ async function showProfil(){
 		if(accountInfo.location) console.log(chalk.bold("Localisation : ") + accountInfo.location)
 		if(accountInfo?.entities?.url?.urls[0]?.display_url) console.log(chalk.bold("Site : ") + accountInfo?.entities?.url?.urls[0]?.display_url)
 		if(accountInfo.created_at) console.log(chalk.bold("Création du compte : ") + moment(new Date(accountInfo.created_at)).format('D MMMM YYYY').toLowerCase().replace("january", "janvier").replace("february", "février").replace("march", "mars").replace("april", "avril").replace("may", "mai").replace("june", "juin").replace("july", "juillet").replace("august", "août").replace("september", "septembre").replace("october", "octobre").replace("november", "novembre").replace("december", "décembre"))
-		if(accountInfo.description && accountInfo.description.length < 24) console.log(chalk.bold("Description : ") + accountInfo.description)
-		if(accountInfo.description && accountInfo.description.length > 24) console.log(chalk.bold("\nDescription : ") + accountInfo.description)
+		if(accountInfo.description && accountInfo.description.length < 48) console.log(chalk.bold("Description : ") + accountInfo.description)
+		else if(accountInfo.description) console.log(chalk.bold("\nDescription : ") + accountInfo.description)
 
 		// Afficher dans le terminal - Nombres
 		console.log("\n" + chalk.bold.underline("Nombres"))
@@ -608,4 +627,608 @@ async function showProfil(){
 		if(accountInfo.friends_count) console.log(chalk.bold("Abonnements : ") + accountInfo.friends_count)
 		if(accountInfo.statuses_count) console.log(chalk.bold("Tweet : ") + accountInfo.statuses_count)
 		if(accountInfo.favourites_count) console.log(chalk.bold("Tweet liké : ") + accountInfo.favourites_count)
+
+		// Si le flag debug est activé, afficher les informations complète sur l'utilisateur
+		if(process.argv.includes("--debug")){
+			console.log("─".repeat(parseInt(process.stdout.columns)))
+			console.log(chalk.bold.underline("Argument --debug :"))
+			console.log(JSON.stringify(accountInfo))
+			console.log("─".repeat(parseInt(process.stdout.columns)))
+		}
+
+	// Séparer les résultats affichés et Inquirer
+	console.log()
+
+	// Préparer une liste d'actions possibles
+		// Quelques actions
+		var actions = [
+			{ name: 'Afficher les tweets', value: 'tweets' },
+			{ name: 'Ouvrir dans le navigateur', value: 'open' },
+		]
+
+		// Pouvoir follow/unfollow
+		if(accountInfo.following == true) actions.push({ name: 'Unfollow', value: 'unfollow' })
+		else if(accountInfo.screen_name != connectedAccountUsername) actions.push({ name: 'Follow', value: 'follow' })
+
+		// Pouvoir éditer le profil si c'est notre compte
+		if(accountInfo.screen_name == connectedAccountUsername) actions.push({ name: 'Éditer le profil', value: 'edit' })
+
+		// Ajouter de quoi quitter l'interface
+		actions.push({ name: 'Quitter', value: 'quit' })
+	
+	// Pouvoir effectuer des actions sur le profil
+	var action = await inquirer.prompt([
+		{
+			type: 'list',
+			name: 'action',
+			message: 'Que souhaitez-vous faire ?',
+			choices: actions
+		}
+	])
+	action = action.action
+
+	// Si l'action est "tweets"
+	if(action == "tweets") return require('./functions/timeline.js')(oauth, token, ownAccountInfo, config?.get("experiments"), accountInfo.screen_name)
+
+	// Si l'action est "open"
+	if(action == "open") return open(`https://twitter.com/${accountInfo.screen_name}`)
+
+	// Si l'action est "follow"
+	if(action == "follow"){
+		// Spinner
+		spinner.text = 'Action en cours...'
+		spinner.start()
+
+		// Follow
+		var follow = await fetch({url: `https://api.twitter.com/1.1/friendships/create.json?screen_name=${accountInfo.screen_name}`, method: 'POST'}, oauth, token)
+
+		// Arrêter le spinner
+		spinner.stop()
+
+		// Vérifiez si l'information contient une erreur
+		var error = await (errorCheck(follow))
+		if(error.error === true) return console.log(chalk.red(`\nImpossible de follow : ${error.frenchDescription}`) + chalk.cyan(` (Code erreur #${error.code})`)) && process.exit()
+
+		// Afficher dans le terminal
+		console.log(chalk.green(`\nVous suivez désormais @${accountInfo.screen_name}`))
+	}
+
+	// Si l'action est "unfollow"
+	if(action == "unfollow"){
+		// Spinner
+		spinner.text = 'Action en cours...'
+		spinner.start()
+
+		// Follow
+		var follow = await fetch({url: `https://api.twitter.com/1.1/friendships/destroy.json?screen_name=${accountInfo.screen_name}`, method: 'POST'}, oauth, token)
+
+		// Arrêter le spinner
+		spinner.stop()
+
+		// Vérifiez si l'information contient une erreur
+		var error = await (errorCheck(follow))
+		if(error.error === true) return console.log(chalk.red(`\nImpossible d'un follow : ${error.frenchDescription}`) + chalk.cyan(` (Code erreur #${error.code})`)) && process.exit()
+
+		// Afficher dans le terminal
+		console.log(chalk.green(`\nVous ne suivez plus @${accountInfo.screen_name}`))
+	}
+
+	// Si l'action est "edit"
+	if(action == "edit"){
+		// Afficher un avertissement
+		console.log(chalk.dim("(les options non remplis ne seront pas modifiés)"))
+		console.log(chalk.dim(`(faite CTRL+C pour quitter Twitterminal)`))
+
+		// Demander certains élements
+		var profile = await inquirer.prompt([
+			{
+				type: 'input',
+				name: 'name',
+				message: 'Nom',
+				validate(input){
+					input = input.trim()
+					if(input.length > 50) return "Le nom d'utilisateur est trop long (maximum 50 caractères)"
+					if(input && input.replace(/ /g,'').length < 4 && input.replace(/ /g,'').length > 0) return "Le nom d'utilisateur est trop court (minimum 4 caractères)"
+					return true
+				}
+			},
+			{
+				type: 'input',
+				name: 'url',
+				message: 'Lien',
+				validate(input){
+					input = input.trim()
+					if(!input.startsWith("http") || !input.startsWith("https")) input = `https://${input}`
+					if(input && input.replace(/ /g,'').length > 0 && input.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)/g)) return "Ce lien est invalide, si vous ne voulez pas en spécifier un, laissez le champ vide"
+					return true
+				}
+			},
+			{
+				type: 'input',
+				name: 'location',
+				message: 'Localisation',
+				validate(input){
+					input = input.trim()
+					if(input.length > 30) return "La localisation est trop longue (maximum 30 caractères)"
+					if(input && input.replace(/ /g,'').length < 2 && input.replace(/ /g,'').length > 0) return "La localisation est trop courte (minimum 2 caractères)"
+					return true
+				}
+			},
+			{
+				type: 'input',
+				name: 'description',
+				message: 'Description',
+				validate(input){
+					input = input.trim()
+					if(input.length > 160) return "La description est trop longue (maximum 160 caractères)"
+					if(input && input.replace(/ /g,'').length < 2 && input.replace(/ /g,'').length > 0) return "La description est trop courte (minimum 2 caractères)"
+					return true
+				}
+			}
+		])
+
+		// Supprimer les valeurs vides
+		profile = Object.fromEntries(Object.entries(profile).filter(entry => entry[1]))
+
+		// Si aucune valeur
+		if(Object.keys(profile).length == 0) return console.log(chalk.red("\nVous n'avez rien rempli")) && process.exit()
+
+		// Afficher un spinner
+		spinner.text = `Modification de ${(new Intl.ListFormat('fr', { style: 'long', type: 'conjunction' })).format(Object.keys(profile).map(na => na.replace("name", "nom d'utilisateur").replace("url", "URL").replace("location","localisation")))}`
+		spinner.start()
+
+		// Délai volontaire pour que la personne puisse voir les modifications
+		// (imagine mettre une demande de confirmation ptdr)
+		await new Promise(resolve => setTimeout(resolve, 3000))
+
+		// Préparer twitter-lite
+		var Twitter = require('twitter-lite');
+		const client = new Twitter({
+			subdomain: "api",
+			version: "1.1",
+			consumer_key: account.consumer_key,
+			consumer_secret: account.consumer_secret,
+			access_token_key: account.access_token,
+			access_token_secret: account.access_token_secret
+		});
+
+		// Effectuer les modifications
+		await client.post((config?.get("experiments")?.includes('DISABLE_TWITTER_REQUEST_MAJOR_ACTIONS') ? 'EXPERIMENT-DISABLE_TWITTER_REQUEST_MAJOR_ACTIONS-IS-ENABLED' : 'account/update_profile'), profile)
+			// Une fois le tweet posté
+			.then(results => {
+				spinner.text = "Votre profil a été modifié"
+				spinner.succeed()
+				process.exit()
+			})
+			// Si y'a une erreur
+			.catch(async err => {
+				// Arrêter le spinner
+				spinner.stop()
+
+				// Donner des infos en plus avec le flag --debug
+				if(process.argv.includes("--debug")) console.log(err)
+
+				// Obtenir des informations via un check, puis les donner
+				var error = await (errorCheck(err))
+				if(error.error === true) return console.log(chalk.red(`Impossible de modifier votre profil : ${error.frenchDescription}`) + chalk.cyan(` (Code erreur #${error.code})`))
+
+				// Sinon, donner l'erreurs comme Twitter la donne
+				return console.log(chalk.red(err.errors || err))
+			});
+	}
+
+	// Si l'action est "quit"
+	if(action == "quit") return process.exit()
+}
+
+// Fonction pour faire des recherches
+async function search(ownAccountInfo){
+	// Demander quelques informations
+	var informations = await inquirer.prompt([
+		{
+			type: 'list',
+			name: 'type',
+			message: 'Type de recherche',
+			choices: [
+				{ name: 'Utilisateurs', value: 'user' },
+				{ name: 'Tweet', value: 'tweet' }
+			]
+		},
+		{
+			type: 'list',
+			name: 'method',
+			message: 'Méthode de recherche',
+			choices: [
+				{ name: 'Mot clé', value: 'text' },
+				{ name: 'Identifiant', value: 'id' }
+			]
+		}
+	])
+	var searchParams = await inquirer.prompt([
+		{
+			type: 'input',
+			name: 'query',
+			message: 'Terme à chercher',
+			validate(input){
+				input = input.trim()
+				if(informations.method == 'id' && !/^\d+$/.test(input)){ return `Identifiant mal formée, exemple (il est en jaune) : https://twitter.com/TwitterAPI/status/${chalk.yellow('210462857140252672')}` }
+				if(informations.method == 'tweet' && input.length > 500){ return "Le terme est trop long (maximum 500 caractères)" }
+				return true
+			}
+		}
+	])
+	searchParams = searchParams.query
+
+	// Séparer les résultats affichés et Inquirer
+	console.log()
+
+	// Afficher un spinner
+	spinner.text = `Recherche...`
+	spinner.start()
+
+	// Préparer twitter-lite
+	var Twitter = require('twitter-lite');
+	const client = new Twitter({
+		subdomain: "api",
+		version: "1.1",
+		consumer_key: account.consumer_key,
+		consumer_secret: account.consumer_secret,
+		access_token_key: account.access_token,
+		access_token_secret: account.access_token_secret
+	});
+
+	// Préparer une variable qui contiendra les résultats de recherche
+	var results;
+
+	// Faire la recherche
+	if(informations.type == 'user' && informations.method == 'text') results = await client.get('users/search', { q: searchParams }).catch(err => { return err })
+	if(informations.type == 'user' && informations.method == 'id') results = await client.get('users/show', { user_id: searchParams }).catch(err => { return err })
+	if(informations.type == 'tweet' && informations.method == 'text') results = await client.get('search/tweets', { q: searchParams }).catch(err => { return err })
+	if(informations.type == 'tweet' && informations.method == 'id') results = await client.get('statuses/show', { id: searchParams }).catch(err => { return err })
+
+	// Si le flag debug est activé, afficher les informations complète sur l'utilisateur
+	if(process.argv.includes("--debug")){
+		spinner.stop()
+		console.log("─".repeat(parseInt(process.stdout.columns)))
+		console.log(chalk.bold.underline("Argument --debug :"))
+		console.log(JSON.stringify(results))
+		console.log("─".repeat(parseInt(process.stdout.columns)))
+		spinner.start()
+	}
+
+	// Vérifiez si l'information contient une erreur
+	var error = await (errorCheck(results))
+	if(error.error === true){
+		spinner.text = chalk.red(`Impossible d'effectuer la recherche : ${error.frenchDescription}`) + chalk.cyan(` (Code erreur #${error.code})`)
+		return spinner.fail()
+	}
+
+	// Si la variable contient un objet, ne stocker que son contenu
+	if(results.statuses) results = results.statuses
+	if(typeof results == 'object' && !Array.isArray(results)) results = [results]
+
+	// Si aucun résultat
+	if(results.length == 0){
+		spinner.text = chalk.red('Aucun résultat trouvé')
+		return spinner.fail()
+	}
+
+	// Enlever le spinner
+	spinner.stop()
+
+	// Afficher les résultats
+	if(informations.type == 'user'){
+		console.log(chalk.underline.bold(`${results.length} résultats :`))
+		results.forEach(element => {
+			console.log(`• ${element.name} (${chalk.yellow('@'+element.screen_name)})       ${chalk.dim(element.id_str)}`)
+		})
+	}
+	if(informations.type == 'tweet') return require('./functions/timeline.js')(oauth, token, ownAccountInfo, config?.get("experiments"), null, results)
+}
+
+// Fonction pour follow un compte en masse
+async function massFollow(){
+	// Demander quelques infos
+	var informations = await inquirer.prompt([
+		{
+			type: 'input',
+			name: 'screenName',
+			message: 'Nom d\'utilisateur du compte',
+			validate(input){
+				if(input?.startsWith('@')) input = input.substring(1)
+				if(!/(^|[^@\w])(\w{1,15})\b/.test(input)){ return "Nom d'utilisateur mal formée" }
+				return true
+			}
+		},
+		{
+			type: 'checkbox',
+			name: 'accountsList',
+			message: 'Quel comptes souhaitez vous utiliser ?',
+			choices: require('./functions/emplacement.js').emplacementList(0),
+			pageSize: (process.stdout.rows-10 > 4) ? process.stdout.rows-10 : null
+		}
+	])
+	var accounts = informations.accountsList
+
+	// N'avoir que le pseudo à chaque fois
+	accounts = accounts.map(account => account.replace('Emplacement ','')?.split(' ')[0]?.trim())
+	if(accounts.length == 0) return console.log(chalk.red("\nVous n'avez sélectionné aucun compte")) && process.exit()
+
+	// Obtenir les accès de chaque compte
+	accounts = accounts.map(account => config.get(`accountList.${account}`))
+	if(accounts.length == 0) return console.log(chalk.red("\nAccès aux comptes manquants")) && process.exit()
+
+	// Afficher un spinner
+	spinner.text = `Vérification de l'existance d'${chalk.cyan(informations.screenName)}`; spinner.start()
+
+	// Vérifier l'existance du compte
+	var accountInfo = await fetch({url: 'https://api.twitter.com/1.1/users/show.json?screen_name=' + informations.screenName.replace(/&/g, encodeURIComponent("&#38;")).replace(/\?/g, encodeURIComponent("&#63;")), method: 'GET'}, OAuth({ consumer: { key: accounts[0]?.consumer_key, secret: accounts[0]?.consumer_secret }, signature_method: 'HMAC-SHA1', hash_function(base_string, key){return crypto.createHmac('sha1', key).update(base_string).digest('base64')} }), { key: accounts[0]?.access_token, secret: accounts[0]?.access_token_secret })
+
+	// Vérifiez si l'information contient une erreur
+	var error = await (errorCheck(accountInfo))
+	if(error.error === true){
+		spinner.text = chalk.red(`Impossible d'obtenir le profil : ${error.frenchDescription}`) + chalk.cyan(` (Code erreur #${error.code})`)
+		spinner.fail()
+		process.exit()
+	}
+
+	// Préparer quelques variables
+	var passedAccountNumber = 0;
+	var errorsNumber = 0;
+	var errorsMessages = [];
+
+	// Avec chaque compte, effectuer l'action
+	for(var i = 0; i < accounts.length; i++){
+		await new Promise(resolve => setTimeout(resolve, 1500))
+		var doAction = await fetch({url: `https://api.twitter.com/1.1/friendships/create.json?screen_name=${accountInfo?.screen_name}`, method: 'POST'}, OAuth({ consumer: { key: accounts[i]?.consumer_key, secret: accounts[i]?.consumer_secret }, signature_method: 'HMAC-SHA1', hash_function(base_string, key){return crypto.createHmac('sha1', key).update(base_string).digest('base64')} }), { key: accounts[i]?.access_token, secret: accounts[i]?.access_token_secret })
+	
+		// Vérifiez si l'information contient une erreur
+		var error = await (errorCheck(doAction))
+		if(error.error === true){
+			errorsNumber++
+			spinner.text = `${passedAccountNumber} ok | ${errorsNumber} fail`
+			errorsMessages.push(`• ${accounts[i]?.name} : ${error.frenchDescription || error.errors || error}`)
+		} else {
+			passedAccountNumber++
+			spinner.text = `${passedAccountNumber} ok | ${errorsNumber} fail`
+		}
+	}
+
+	// Une fois toutes les actions effectuées, afficher le résultat
+	spinner.stop()
+	if(errorsNumber == 0) return console.log(`\n${passedAccountNumber} comptes ont effectué l'action avec succès`)
+	else return console.log(`\n${passedAccountNumber} comptes ont effectué l'action avec succès\n${errorsNumber} comptes échoués :\n${errorsMessages.join('\n')}`)
+}
+
+// Fonction pour like un tweet en masse
+async function massLike(){
+	// Demander quelques infos
+	var informations = await inquirer.prompt([
+		{
+			type: 'input',
+			name: 'tweetID',
+			message: 'Identifiant du tweet',
+			validate(input){
+				if(!/^\d+$/.test(input)){ return `Identifiant mal formée, exemple (il est en jaune) : https://twitter.com/TwitterAPI/status/${chalk.yellow('210462857140252672')}` }
+				return true
+			}
+		},
+		{
+			type: 'checkbox',
+			name: 'accountsList',
+			message: 'Quel comptes souhaitez vous utiliser ?',
+			choices: require('./functions/emplacement.js').emplacementList(0),
+			pageSize: (process.stdout.rows-10 > 4) ? process.stdout.rows-10 : null
+		}
+	])
+	var accounts = informations.accountsList
+
+	// N'avoir que le pseudo à chaque fois
+	accounts = accounts.map(account => account.replace('Emplacement ','')?.split(' ')[0]?.trim())
+	if(accounts.length == 0) return console.log(chalk.red("\nVous n'avez sélectionné aucun compte")) && process.exit()
+
+	// Obtenir les accès de chaque compte
+	accounts = accounts.map(account => config.get(`accountList.${account}`))
+	if(accounts.length == 0) return console.log(chalk.red("\nAccès aux comptes manquants")) && process.exit()
+
+	// Afficher un spinner
+	spinner.text = `Vérification de l'existance du tweet`; spinner.start()
+
+	// Vérifier l'existance du tweet
+	var tweetInfo = await fetch({url: `https://api.twitter.com/1.1/statuses/show.json?id=${informations.tweetID}`, method: 'GET'}, OAuth({ consumer: { key: accounts[0]?.consumer_key, secret: accounts[0]?.consumer_secret }, signature_method: 'HMAC-SHA1', hash_function(base_string, key){return crypto.createHmac('sha1', key).update(base_string).digest('base64')} }), { key: accounts[0]?.access_token, secret: accounts[0]?.access_token_secret })
+
+	// Vérifiez si l'information contient une erreur
+	var error = await (errorCheck(tweetInfo))
+	if(error.error === true){
+		spinner.text = chalk.red(`Impossible d'obtenir le tweet : ${error.frenchDescription}`) + chalk.cyan(` (Code erreur #${error.code})`)
+		spinner.fail()
+		process.exit()
+	}
+
+	// Préparer quelques variables
+	var passedAccountNumber = 0;
+	var errorsNumber = 0;
+	var errorsMessages = [];
+
+	// Avec chaque compte, effectuer l'action
+	for(var i = 0; i < accounts.length; i++){
+		await new Promise(resolve => setTimeout(resolve, 1500))
+		var doAction = await fetch({url: `https://api.twitter.com/1.1/favorites/create.json?id=${informations?.tweetID}`, method: 'POST'}, OAuth({ consumer: { key: accounts[i]?.consumer_key, secret: accounts[i]?.consumer_secret }, signature_method: 'HMAC-SHA1', hash_function(base_string, key){return crypto.createHmac('sha1', key).update(base_string).digest('base64')} }), { key: accounts[i]?.access_token, secret: accounts[i]?.access_token_secret })
+	
+		// Vérifiez si l'information contient une erreur
+		var error = await (errorCheck(doAction))
+		if(error.error === true){
+			errorsNumber++
+			spinner.text = `${passedAccountNumber} ok | ${errorsNumber} fail`
+			errorsMessages.push(`• ${accounts[i]?.name} : ${error.frenchDescription || error.errors || error}`)
+		} else {
+			passedAccountNumber++
+			spinner.text = `${passedAccountNumber} ok | ${errorsNumber} fail`
+		}
+	}
+
+	// Une fois toutes les actions effectuées, afficher le résultat
+	spinner.stop()
+	if(errorsNumber == 0) return console.log(`\n${passedAccountNumber} comptes ont effectué l'action avec succès`)
+	else return console.log(`\n${passedAccountNumber} comptes ont effectué l'action avec succès\n${errorsNumber} comptes échoués :\n${errorsMessages.join('\n')}`)
+}
+
+// Fonction pour RT un tweet en masse
+async function massRt(){
+	// Demander quelques infos
+	var informations = await inquirer.prompt([
+		{
+			type: 'input',
+			name: 'tweetID',
+			message: 'Identifiant du tweet',
+			validate(input){
+				if(!/^\d+$/.test(input)){ return `Identifiant mal formée, exemple (il est en jaune) : https://twitter.com/TwitterAPI/status/${chalk.yellow('210462857140252672')}` }
+				return true
+			}
+		},
+		{
+			type: 'checkbox',
+			name: 'accountsList',
+			message: 'Quel comptes souhaitez vous utiliser ?',
+			choices: require('./functions/emplacement.js').emplacementList(0),
+			pageSize: (process.stdout.rows-10 > 4) ? process.stdout.rows-10 : null
+		}
+	])
+	var accounts = informations.accountsList
+
+	// N'avoir que le pseudo à chaque fois
+	accounts = accounts.map(account => account.replace('Emplacement ','')?.split(' ')[0]?.trim())
+	if(accounts.length == 0) return console.log(chalk.red("\nVous n'avez sélectionné aucun compte")) && process.exit()
+
+	// Obtenir les accès de chaque compte
+	accounts = accounts.map(account => config.get(`accountList.${account}`))
+	if(accounts.length == 0) return console.log(chalk.red("\nAccès aux comptes manquants")) && process.exit()
+
+	// Afficher un spinner
+	spinner.text = `Vérification de l'existance du tweet`; spinner.start()
+
+	// Vérifier l'existance du tweet
+	var tweetInfo = await fetch({url: `https://api.twitter.com/1.1/statuses/show.json?id=${informations.tweetID}`, method: 'GET'}, OAuth({ consumer: { key: accounts[0]?.consumer_key, secret: accounts[0]?.consumer_secret }, signature_method: 'HMAC-SHA1', hash_function(base_string, key){return crypto.createHmac('sha1', key).update(base_string).digest('base64')} }), { key: accounts[0]?.access_token, secret: accounts[0]?.access_token_secret })
+
+	// Vérifiez si l'information contient une erreur
+	var error = await (errorCheck(tweetInfo))
+	if(error.error === true){
+		spinner.text = chalk.red(`Impossible d'obtenir le tweet : ${error.frenchDescription}`) + chalk.cyan(` (Code erreur #${error.code})`)
+		spinner.fail()
+		process.exit()
+	}
+
+	// Préparer quelques variables
+	var passedAccountNumber = 0;
+	var errorsNumber = 0;
+	var errorsMessages = [];
+
+	// Avec chaque compte, effectuer l'action
+	for(var i = 0; i < accounts.length; i++){
+		await new Promise(resolve => setTimeout(resolve, 1500))
+		var doAction = await fetch({url: `https://api.twitter.com/1.1/statuses/retweet.json?id=${informations?.tweetID}`, method: 'POST'}, OAuth({ consumer: { key: accounts[i]?.consumer_key, secret: accounts[i]?.consumer_secret }, signature_method: 'HMAC-SHA1', hash_function(base_string, key){return crypto.createHmac('sha1', key).update(base_string).digest('base64')} }), { key: accounts[i]?.access_token, secret: accounts[i]?.access_token_secret })
+	
+		// Vérifiez si l'information contient une erreur
+		var error = await (errorCheck(doAction))
+		if(error.error === true){
+			errorsNumber++
+			spinner.text = `${passedAccountNumber} ok | ${errorsNumber} fail`
+			errorsMessages.push(`• ${accounts[i]?.name} : ${error.frenchDescription || error.errors || error}`)
+		} else {
+			passedAccountNumber++
+			spinner.text = `${passedAccountNumber} ok | ${errorsNumber} fail`
+		}
+	}
+
+	// Une fois toutes les actions effectuées, afficher le résultat
+	spinner.stop()
+	if(errorsNumber == 0) return console.log(`\n${passedAccountNumber} comptes ont effectué l'action avec succès`)
+	else return console.log(`\n${passedAccountNumber} comptes ont effectué l'action avec succès\n${errorsNumber} comptes échoués :\n${errorsMessages.join('\n')}`)
+}
+
+// Fonction pour commenter un tweet en masse
+async function massComment(){
+	// Demander quelques infos
+	var informations = await inquirer.prompt([
+		{
+			type: 'input',
+			name: 'tweetID',
+			message: 'Identifiant du tweet',
+			validate(input){
+				if(!/^\d+$/.test(input)){ return `Identifiant mal formée, exemple (il est en jaune) : https://twitter.com/TwitterAPI/status/${chalk.yellow('210462857140252672')}` }
+				return true
+			}
+		},
+		{
+			type: 'input',
+			name: 'content',
+			message: 'Que dire ?',
+			validate(input){
+				if(input.length < 1){ return 'Veuillez entrer un texte' }
+				if(input.length > 255){ return `Ce texte est trop grand (${input.length} caractères)` }
+				return true
+			}
+		},
+		{
+			type: 'checkbox',
+			name: 'accountsList',
+			message: 'Quel comptes souhaitez vous utiliser ?',
+			choices: require('./functions/emplacement.js').emplacementList(0),
+			pageSize: (process.stdout.rows-10 > 4) ? process.stdout.rows-10 : null
+		}
+	])
+	var accounts = informations.accountsList
+
+	// N'avoir que le pseudo à chaque fois
+	accounts = accounts.map(account => account.replace('Emplacement ','')?.split(' ')[0]?.trim())
+	if(accounts.length == 0) return console.log(chalk.red("\nVous n'avez sélectionné aucun compte")) && process.exit()
+
+	// Obtenir les accès de chaque compte
+	accounts = accounts.map(account => config.get(`accountList.${account}`))
+	if(accounts.length == 0) return console.log(chalk.red("\nAccès aux comptes manquants")) && process.exit()
+
+	// Afficher un spinner
+	spinner.text = `Vérification de l'existance du tweet`; spinner.start()
+
+	// Vérifier l'existance du tweet
+	var tweetInfo = await fetch({url: `https://api.twitter.com/1.1/statuses/show.json?id=${informations.tweetID}`, method: 'GET'}, OAuth({ consumer: { key: accounts[0]?.consumer_key, secret: accounts[0]?.consumer_secret }, signature_method: 'HMAC-SHA1', hash_function(base_string, key){return crypto.createHmac('sha1', key).update(base_string).digest('base64')} }), { key: accounts[0]?.access_token, secret: accounts[0]?.access_token_secret })
+
+	// Vérifiez si l'information contient une erreur
+	var error = await (errorCheck(tweetInfo))
+	if(error.error === true){
+		spinner.text = chalk.red(`Impossible d'obtenir le tweet : ${error.frenchDescription}`) + chalk.cyan(` (Code erreur #${error.code})`)
+		spinner.fail()
+		process.exit()
+	}
+
+	// Préparer quelques variables
+	var passedAccountNumber = 0;
+	var errorsNumber = 0;
+	var errorsMessages = [];
+
+	// Avec chaque compte, effectuer l'action
+	for(var i = 0; i < accounts.length; i++){
+		await new Promise(resolve => setTimeout(resolve, 1500))
+		var bodyFormData = new FormData()
+		bodyFormData.append('status', informations.content)
+		bodyFormData.append('in_reply_to_status_id', informations.tweetID)
+		bodyFormData.append('auto_populate_reply_metadata', 'true')
+		var doAction = await fetch({url: `https://api.twitter.com/1.1/statuses/update.json`, method: 'POST', body: bodyFormData}, OAuth({ consumer: { key: accounts[i]?.consumer_key, secret: accounts[i]?.consumer_secret }, signature_method: 'HMAC-SHA1', hash_function(base_string, key){return crypto.createHmac('sha1', key).update(base_string).digest('base64')} }), { key: accounts[i]?.access_token, secret: accounts[i]?.access_token_secret })
+
+		// Vérifiez si l'information contient une erreur
+		var error = await (errorCheck(doAction))
+		if(error.error === true){
+			errorsNumber++
+			spinner.text = `${passedAccountNumber} ok | ${errorsNumber} fail`
+			errorsMessages.push(`• ${accounts[i]?.name} : ${error.frenchDescription || error.errors || error}`)
+		} else {
+			passedAccountNumber++
+			spinner.text = `${passedAccountNumber} ok | ${errorsNumber} fail`
+		}
+	}
+
+	// Une fois toutes les actions effectuées, afficher le résultat
+	spinner.stop()
+	if(errorsNumber == 0) return console.log(`\n${passedAccountNumber} comptes ont effectué l'action avec succès`)
+	else return console.log(`\n${passedAccountNumber} comptes ont effectué l'action avec succès\n${errorsNumber} comptes échoués :\n${errorsMessages.join('\n')}`)
 }
