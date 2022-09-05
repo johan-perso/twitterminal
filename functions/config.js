@@ -260,7 +260,7 @@ async function importExportConfig(){
 
 	// Selon le choix
 	if(action.toLowerCase() === 'configurer son compte ☁️☁️'){
-		console.log(`\nPour sauvegarder ou importer une configuration Twitterminal à partir du cloud, accéder à ${chalk.cyan("johanstickman.com/uuid")} et entrer votre UUID de compte.`)
+		console.log(`\nPour sauvegarder ou importer une configuration Twitterminal à partir du cloud, accéder à ${chalk.cyan("johanstick.me/uuid")} et entrer votre UUID de compte.`)
 		setTimeout(() => addJohanstickmanAccount(), 500);
 	}
 	if(action.toLowerCase() === 'importer une configuration (local)'){
@@ -335,7 +335,7 @@ async function importConfig(type='cloud'){
 		spinner.start()
 
 		// Obtenir la configuration originale
-		var backup = await fetch(`https://text.johanstickman.com/raw/${backupId}`, { headers: { 'User-Agent': `Twitterminal/${require('../package.json')?.version || 'undefined'} (+https://github.com/johan-perso/twitterminal)` } })
+		var backup = await fetch(`https://text.johanstick.me/raw/${backupId}`, { headers: { 'User-Agent': `Twitterminal/${require('../package.json')?.version || 'undefined'} (+https://github.com/johan-perso/twitterminal)` } })
 		.then(res => res.text())
 		.catch(async err => {
 			spinner.text = "FETCHERR_UNABLE_GET_BACKUP"
@@ -434,7 +434,7 @@ async function exportConfig(type='cloud'){
 		// Si on souhaite exporter vers le cloud
 		if(type === 'cloud'){
 			// Crée un texte contenant la configuration
-			var backup = await fetch(`https://text.johanstickman.com/api/create`, { method: 'post', body: new URLSearchParams({ title: `Twitterminal backup, ${moment().format("DD/MM/YYYY [at] HH:mm:ss")}`, content: data, type: 'code', codeLanguage: 'json', uuid: config.get('johanstickman_account_uuid'), headers: { 'User-Agent': `Twitterminal/${require('../package.json')?.version || 'undefined'} (+https://github.com/johan-perso/twitterminal)` } }) })
+			var backup = await fetch(`https://text.johanstick.me/api/create`, { method: 'post', body: new URLSearchParams({ title: `Twitterminal backup, ${moment().format("DD/MM/YYYY [at] HH:mm:ss")}`, content: data, type: 'code', codeLanguage: 'json', uuid: config.get('johanstickman_account_uuid'), headers: { 'User-Agent': `Twitterminal/${require('../package.json')?.version || 'undefined'} (+https://github.com/johan-perso/twitterminal)` } }) })
 			.then(res => res.json())
 			.catch(async err => {
 				spinner.text = "FETCHERR_UNABLE_CREATE_BACKUP"
@@ -543,7 +543,7 @@ async function deleteBackup(){
 	spinner.start()
 
 	// Supprimer la sauvegarde
-	var deleted = await fetch(`https://text.johanstickman.com/api/delete`, { method: 'delete', body: new URLSearchParams({ id: backup.id.split("-")[0], secretKey: backup.secretKey }), headers: { 'User-Agent': `Twitterminal/${require('../package.json')?.version || 'undefined'} (+https://github.com/johan-perso/twitterminal)` }})
+	var deleted = await fetch(`https://text.johanstick.me/api/delete`, { method: 'delete', body: new URLSearchParams({ id: backup.id.split("-")[0], secretKey: backup.secretKey }), headers: { 'User-Agent': `Twitterminal/${require('../package.json')?.version || 'undefined'} (+https://github.com/johan-perso/twitterminal)` }})
 	.then(res => res.json())
 	.catch(async err => {
 		spinner.text = "FETCHERR_UNABLE_DELETE_BACKUP"
@@ -583,7 +583,7 @@ async function addJohanstickmanAccount(){
 	spinner.start()
 
 	// Obtenir des informations sur le compte
-	var johanstickmanAccount = await fetch(`https://johanstickman.com/api/info?uuid=${johanstickmanUuid}`, { headers: { 'User-Agent': `Twitterminal/${require('../package.json')?.version || 'undefined'} (+https://github.com/johan-perso/twitterminal)` } })
+	var johanstickmanAccount = await fetch(`https://johanstick.me/api/info?uuid=${johanstickmanUuid}`, { headers: { 'User-Agent': `Twitterminal/${require('../package.json')?.version || 'undefined'} (+https://github.com/johan-perso/twitterminal)` } })
 	.then(res => res.json())
 	.catch(async err => {
 		spinner.text = "FETCHERR_UNABLE_GET_USERINFO"
