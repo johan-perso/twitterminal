@@ -156,7 +156,7 @@ async function checkCloudSave(){
 	cloudSaveID = cloudSaveID.cloudSaveID
 
 	// Obtenir la configuration originale
-	var backup = await fetch(`https://text.johanstickman.com/raw/${cloudSaveID}`, { headers: { 'User-Agent': `Twitterminal/${require('../package.json')?.version || 'undefined'} (+https://github.com/johan-perso/twitterminal)` } })
+	var backup = await fetch(`https://text.johanstick.me/raw/${cloudSaveID}`, { headers: { 'User-Agent': `Twitterminal/${require('../package.json')?.version || 'undefined'} (+https://github.com/johan-perso/twitterminal)` } })
 	.then(res => res.text())
 	.catch(async err => {
 		console.log(`${chalk.red('[FATAL]')} Impossible d'accéder à la sauvegarde.`)
@@ -286,7 +286,7 @@ async function editConfiguration(){
 			// Ajouter les actions possibles
 			if(Object?.keys(jsonConfig?.accountList || [])?.length) choices.push({ name: 'Supprimer un compte', value: 'removeAccount' })
 			if(jsonConfig.clipboardy) choices.push({ name: 'Réinitialiser le presse-papier', value: 'resetClipboard' })
-			if(jsonConfig.johanstickman_account_uuid) choices.push({ name: 'Déconnexion johanstickman.com', value: 'disconnectJohanstickman' })
+			if(jsonConfig.johanstickman_account_uuid) choices.push({ name: 'Déconnexion johanstick.me', value: 'disconnectJohanstickman' })
 			if(jsonConfig.experiments?.length) choices.push({ name: 'Réinitialiser les expérimentations', value: 'resetExperiments' })
 			if(jsonConfig.configBackupList?.length) choices.push({ name: 'Réinitialiser les sauvegardes', value: 'resetSaves' })
 
@@ -331,11 +331,11 @@ async function editConfiguration(){
 			return whatToDo()
 		}
 
-		// Si on veut déconnecter johanstickman.com
+		// Si on veut déconnecter johanstick.me
 		if(modification == 'disconnectJohanstickman'){
 			delete jsonConfig.johanstickman_account_uuid
 			fs.writeFileSync(configPath, JSON.stringify(jsonConfig, null, 2))
-			console.log(`${chalk.green('[INFO]')} Déconnexion johanstickman.com réussie.\n`)
+			console.log(`${chalk.green('[INFO]')} Déconnexion johanstick.me réussie.\n`)
 			return whatToDo()
 		}
 
