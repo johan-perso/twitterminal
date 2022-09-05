@@ -73,7 +73,7 @@ if(process.argv.slice(2)[0] === "--version" || process.argv.slice(2)[0] === "-v"
 
 	// Afficher que ✨ le grand maitre stickman ✨ est le créateur de Twitterminal
 	console.log("Développé par Johan le stickman")
-	console.log(chalk.cyan("	https://johanstickman.com"))
+	console.log(chalk.cyan("	https://johanstick.me"))
 	process.exit()
 }
 // Argument pour afficher le chemin de la configuration
@@ -739,7 +739,7 @@ async function showProfil(ownAccountInfo){
 				validate(input){
 					input = input.trim()
 					if(!input.startsWith("http") || !input.startsWith("https")) input = `https://${input}`
-					if(input && input.replace(/ /g,'').length > 0 && input.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)/g)) return "Ce lien est invalide, si vous ne voulez pas en spécifier un, laissez le champ vide"
+					if(!input || (input && input.replace(/ /g,'').length < 10)) return "Ce lien est invalide, si vous ne voulez pas en spécifier un, laissez le champ vide"
 					return true
 				}
 			},
