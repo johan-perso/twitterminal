@@ -64,4 +64,4 @@ La plupart des modules pour interagir avec l'API de Twitter ne sont pas suffisan
 
 ## Licence
 
-MIT © [Johan](https://johanstickman.com)
+MIT © [Johan](https://johanstick.me)
