@@ -1,3 +1,11 @@
+### Disclaimer
+
+Depuis le mois de janvier 2023, l'utilisation de client tiers (par exemple, Twitterminal) n'est plus autorisée. Le développement de Twitterminal est donc interdit selon les nouvelles [conditions d'utilisations pour développeurs](https://developer.twitter.com/en/developer-terms/agreement).
+
+Sources : [iGen](https://www.igen.fr/app-store/2023/01/cest-officiellement-mort-pour-les-apps-twitter-135047), [The Verge](https://www.theverge.com/2023/1/19/23562947/twitter-third-party-client-tweetbot-twitterific-ban-rules), [Engadget](https://www.engadget.com/twitter-new-developer-terms-ban-third-party-clients-211247096.html).
+
+Pour l'instant, les fonctionnalités de Twitterminal semblent toujours fonctionner, mais celles-ci pourraient s'arrêter à tout moment, sans préavis.
+
 # Twitterminal
 
 Twitterminal est un CLI permettant d'utiliser Twitter depuis son terminal, tout en ayant la possibilité d'utiliser des comptes développeurs (ou compte utilisateur/régulier), sans jamais avoir à sortir du terminal.
@@ -9,6 +17,7 @@ Twitterminal est un CLI permettant d'utiliser Twitter depuis son terminal, tout 
 * Support de comptes illimités (compte dev supportés)
 * Recherche d'utilisateur et de tweets
 * Système de sauvegarde intégré (cloud et local)
+* Vérifier et obtenir des informations sur un compte à partir de clés d'API (OAuth v1)
 * [Actions de masse](https://github.com/johan-perso/twitterminal/wiki/Actions-de-masse)
 * User-friendly (même dans un terminal)
 
@@ -38,6 +47,7 @@ npm link
 ## Changelog
 
 * [6.0.0](https://github.com/johan-perso/twitterminal/wiki/Changelog#v600)
+* [6.1.0](https://github.com/johan-perso/twitterminal/wiki/Changelog#v610)
 * [5.0.0](https://github.com/johan-perso/twitterminal/wiki/Changelog#v500)
 * [4.2.0](https://github.com/johan-perso/twitterminal/wiki/Changelog#v420)
 * [4.1.0](https://github.com/johan-perso/twitterminal/wiki/Changelog#v410)
