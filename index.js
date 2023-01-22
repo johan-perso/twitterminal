@@ -356,7 +356,7 @@ async function main(){
 
 	// Obtenir la liste des choix pour le menu
 	var choices = []
-	choices.push('Tweeter','Voir sa timeline','Créer un thread','Profil','Rechercher','Configuration')
+	choices.push('Tweeter','Voir sa timeline','Créer un thread','Profil','Rechercher','Vérifier des tokens','Configuration')
 
 	// Afficher un menu
 	inquirer.prompt([
@@ -373,6 +373,7 @@ async function main(){
 		if(answer.action.toLowerCase() === "créer un thread") return thread() 
 		if(answer.action.toLowerCase() === "profil") return showProfil(accountInfo)
 		if(answer.action.toLowerCase() === "rechercher") return search(accountInfo)
+		if(answer.action.toLowerCase() === "vérifier des tokens") return tokenChecker()
 
 		if(answer.action.toLowerCase() === "configuration" && !config?.get("experiments")?.includes("CONFIG_IN_TEXT_EDITOR")) return require('./functions/config.js')()
 		if(answer.action.toLowerCase() === "configuration" && config?.get("experiments")?.includes("CONFIG_IN_TEXT_EDITOR")) return open(path.join(config.path))
@@ -476,7 +477,7 @@ async function thread(){
 	console.log(chalk.dim(`(La fonctionnalité de thread est encore en bêta)`))
 
 	// Obtenir le contenu du texte à tweeter
-	var tweetContent = await inquirer.prompt([
+	var {tweetContent} = await inquirer.prompt([
 		{
 			type: 'input',
 			name: 'tweetContent',
@@ -488,7 +489,6 @@ async function thread(){
 			}
 		}
 	])
-	var tweetContent = tweetContent.tweetContent
 
 	// Afficher un spinner
 	spinner.text = "Thread en cours de publication...";
@@ -573,14 +573,13 @@ async function thread(){
 
 // Fonction pour afficher un profil
 async function showProfil(ownAccountInfo){
-	var username = await inquirer.prompt([
+	var {username} = await inquirer.prompt([
 		{
 			type: 'input',
 			name: 'username',
 			message: 'Entrer un nom d\'utilisateur'
 		}
 	])
-	var username = username.username
 
 	// Afficher un spinner
 	if(!username) spinner.text = 'Obtention de votre profil...'
@@ -657,7 +656,7 @@ async function showProfil(ownAccountInfo){
 		actions.push({ name: 'Quitter', value: 'quit' })
 	
 	// Pouvoir effectuer des actions sur le profil
-	var action = await inquirer.prompt([
+	var {action} = await inquirer.prompt([
 		{
 			type: 'list',
 			name: 'action',
@@ -665,7 +664,6 @@ async function showProfil(ownAccountInfo){
 			choices: actions
 		}
 	])
-	action = action.action
 
 	// Si l'action est "tweets"
 	if(action == "tweets") return require('./functions/timeline.js')(oauth, token, ownAccountInfo, config?.get("experiments"), accountInfo.screen_name)
@@ -844,10 +842,10 @@ async function search(ownAccountInfo){
 			]
 		}
 	])
-	var searchParams = await inquirer.prompt([
+	var {searchParams} = await inquirer.prompt([
 		{
 			type: 'input',
-			name: 'query',
+			name: 'searchParams',
 			message: 'Terme à chercher',
 			validate(input){
 				input = input.trim()
@@ -857,7 +855,6 @@ async function search(ownAccountInfo){
 			}
 		}
 	])
-	searchParams = searchParams.query
 
 	// Séparer les résultats affichés et Inquirer
 	console.log()
@@ -924,6 +921,76 @@ async function search(ownAccountInfo){
 		})
 	}
 	if(informations.type == 'tweet') return require('./functions/timeline.js')(oauth, token, ownAccountInfo, config?.get("experiments"), null, results)
+}
+
+// Fonction pour demander, puis vérifier si des tokens d'accès sont valides
+async function tokenChecker(){
+	// Demander les tokens
+	var {consumer_key,consumer_secret,access_token,access_token_secret} = await inquirer.prompt([
+		{
+			type: 'input',
+			name: 'consumer_key',
+			message: 'consumer_key'
+		},
+		{
+			type: 'input',
+			name: 'consumer_secret',
+			message: 'consumer_secret'
+		},
+		{
+			type: 'input',
+			name: 'access_token',
+			message: 'access_token'
+		},
+		{
+			type: 'input',
+			name: 'access_token_secret',
+			message: 'access_token_secret'
+		}
+	])
+
+	// Obtenir les informations du compte
+	var accountInfo = await fetch({url: 'https://api.twitter.com/1.1/account/verify_credentials.json', method: 'GET'}, OAuth({ consumer: { key: consumer_key, secret: consumer_secret }, signature_method: 'HMAC-SHA1', hash_function(base_string, key){return crypto.createHmac('sha1', key).update(base_string).digest('base64')} }), { key: access_token, secret: access_token_secret })
+
+	// Vérifiez si l'information contient une erreur
+	var error = await (errorCheck(accountInfo))
+	if(error.error === true){
+		console.log(chalk.red(`Impossible de se connecter au compte Twitter : ${error.frenchDescription}`) + chalk.cyan(` (Code erreur #${error.code})`))
+		return tokenChecker()
+	}
+
+	// Afficher les informations du compte
+	console.log(`=========================================`)
+	console.log(Object.entries(accountInfo).map(([key, value]) => (key && value && (typeof value == 'string' || typeof value == 'number' || typeof value == 'boolean')) ? `${key}: ${value}` : null).filter(a => a?.length).join('\n'))
+	console.log(`=========================================`)
+
+	// Si le compte est valide, demander si l'utilisateur souhaite sauvegarder les tokens dans un emplacement de la config, ou proposer d'en vérifier d'autres
+	var {whatToDo} = await inquirer.prompt([
+		{
+			type: 'list',
+			name: 'whatToDo',
+			message: 'Que souhaitez vous faire ?',
+			choices: [
+				{
+					name: 'Ajouter le compte à Twitterminal',
+					value: 'save'
+				},
+				{
+					name: 'Vérifier un autre compte',
+					value: 'check'
+				},
+				{
+					name: 'Quitter',
+					value: 'exit'
+				}
+			]
+		}
+	])
+
+	// En fonction de ce que l'on souhaite faire
+	if(whatToDo == 'save') return require('./functions/config.js')("addAccountLegacy", { consumer_key, consumer_secret, access_token, access_token_secret })
+	if(whatToDo == 'check') return tokenChecker()
+	if(whatToDo == 'exit') return process.exit()
 }
 
 // Fonction pour follow un compte en masse
