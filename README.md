@@ -46,8 +46,8 @@ npm link
 
 ## Changelog
 
-* [6.0.0](https://github.com/johan-perso/twitterminal/wiki/Changelog#v600)
 * [6.1.0](https://github.com/johan-perso/twitterminal/wiki/Changelog#v610)
+* [6.0.0](https://github.com/johan-perso/twitterminal/wiki/Changelog#v600)
 * [5.0.0](https://github.com/johan-perso/twitterminal/wiki/Changelog#v500)
 * [4.2.0](https://github.com/johan-perso/twitterminal/wiki/Changelog#v420)
 * [4.1.0](https://github.com/johan-perso/twitterminal/wiki/Changelog#v410)
