@@ -126,7 +126,7 @@ async function deleteConfiguration(){
 	if(accounts || currentlyUsedAccount || configBackupList) console.log(`\nLa configuration est quand même lisible, n'oubliez donc pas qu'il est possible de la rendre fonctionnelle à nouveau, et que vous n'avez pas tout perdu.`)
 
 	// Demander une confirmation
-	var confirm = await inquirer.prompt([
+	var {confirm} = await inquirer.prompt([
 		{
 			type: 'confirm',
 			name: 'confirm',
@@ -135,13 +135,13 @@ async function deleteConfiguration(){
 	])
 
 	// Si on a confirmé, supprimer le fichier
-	if(confirm.confirm) fs.unlinkSync(require('./functions/configPath')(true)) & console.log(`${chalk.green('[INFO]')} Configuration supprimée.`)
+	if(confirm) fs.unlinkSync(require('./functions/configPath')(true)) & console.log(`${chalk.green('[INFO]')} Configuration supprimée.`)
 }
 
 // Fonction pour analyser une sauvegarde qui est dans le cloud
 async function checkCloudSave(){
 	// Demander l'identifiant de la sauvegarde
-	var cloudSaveID = await inquirer.prompt([
+	var {cloudSaveID} = await inquirer.prompt([
 		{
 			type: 'input',
 			name: 'cloudSaveID',
@@ -153,7 +153,6 @@ async function checkCloudSave(){
 			}
 		}
 	])
-	cloudSaveID = cloudSaveID.cloudSaveID
 
 	// Obtenir la configuration originale
 	var backup = await fetch(`https://text.johanstick.me/raw/${cloudSaveID}`, { headers: { 'User-Agent': `Twitterminal/${require('../package.json')?.version || 'undefined'} (+https://github.com/johan-perso/twitterminal)` } })
@@ -222,7 +221,7 @@ async function showConfiguration(jsonConfig){
 	}
 
 	// Demander si on veut l'utiliser comme configuration principale
-	var confirm = await inquirer.prompt([
+	var {confirm} = await inquirer.prompt([
 		{
 			type: 'confirm',
 			name: 'confirm',
@@ -230,7 +229,6 @@ async function showConfiguration(jsonConfig){
 			default: false
 		}
 	])
-	confirm = confirm.confirm
 
 	// Si on veut l'utiliser comme configuration principale
 	if(confirm){
@@ -243,10 +241,10 @@ async function showConfiguration(jsonConfig){
 // Fonction pour pouvoir modifier une configuration
 async function editConfiguration(){
 	// Obtenir le chemin de la configuration
-	var configPath = await inquirer.prompt([
+	var {configPath} = await inquirer.prompt([
 		{
 			type: 'input',
-			name: 'path',
+			name: 'configPath',
 			default: config?.path ? config?.path : null,
 			message: 'Chemin de la configuration à analyser :',
 			validate: function(value){
@@ -256,7 +254,6 @@ async function editConfiguration(){
 			}
 		}
 	])
-	configPath = configPath.path
 
 	// Essayer de parse le JSON
 	var jsonConfig;
@@ -294,20 +291,19 @@ async function editConfiguration(){
 			if(!choices.length) return console.log(`${chalk.red('[FATAL]')} Aucune modification à faire.`) & process.exit()
 
 		// Demander quelles modifications faire
-		var modification = await inquirer.prompt([
+		var {modification} = await inquirer.prompt([
 			{
 				type: 'list',
-				name: 'whatToDo',
+				name: 'modification',
 				message: 'Quelle modification souhaitez-vous faire ?',
 				choices: choices
 			}
 		])
-		modification = modification.whatToDo
 
 		// Si on veut supprimer un compte
 		if(modification == 'removeAccount'){
 			// Demander quel compte supprimer
-			var account = await inquirer.prompt([
+			var {account} = await inquirer.prompt([
 				{
 					type: 'list',
 					name: 'account',
@@ -317,7 +313,7 @@ async function editConfiguration(){
 			])
 
 			// Supprimer le compte et enregistrer
-			delete jsonConfig.accountList[account.account]
+			delete jsonConfig.accountList[account]
 			fs.writeFileSync(configPath, JSON.stringify(jsonConfig, null, 2))
 			console.log(`${chalk.green('[INFO]')} Compte supprimé.\n`)
 			return whatToDo()
