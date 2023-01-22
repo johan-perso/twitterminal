@@ -28,7 +28,7 @@ function isJson(item){
 }
 
 // Exporter en tant que module
-module.exports = async function(option){
+module.exports = async function(option, args={}){
 	// Si une option a été ajouté - pour importer une sauvegarde
 	if(option === "importConfig"){
 		return inquirer.prompt([
@@ -49,9 +49,7 @@ module.exports = async function(option){
 	}
 
 	// Si une option a été ajouté - pour ajouter un compte développeur
-	if(option === "addAccountLegacy"){
-		return addAccountLegacy()
-	}
+	if(option === "addAccountLegacy") return addAccountLegacy(args)
 
 	// Afficher un menu
 	if(!option) inquirer.prompt([
@@ -85,7 +83,7 @@ module.exports = async function(option){
 }
 
 // Ajouter un compte (legacy)
-async function addAccountLegacy(){
+async function addAccountLegacy(keys){
 	// Afficher un menu
 	var account = await inquirer.prompt([
 		{
@@ -93,30 +91,30 @@ async function addAccountLegacy(){
 			name: 'name',
 			message: 'Nom du compte'
 		},
-		{
+		!keys?.consumer_key ? {
 			type: 'input',
 			name: 'consumer_key',
 			message: 'consumer_key'
-		},
-		{
+		} : null,
+		!keys?.consumer_secret ? {
 			type: 'input',
 			name: 'consumer_secret',
 			message: 'consumer_secret'
-		},
-		{
+		} : null,
+		!keys?.access_token ? {
 			type: 'input',
 			name: 'access_token',
 			message: 'access_token'
-		},
-		{
+		} : null,
+		!keys?.access_token_secret ? {
 			type: 'input',
 			name: 'access_token_secret',
 			message: 'access_token_secret'
-		}
-	])
+		} : null
+	].filter(q => q))
 
 	// Demander l'emplacement
-	var emplacement = await inquirer.prompt([
+	var {emplacement} = await inquirer.prompt([
 		{
 			type: 'list',
 			name: 'emplacement',
@@ -125,7 +123,6 @@ async function addAccountLegacy(){
 			pageSize: (process.stdout.rows-10 > 4) ? process.stdout.rows-10 : null
 		}
 	])
-	var emplacement = emplacement.emplacement
 
 	// Enregistrer dans la configuration
 		// Obtenir le numéro de l'emplacement
@@ -134,15 +131,15 @@ async function addAccountLegacy(){
 		// Ajouter le compte dans la liste
 		config.set({
 			[`accountList.${emplacementNumber}.name`]: account.name,
-			[`accountList.${emplacementNumber}.consumer_key`]: account.consumer_key,
-			[`accountList.${emplacementNumber}.consumer_secret`]: account.consumer_secret,
-			[`accountList.${emplacementNumber}.access_token`]: account.access_token,
-			[`accountList.${emplacementNumber}.access_token_secret`]: account.access_token_secret,
+			[`accountList.${emplacementNumber}.consumer_key`]: account.consumer_key || keys.consumer_key,
+			[`accountList.${emplacementNumber}.consumer_secret`]: account.consumer_secret || keys.consumer_secret,
+			[`accountList.${emplacementNumber}.access_token`]: account.access_token || keys.access_token,
+			[`accountList.${emplacementNumber}.access_token_secret`]: account.access_token_secret || keys.access_token_secret,
 			[`accountList.${emplacementNumber}.type`]: 'legacy'
 		});
 
 		// Définir le compte par défaut
-		config.set({ 'account.name': account.name, 'account.consumer_key': account.consumer_key, 'account.consumer_secret': account.consumer_secret, 'account.access_token': account.access_token, 'account.access_token_secret': account.access_token_secret });
+		config.set({ 'account.name': account.name, 'account.consumer_key': account.consumer_key || keys.consumer_key, 'account.consumer_secret': account.consumer_secret || keys.consumer_secret, 'account.access_token': account.access_token || keys.access_token, 'account.access_token_secret': account.access_token_secret || keys.access_token_secret });
 
 	// Arrêter le processus
 	config.set('not_first_start','true')
@@ -159,7 +156,7 @@ async function defaultAccount(){
 	}
 
 	// Afficher un menu
-	var account = await inquirer.prompt([
+	var {account} = await inquirer.prompt([
 		{
 			type: 'list',
 			name: 'account',
@@ -168,7 +165,7 @@ async function defaultAccount(){
 			pageSize: (process.stdout.rows-10 > 4) ? process.stdout.rows-10 : null
 		}
 	])
-	var account = account?.account?.replace('Emplacement ','')?.split(' ')[0]?.trim()
+	var account = account?.replace('Emplacement ','')?.split(' ')[0]?.trim()
 
 	// Définir le compte par défaut
 		// Obtenir plus d'information sur le compte
@@ -188,7 +185,7 @@ async function clipboardSettings(){
 	console.log("\nLa gestion du presse-papier n'est fonctionnelle que sur Windows et macOS. Vous pouvez quand même forcer son activation. Lors de certaines actions, le presse-papier peut être automatiquement utilisé.\n")
 
 	// Afficher un menu
-	var settings = await inquirer.prompt([
+	var {settings} = await inquirer.prompt([
 		{
 			type: 'list',
 			name: 'settings',
@@ -199,7 +196,6 @@ async function clipboardSettings(){
 			]
 		}
 	])
-	var settings = settings.settings
 
 	// Selon le paramètres à modifié choisi
 	if(settings.toLowerCase().startsWith('ecriture automatique')){
@@ -247,7 +243,7 @@ async function importExportConfig(){
 		)
 
 	// Afficher un menu
-	var action = await inquirer.prompt([
+	var {action} = await inquirer.prompt([
 		{
 			type: 'list',
 			name: 'action',
@@ -256,7 +252,6 @@ async function importExportConfig(){
 			pageSize: (process.stdout.rows-10 > 4) ? process.stdout.rows-10 : null
 		}
 	])
-	var action = action.action
 
 	// Selon le choix
 	if(action.toLowerCase() === 'configurer son compte ☁️☁️'){
@@ -296,7 +291,7 @@ async function importConfig(type='cloud'){
 		if(config.get('configBackupList')) configBackupList.push("Entrer un identifiant")
 
 		// Si une backup est dans la liste, demander quel backup utilisé
-		if(configBackupList[0]) var backupId = await inquirer.prompt([
+		if(configBackupList[0]) var {backupId} = await inquirer.prompt([
 			{
 				type: 'list',
 				name: 'backupId',
@@ -304,7 +299,6 @@ async function importConfig(type='cloud'){
 				choices: configBackupList
 			}
 		])
-		if(configBackupList[0]) var backupId = backupId.backupId
 
 		// Si la liste des backups est vide, demander un identifiant
 		if(!configBackupList[0] || backupId === "Entrer un identifiant") var backupIdI = await inquirer.prompt([
@@ -346,7 +340,7 @@ async function importConfig(type='cloud'){
 	// Si on souhaite importer à partir du local
 	if(type === 'local'){
 		// Demander le chemin du fichier
-		var backupPath = await inquirer.prompt([
+		var {backupPath} = await inquirer.prompt([
 			{
 				type: 'input',
 				name: 'backupPath',
@@ -357,7 +351,6 @@ async function importConfig(type='cloud'){
 				}
 			}
 		])
-		var backupPath = backupPath.backupPath
 
 		// Afficher un spinner
 		spinner.text = "Importation en cours..."
@@ -383,7 +376,7 @@ async function importConfig(type='cloud'){
 
 	// Si Johan Text a renvoyé une erreur
 	if(backup.startsWith("/\\ ERREUR /\\")){
-		spinner.text = backup.split('\n')[2].replace("Impossible de trouver le texte que vous souhaitez",`Aucune sauvegarde associé à l'id ${chalk.cyan(backupId)} n'a été trouvée.`).replace("Impossible de déchiffrer le texte, assurez-vous d'avoir utilisé le bon lien.",`Impossible de déchiffrer la sauvegarde ${chalk.cyan(backupId.split("-")[0])} avec la clé ${chalk.cyan(backupId.split("-")[1])}.`).replace("L'ID du texte est mal formulé","L'identifiant n'est pas considéré comme valide. Il doit commencer par un nombre, suivi d'un tiret et d'une suite de caractères.")
+		spinner.text = backup.split('\n')[2].replace("Impossible de trouver le texte que vous souhaitez",`Aucune sauvegarde associé à l'id ${chalk.cyan(backupId)} n'a été trouvée.`).replace("Impossible de déchiffrer le texte, assurez-vous d'avoir utilisé le bon lien.",`Impossible d'utiliser le protocole de déchiffrement pour la sauvegarde ${chalk.cyan(backupId.split("-")[0])} avec la clé ${chalk.cyan(backupId.split("-")[1])}.`).replace("L'ID du texte est mal formulé","L'identifiant n'est pas considéré comme valide. Il doit commencer par un nombre, suivi d'un tiret et d'une suite de caractères.")
 		return spinner.fail()
 	}
 
@@ -569,14 +562,13 @@ async function deleteBackup(){
 // Fonction pour configurer un compte Johanstickman
 async function addJohanstickmanAccount(){
 	// Demander l'UUID du compte
-	var johanstickmanUuid = await inquirer.prompt([
+	var {johanstickmanUuid} = await inquirer.prompt([
 		{
 			type: 'input',
 			name: 'johanstickmanUuid',
 			message: 'UUID de votre compte'
 		}
 	])
-	var johanstickmanUuid = johanstickmanUuid.johanstickmanUuid
 
 	// Afficher un spinner
 	spinner.text = "Vérification de votre compte..."
