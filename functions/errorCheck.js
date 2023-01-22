@@ -24,7 +24,7 @@ module.exports = async function(json){
 	if(!isJson(json)) return { error: false, description: "Not JSON", frenchDescription: "Le JSON n'est pas du JSON", code: "921323" }
 
 	// Si une erreur non Twitter est présente
-	if(json.error) return { error: true, description: json.description, frenchDescription: json.description, code: "2429391" }
+	if(json.error) return { error: true, description: json.description || json.error, frenchDescription: json.description || json.error, code: "2429391" }
 
 	// Si aucune erreur Twitter n'est présente
 	if(!json.errors || json.errors && !json.errors[0]) return { error: false, description: "", frenchDescription: "", code: "" }
