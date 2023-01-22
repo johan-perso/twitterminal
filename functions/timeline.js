@@ -130,7 +130,7 @@ module.exports = async function(oauth, token, selfInfo, experimentLists=[], show
 			isListening = false
 
 			// Demander ce qu'on veut répondre
-			var response = await inquirer.prompt([
+			var {response} = await inquirer.prompt([
 				{
 					type: 'input',
 					name: 'response',
@@ -142,7 +142,6 @@ module.exports = async function(oauth, token, selfInfo, experimentLists=[], show
 					}
 				}
 			])
-			var response = response.response
 
 			// Préparer twitter-lite
 			var Twitter = require('twitter-lite');
@@ -188,7 +187,7 @@ module.exports = async function(oauth, token, selfInfo, experimentLists=[], show
 			isListening = false
 
 			// Demander ce qu'on veut dire
-			var response = await inquirer.prompt([
+			var {response} = await inquirer.prompt([
 				{
 					type: 'input',
 					name: 'response',
@@ -200,7 +199,6 @@ module.exports = async function(oauth, token, selfInfo, experimentLists=[], show
 					}
 				}
 			])
-			var response = response.response
 
 			// Préparer twitter-lite
 			var Twitter = require('twitter-lite');
@@ -246,7 +244,7 @@ module.exports = async function(oauth, token, selfInfo, experimentLists=[], show
 			isListening = false
 
 			// Demander ce qu'on veut répondre
-			var confirm = await inquirer.prompt([
+			var {confirm} = await inquirer.prompt([
 				{
 					type: 'confirm',
 					name: 'confirm',
@@ -254,7 +252,6 @@ module.exports = async function(oauth, token, selfInfo, experimentLists=[], show
 					default: false
 				}
 			])
-			var confirm = confirm.confirm
 
 			// Si on accepte
 			if(confirm) {
