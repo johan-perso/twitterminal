@@ -88,7 +88,7 @@ async function convertToken(query){
 // Ajouter à la configuration
 async function addToConfig(token){
 	// Demander l'emplacement
-	var emplacement = await inquirer.prompt([
+	var {emplacement} = await inquirer.prompt([
 		{
 			type: 'list',
 			name: 'emplacement',
@@ -97,7 +97,6 @@ async function addToConfig(token){
 			pageSize: (process.stdout.rows-10 > 4) ? process.stdout.rows-10 : null
 		}
 	])
-	emplacement = emplacement.emplacement
 
 	// Enregistrer dans la configuration
 		// Obtenir le numéro de l'emplacement
