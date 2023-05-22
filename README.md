@@ -6,6 +6,8 @@ Sources : [iGen](https://www.igen.fr/app-store/2023/01/cest-officiellement-mort-
 
 Pour l'instant, les fonctionnalités de Twitterminal semblent toujours fonctionner, mais celles-ci pourraient s'arrêter à tout moment, sans préavis.
 
+EDIT MAI 2023 : on s'est fait ban 💀💀
+
 # Twitterminal
 
 Twitterminal est un CLI permettant d'utiliser Twitter depuis son terminal, tout en ayant la possibilité d'utiliser des comptes développeurs (ou compte utilisateur/régulier), sans jamais avoir à sortir du terminal.
